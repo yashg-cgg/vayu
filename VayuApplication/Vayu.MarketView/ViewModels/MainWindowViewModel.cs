@@ -1,4 +1,4 @@
-﻿using Microsoft.Maps.MapControl.WPF;
+﻿//using Microsoft.Maps.MapControl.WPF;   // Bing Maps replaced by Mapsui/OSM. Kept commented for traceability.
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -21,6 +21,8 @@ using Vayu.MarketView.Model;
 using Vayu.MarketView.Views;
 using Vayu.NodePriceFiveMinLibrary;
 using Vayu.NodePriceLibrary;
+using Location = Vayu.MarketView.Model.MapLocation;           // Mapsui migration: retarget Location alias.
+using LocationCollection = Vayu.MarketView.Model.MapLocationCollection; // Mapsui migration: retarget LocationCollection alias.
 
 namespace Vayu.MarketView.ViewModels
 {
@@ -240,41 +242,48 @@ namespace Vayu.MarketView.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the UI map.
-        /// </summary>
-        /// <value>
-        /// The UI map.
-        /// </value>
-        public Map UIMap { get; set; }
-        /// <summary>
-        /// Gets or sets the navigate layer.
-        /// </summary>
-        /// <value>
-        /// The navigate layer.
-        /// </value>
-        public MapLayer NavigateLayer { get; set; }
-        /// <summary>
-        /// Gets or sets the poly constrains layer.
-        /// </summary>
-        /// <value>
-        /// The poly constrains layer.
-        /// </value>
-        public MapLayer PolyConstrainsLayer { get; set; }
-        /// <summary>
-        /// Gets or sets the constrains layer.
-        /// </summary>
-        /// <value>
-        /// The constrains layer.
-        /// </value>
-        public MapLayer ConstrainsLayer { get; set; }
-        /// <summary>
-        /// Gets or sets the LMP map layer.
-        /// </summary>
-        /// <value>
-        /// The LMP map layer.
-        /// </value>
-        public MapLayer LMPMapLayer { get; set; }
+        // ------------------------------------------------------------------
+        // Mapsui/OSM migration:
+        // The following five Bing-typed properties (Map / MapLayer) were
+        // exposed to the View only for the legacy Bing map. The Mapsui view
+        // manages its layers internally, so these are no longer used.
+        // Kept commented for traceability (do not delete).
+        // ------------------------------------------------------------------
+        ///// <summary>
+        ///// Gets or sets the UI map.
+        ///// </summary>
+        ///// <value>
+        ///// The UI map.
+        ///// </value>
+        //public Map UIMap { get; set; }
+        ///// <summary>
+        ///// Gets or sets the navigate layer.
+        ///// </summary>
+        ///// <value>
+        ///// The navigate layer.
+        ///// </value>
+        //public MapLayer NavigateLayer { get; set; }
+        ///// <summary>
+        ///// Gets or sets the poly constrains layer.
+        ///// </summary>
+        ///// <value>
+        ///// The poly constrains layer.
+        ///// </value>
+        //public MapLayer PolyConstrainsLayer { get; set; }
+        ///// <summary>
+        ///// Gets or sets the constrains layer.
+        ///// </summary>
+        ///// <value>
+        ///// The constrains layer.
+        ///// </value>
+        //public MapLayer ConstrainsLayer { get; set; }
+        ///// <summary>
+        ///// Gets or sets the LMP map layer.
+        ///// </summary>
+        ///// <value>
+        ///// The LMP map layer.
+        ///// </value>
+        //public MapLayer LMPMapLayer { get; set; }
 
         /// <summary>
         /// The is expanded
@@ -607,7 +616,7 @@ namespace Vayu.MarketView.ViewModels
 
                 }
                 RaisePropertyChanged("IsHistoricalChecked");
-                
+
             }
         }
         /// <summary>
@@ -1487,7 +1496,7 @@ namespace Vayu.MarketView.ViewModels
             _playTimer.Tick += PlayTimer_Tick;
             ListstrDeenergizedNodes = mDataService.GetDeenergizedNodes();
             //Vayu.WorkbookStatistics.Model.DataService workBookObj = new WorkbookStatistics.Model.DataService();
-            mMapCenterLocation = new Location(33.3683, -95.2734);
+            //mMapCenterLocation = new Location(33.3683, -95.2734); 
             CloseCommand = new DelegateCommand(() => CloseAndUnsubscribe());
             LoadedCommand = new DelegateCommand(() => WindowLoaded());
             OnRefresh = new DelegateCommand(() => RefereshData());
@@ -1516,7 +1525,7 @@ namespace Vayu.MarketView.ViewModels
             SliderDisplayTime = MarketDateTime.AddHours(-48).ToString("MMM dd, HH:mm");
             IsHistoricalChecked = false;
             SelectedMarket = Markets.First();
-            
+
         }
         #region Private Methods
 
@@ -1708,7 +1717,7 @@ namespace Vayu.MarketView.ViewModels
             PortfolioList = new ObservableCollection<Portfolio>(TraderPortfolioList);
             PortfolioList.Remove(allPortfolio);
 
-            
+
             //Task lmpTask = Task.Run(() => RefreshLMP());
             PortfolioSelection();
         }
@@ -1807,28 +1816,23 @@ namespace Vayu.MarketView.ViewModels
         /// </summary>
         private void OnNavigateLMP()
         {
-            LmpData constrain = SelectedLMP;
-            if (constrain == null)
-                return;
+            LmpData sel = SelectedLMP;
+            if (sel == null) return;
+            NodeGeoDetail source = NodeLocationHashCache[sel.NodeKey] as NodeGeoDetail;
+            if (source == null) return;
 
-            NodeGeoDetail source = NodeLocationHashCache[constrain.NodeKey] as NodeGeoDetail;
-            List<PointMapPath> eclipsLine = null;
-
-            if (NavigateLMPLocations != null)
-                eclipsLine = new List<PointMapPath>(NavigateLMPLocations);
-            else
-                eclipsLine = new List<PointMapPath>();
-
+            // Keep existing eclipsLine bookkeeping so overlays continue to work.
+            var eclipsLine = NavigateLMPLocations != null
+                ? new List<PointMapPath>(NavigateLMPLocations)
+                : new List<PointMapPath>();
             PointMapPath point = ConstructPointMapPath(source, null, eclipsLine);
-
-            if (point != null)
-                point.MyColor = Brushes.OrangeRed;
-
-            if (eclipsLine.Count != 0)
-                MapCenterLocation = eclipsLine[0].MapLocation;
+            if (point != null) point.MyColor = Brushes.OrangeRed;
 
             LMPNavigateVisibility = Visibility.Visible;
             NavigateLMPLocations = new PointMapPathLocationList(eclipsLine);
+
+            // Reuse the node-centering + pin-placement path
+            LmpNodeSelected?.Invoke(this, source);
         }
         /// <summary>
         /// Sets the portfolio.
@@ -1883,10 +1887,28 @@ namespace Vayu.MarketView.ViewModels
             NavigateConstraintLocations = new PointMapPathLocationList();
         }
         /// <summary>
+        /// Raised whenever the LMP DataGrid selection changes.
+        /// The View subscribes to this to pan/zoom the map to the selected
+        /// node and paint a temporary green highlight for ~2 seconds.
+        /// (Added as part of Mapsui/OSM migration.)
+        /// </summary>
+        public event EventHandler<NodeGeoDetail> LmpNodeSelected;
+
+        /// <summary>
         /// Called when [LMP selection changed].
         /// </summary>
         private void OnLMPSelectionChanged()
         {
+            if (selectedLMP == null) return;
+            var node = NodeLocationHashCache != null
+                ? NodeLocationHashCache[selectedLMP.NodeKey] as NodeGeoDetail
+                : null;
+            if (node == null) return;
+
+            // View handles pan/zoom + green highlight via this event.
+            // Do NOT also set MapCenterLocation here — it triggers a second
+            // navigation at DefaultResolution which overwrites the medium zoom.
+            LmpNodeSelected?.Invoke(this, node);
         }
         /// <summary>
         /// Refereshes the data.
@@ -1923,6 +1945,7 @@ namespace Vayu.MarketView.ViewModels
             }
         }
 
+
         private async void RefreshLMPAsync()
         {
             Task lmpTask = Task.Run(() => RefreshAsync());
@@ -1933,7 +1956,7 @@ namespace Vayu.MarketView.ViewModels
         private void RefreshAsync()
         {
             Node[] latestNodes = null;
-            
+
             latestNodes = PriceChannel.GetAllFiveMinPrice(9, MarketDateTime.AddHours(-48), MarketDateTime.AddDays(1), false);
             historcalNodes = latestNodes;
 
@@ -1966,7 +1989,7 @@ namespace Vayu.MarketView.ViewModels
             }
             catch (Exception ex)
             {
-                
+
             }
         }
         /// <summary>
@@ -2097,7 +2120,7 @@ namespace Vayu.MarketView.ViewModels
             if (PortfolioList == null)
                 return;
 
-           
+
             //mBidList = DBAccess.GetCurrentBids(SelectedMarket.ToString(), PortfolioList.Select(x => x.ID), MarketDateTime, (UPTOOnly & UPTOEnable));
             //mBidList = DBAccess.GetCurrentBids(SelectedMarket.ToString(), PortfolioList.Select(x => x.ID), MarketDateTime, (true));
             mBidList = DBAccess.GetCurrenERCOTBids(SelectedMarket.ToString(), PortfolioList.Select(x => x.ID), MarketDateTime, (true));
@@ -2328,7 +2351,7 @@ namespace Vayu.MarketView.ViewModels
             return dictZone;
         }
 
-        
+
 
         private List<LmpData> originalLMPList;
         private string _searchText;
@@ -2337,11 +2360,11 @@ namespace Vayu.MarketView.ViewModels
             get => _searchText;
             set
             {
-                if (_searchText != value) 
+                if (_searchText != value)
                 {
                     _searchText = value;
-                    RaisePropertyChanged(nameof(SearchText)); 
-                    FilterDataGrid(); 
+                    RaisePropertyChanged(nameof(SearchText));
+                    FilterDataGrid();
                 }
             }
         }
@@ -2424,7 +2447,7 @@ namespace Vayu.MarketView.ViewModels
                     Tuple<string, Dictionary<int, double>> DACongHash = mDataService.GetDACongestionByNodeAndHour(DateTime.Now);
                     if (!IsHistoricalChecked)
                     {
-                         DACongHash = mDataService.GetDACongestionByNodeAndHour(DateTime.Now);
+                        DACongHash = mDataService.GetDACongestionByNodeAndHour(DateTime.Now);
                         while (DACongHash.Item1.Length != 0)
                         {
                             DACongHash = mDataService.GetDACongestionByNodeAndHour(DateTime.Now);
@@ -2433,17 +2456,17 @@ namespace Vayu.MarketView.ViewModels
                     else
                     {
                         DateTime dt = DateTime.Parse(filteredNodes[0].DateTime);
-                         DACongHash = mDataService.GetDACongestionByNodeAndHour(dt);
+                        DACongHash = mDataService.GetDACongestionByNodeAndHour(dt);
                         while (DACongHash.Item1.Length != 0)
                         {
                             DACongHash = mDataService.GetDACongestionByNodeAndHour(dt);
                         }
                     }
-                        foreach (var node in filteredNodes)
-                        {
-                            node.DACongestion = DACongHash.Item2.ContainsKey(node.NodeKey) ? DACongHash.Item2[node.NodeKey] : 0;
-                            node.DART = node.Congestion - node.DACongestion;
-                        }
+                    foreach (var node in filteredNodes)
+                    {
+                        node.DACongestion = DACongHash.Item2.ContainsKey(node.NodeKey) ? DACongHash.Item2[node.NodeKey] : 0;
+                        node.DART = node.Congestion - node.DACongestion;
+                    }
 
                     var filteredDistinctNodes = filteredNodes.GroupBy(d => new { d.NodeName }).Select(y => y.First());
                     LatestLMPList = new LMPDataList(filteredDistinctNodes, lmpList);
@@ -2554,7 +2577,11 @@ namespace Vayu.MarketView.ViewModels
                 {
                     ZonePolyLineLocation loc = new ZonePolyLineLocation();
                     loc.Name = item.Name;
-                    loc.ZoneLocations = ritem.Locations;
+                    // Mapsui migration: RegionInfo.Locations still returns a Bing LocationCollection,
+                    // and ZonePolyLineLocation.ZoneLocations is now MapLocationCollection.
+                    // Adapter performs an explicit coordinate-preserving copy (no reprojection).
+                    // loc.ZoneLocations = ritem.Locations;
+                    loc.ZoneLocations = MapLocationCollectionAdapter.FromBing(ritem.Locations);
                     loc.FillColor = ritem.FillColor;
                     locList.Add(loc);
                 }

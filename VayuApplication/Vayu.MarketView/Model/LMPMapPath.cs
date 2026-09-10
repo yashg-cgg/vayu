@@ -1,4 +1,4 @@
-﻿using Microsoft.Maps.MapControl.WPF;
+﻿//using Microsoft.Maps.MapControl.WPF;   // Bing Maps replaced by Mapsui/OSM. Kept commented for traceability.
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using Vayu.CommonControls;
+using Location = Vayu.MarketView.Model.MapLocation;           // Mapsui migration: retarget Location alias.
+using LocationCollection = Vayu.MarketView.Model.MapLocationCollection; // Mapsui migration: retarget LocationCollection alias.
 
 namespace Vayu.MarketView.Model
 {

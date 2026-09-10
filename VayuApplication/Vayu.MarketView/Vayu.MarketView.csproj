@@ -57,9 +57,12 @@
     <Reference Include="MahApps.Metro">
       <HintPath>..\..\Library\LMPriceWindow\bin\Debug\MahApps.Metro.dll</HintPath>
     </Reference>
+    <!-- Bing Maps DLL reference removed as part of Mapsui/OSM migration.
+         Kept commented so reviewers can see what was replaced.
     <Reference Include="Microsoft.Maps.MapControl.WPF">
       <HintPath>..\..\Library\Vayu.CommonControls\bin\Debug\Microsoft.Maps.MapControl.WPF.dll</HintPath>
     </Reference>
+    -->
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -104,6 +107,7 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\DeenergizedNode.cs" />
     <Compile Include="Model\DispatcherTimerEx.cs" />
+    <Compile Include="Model\GeoTypes.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Model\LMPData.cs" />
     <Compile Include="Model\LMPMapPath.cs" />
@@ -153,6 +157,23 @@
     <None Include="Vayu.MarketView_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Mapsui + OSM (added as part of MarketView migration) -->
+    <PackageReference Include="Mapsui.Nts">
+      <Version>4.1.7</Version>
+    </PackageReference>
+    <PackageReference Include="Mapsui.Tiling">
+      <Version>4.1.7</Version>
+    </PackageReference>
+    <PackageReference Include="Mapsui.Wpf">
+      <Version>4.1.7</Version>
+    </PackageReference>
+    <!-- Still needed at compile time because Vayu.CommonControls.RegionInfo.Locations
+         exposes Microsoft.Maps.MapControl.WPF.LocationCollection, which is consumed
+         by MapLocationCollectionAdapter.FromBing(...). Sourced from NuGet now (was a
+         file reference before). -->
+    <PackageReference Include="Microsoft.Maps.MapControl.WPF">
+      <Version>1.0.0.3</Version>
+    </PackageReference>
     <PackageReference Include="Prism.Core">
       <Version>8.1.97</Version>
     </PackageReference>
