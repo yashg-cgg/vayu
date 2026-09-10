@@ -1,0 +1,55 @@
+﻿<Window    x:Class="Vayu.RT_Constraint_impact.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="VAYU - RT Constraints Impact" Height="783" Width="1066">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="DataGridRow">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding color}" Value="False">
+                        <Setter Property="Background" Value="LightGray" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <DatePicker x:Name="fromDatePicker"  Margin="5" SelectedDateFormat="Short" SelectedDate="{Binding StartDate}" />
+            <Label Content="Market" Grid.Row="0" Margin="2" Grid.Column="1" VerticalAlignment="Center" />
+            <ComboBox Name="MarketComboBox"  Grid.Column="2" Margin="2" ItemsSource="{Binding MarketList}" SelectedItem="{Binding MarketSelected}" />
+            <CheckBox Content="Hourly" Grid.Column="3" Name="HourlyCheckBox"  Margin="5" IsChecked="{Binding HourlyChecked, Mode=TwoWay}" />
+            <Button Content="Refresh" Name="refreshButton" Grid.Column="4" Margin="2" Command="{Binding RunRetrieveFetchDataCommand}" />
+        </Grid>
+        <DataGrid Grid.Row="1" CanUserAddRows="False" GridLinesVisibility="All" AreRowDetailsFrozen="True" 
+                 AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                  ItemsSource="{Binding ConstraintList}"
+                  AutoGenerateColumns="False" SelectionMode="Extended" Margin="0,0,0,0" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Market Date" Width="60*" Foreground="Black" Binding="{Binding MarketDate, StringFormat={}\{0:M/dd/yyyy HH:mm\}}" CanUserReorder="False" IsReadOnly="True" />
+                <DataGridTextColumn Header="Constraint" Width="170*" Foreground="Black" Binding="{Binding Constraint}" CanUserReorder="False" IsReadOnly="True" />
+                <DataGridTextColumn Header="Contingency" Width="170*" Foreground="Black" Binding="{Binding Contingency}" CanUserReorder="False" IsReadOnly="True" />
+                <DataGridTextColumn Header="Shadow Price" Width="40*" Foreground="Black" Binding="{Binding ShadowPrice}" CanUserReorder="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Impact" Width="30*" Foreground="Black" Binding="{Binding Impact }" CanUserReorder="False" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+     
+</Window>

@@ -1,0 +1,330 @@
+﻿<Window    x:Class="Vayu.DAMImpact.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:vm="clr-namespace:Vayu.DAMImpact.ViewModels"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="VAYU - DAM Impact" Height="650" Width="700">
+
+    <Window.Resources>
+
+        <ResourceDictionary>
+            
+            <vm:DataGridBackColorConverter x:Key="myBGColor"/>
+            <vm:ValueToForegroundColorConverter x:Key="ValueToForeground"/>
+            <!--<Style x:Key="CenterCellStyleFG" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Foreground" 
+                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=Content.Text, 
+                        Converter={
+            ValueToForeground}}" />
+                <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
+            </Style>-->
+            <Style x:Key="CenterCellStyleFG" TargetType="{x:Type DataGridCell}">
+
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource ValueToForeground}">
+                            <!--<Binding RelativeSource="{RelativeSource AncestorType=DataGrid}" Path="DataContext.Items[RowIndex].RTImpactsourceFMAProp"/>
+                            
+                            <Binding RelativeSource="{RelativeSource Self}" Path="Content.Text"/>-->
+                            <Binding Path="DataContext.RTImpactsourceProp" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                            <!-- Binding for DataGrid2 -->
+                            <Binding Path="DataContext.RTImpactsourceFMAProp" RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Source" Width="100">
+
+                <Grid x:Name="LayoutRoot" >
+                   
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="148*"/>
+                        <ColumnDefinition Width="1161*"/>
+                        <ColumnDefinition Width="277*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="90"></RowDefinition>
+                        <RowDefinition Height="500*"></RowDefinition>
+                        <RowDefinition Height="500*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="3" Orientation="Horizontal" Grid.ColumnSpan="3">
+
+                        <GroupBox Header="Select Date" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="2" Orientation="Horizontal">
+                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Date  :-"></TextBlock>
+                                    <DatePicker Margin="15,0,0,0" VerticalAlignment="Center" SelectedDate="{Binding StartSelectedDate}"></DatePicker>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Header="Buttons" BorderBrush="#FF1D1C1C" Height="70" Margin="6,7" Width="190">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Height="27" Width="70" Margin="5,0,0,0" Content="Refresh" Command="{Binding RefreshAllCommand}"></Button>
+                                <Button Height="27" Width="90" Margin="5,0,0,0" Content="Export To CSV" Command="{Binding ExportToExcelCommand}"></Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Source Summary" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Cleared:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding SourceHoursClearedProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Price Set:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding SourceHoursPriceSetProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Percent:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="40" Height="20" VerticalAlignment="Center" Text="{Binding SourcePercentageProp, StringFormat={}{0:F2}%}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Total Summary" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Cleared:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding TotalHoursClearedProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Price Set:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding TotalHoursPriceSetProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Percent:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="40" Height="20" VerticalAlignment="Center" Text="{Binding TotalPercentageProp}"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <Expander Name="summaryExpander"
+		          Grid.Row="1"
+		          Grid.RowSpan="1"
+		          Margin="1,1,1,0"
+                  
+		          HorizontalAlignment="Stretch"
+		          BorderBrush="Black"
+		          BorderThickness="1"
+		          Header="Source Market Overview"
+		          IsExpanded="True" Grid.ColumnSpan="3">
+                        <DataGrid Name="SourceDataGrid1" Grid.Row="1"  Margin="0,2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground="LightGray" AreRowDetailsFrozen="True" AutoGenerateColumns="False"
+		          CanUserAddRows="False" FontFamily="Microsoft Sans Serif, 8.25pt" FontWeight="ExtraLight" ItemsSource="{Binding RTImpactsourceProp}"  CellStyle="{StaticResource CenterCellStyleFG}" Grid.ColumnSpan="3">
+                            <!--<DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <Binding Path="RTImpactsourceFMAProp" Converter="{StaticResource ValueToForeground}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.CellStyle>-->
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="35*" Binding="{Binding NodeName}"  Header="NodeName" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour1}"  Header="1" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour2}"  Header="2" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour3}"  Header="3" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour4}"  Header="4" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour5}"  Header="5" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour6}"  Header="6" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour7}"  Header="7" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour8}"  Header="8" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour9}"  Header="9" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour10}"  Header="10" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour11}"  Header="11" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour12}"  Header="12" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour13}"  Header="13" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour14}"  Header="14" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour15}"  Header="15" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour16}"  Header="16" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour17}"  Header="17" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour18}"  Header="18" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour19}"  Header="19" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour20}"  Header="20" IsReadOnly="True"   />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour21}"  Header="21" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour22}"  Header="22" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour23}"  Header="23" IsReadOnly="True"   />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour24}"  Header="24" IsReadOnly="True"   />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Expander>
+                    <Expander Name="Expander"
+		          Grid.Row="2"
+		          Grid.RowSpan="5"
+		          Margin="1,1,1,0"
+		          HorizontalAlignment="Stretch"
+		          BorderBrush="Black"
+		          BorderThickness="1"
+		          Header="Source Impact"
+		          IsExpanded="True" Grid.ColumnSpan="3">
+                        <DataGrid Name="SourceDataGrid2" Grid.Row="2"  Margin="0,2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground="LightGray" AreRowDetailsFrozen="True" AutoGenerateColumns="False"
+		          CanUserAddRows="False" FontFamily="Microsoft Sans Serif, 8.25pt" FontWeight="ExtraLight" ItemsSource="{Binding RTImpactsourceFMAProp}"   Grid.ColumnSpan="3" >
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Width="35*" Binding="{Binding NodeName}"  Header="NodeName" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour1}"  Header="1" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour2}"  Header="2" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour3}"  Header="3" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour4}"  Header="4" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour5}"  Header="5" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour6}"  Header="6" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour7}"  Header="7" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour8}"  Header="8" IsReadOnly="True" />
+
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour9}"  Header="9" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour10}"  Header="10" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour11}"  Header="11" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour12}"  Header="12" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour13}"  Header="13" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour14}"  Header="14" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour15}"  Header="15" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour16}"  Header="16" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour17}"  Header="17" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour18}"  Header="18" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour19}"  Header="19" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour20}"  Header="20" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour21}"  Header="21" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour22}"  Header="22" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour23}"  Header="23" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour24}"  Header="24" IsReadOnly="True"  />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Expander>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Sink" Width="100">
+                <Grid x:Name="LayoutRoot1" >
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="777*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="90"></RowDefinition>
+                        <RowDefinition Height="500*"></RowDefinition>
+                        <RowDefinition Height="500*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="3" Orientation="Horizontal" Grid.ColumnSpan="2">
+                        <GroupBox Header="select Date" BorderBrush="#FF1D1C1C" Height="70" >
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="2" Orientation="Horizontal">
+                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Date :-"></TextBlock>
+                                    <DatePicker Margin="5,0,0,0" Padding="0" VerticalAlignment="Center" SelectedDate="{Binding StartSelectedDate}" Width="108"></DatePicker>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Header="Buttons" BorderBrush="#FF1D1C1C" Height="70" Margin="10,0,0,0" Width="190">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Height="27" Width="70" Margin="5,0,0,0" Content="Refresh" Command="{Binding RefreshAllCommand}"></Button>
+                                <Button Height="27" Width="90" Margin="5,0,5,0" Content="Export To CSV" Command="{Binding ExportToExcelCommandSinkGrid1}"></Button>
+
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Sink Summary" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Cleared:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding SinkHoursClearedProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Price Set:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding SinkHoursPriceSetProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Percent:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="40" Height="20" VerticalAlignment="Center"  Text="{Binding SinkPercentageProp, StringFormat={}{0:F2}%}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Total Summary" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Cleared:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding TotalHoursClearedProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Hours Price Set:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="50" Height="20" VerticalAlignment="Center" Text="{Binding TotalHoursPriceSetProp}"/>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Percent:-"></TextBlock>
+                                <TextBox Margin="5,0,0,0" Width="40" Height="20" VerticalAlignment="Center" Text="{Binding TotalPercentageProp}"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <Expander Name="Expander3"
+		          Grid.Row="1"
+		          Grid.RowSpan="1"
+		          Margin="1,1,1,0"
+		          HorizontalAlignment="Stretch"
+		          BorderBrush="Black"
+		          BorderThickness="1"
+		          Header="Sink Market Overview"
+		          IsExpanded="True" Grid.ColumnSpan="3">
+                        <DataGrid Name="MessagesDataGrid" Grid.Row="1"  Margin="0,2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground="LightGray" AreRowDetailsFrozen="True" AutoGenerateColumns="False"
+		          CanUserAddRows="False" FontFamily="Microsoft Sans Serif, 8.25pt" FontWeight="ExtraLight" ItemsSource="{Binding RTImpactsinkProp}" Grid.ColumnSpan="2" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="35*" Binding="{Binding NodeName}"  Header="NodeName" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour1}"  Header="1" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour2}"  Header="2" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour3}"  Header="3" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour4}"  Header="4" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour5}"  Header="5" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour6}"  Header="6" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour7}"  Header="7" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour8}"  Header="8" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour9}"  Header="9" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour10}"  Header="10" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour11}"  Header="11" IsReadOnly="True" />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour12}"  Header="12" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour13}"  Header="13" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour14}"  Header="14" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour15}"  Header="15" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour16}"  Header="16" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour17}"  Header="17" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour18}"  Header="18" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour19}"  Header="19" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour20}"  Header="20" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour21}"  Header="21" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour22}"  Header="22" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour23}"  Header="23" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour24}"  Header="24" IsReadOnly="True"  />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Expander>
+                    <Expander Name="Expander4"
+		          Grid.Row="2"
+		          Grid.RowSpan="1"
+		          Margin="1,1,1,0"
+		          HorizontalAlignment="Stretch"
+		          BorderBrush="Black"
+		          BorderThickness="1"
+		          Header="Sink Impact"
+		          IsExpanded="True" Grid.ColumnSpan="3">
+                        <DataGrid Name="MessagesData" Grid.Row="2"  Margin="0,2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground="LightGray" AreRowDetailsFrozen="True" AutoGenerateColumns="False"
+		          CanUserAddRows="False" FontFamily="Microsoft Sans Serif, 8.25pt" FontWeight="ExtraLight" ItemsSource="{Binding RTImpactsinkFMAProp}" Grid.ColumnSpan="2" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="35*" Binding="{Binding NodeName}"  Header="NodeName" IsReadOnly="True"  />
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour1}"  Header="1" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour2}"  Header="2" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour3}"  Header="3" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour4}"  Header="4" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour5}"  Header="5" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour6}"  Header="6" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour7}"  Header="7" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour8}"  Header="8" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour9}"  Header="9" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour10}"  Header="10" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour11}"  Header="11" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour12}"  Header="12" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour13}"  Header="13" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour14}"  Header="14" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour15}"  Header="15" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour16}"  Header="16" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour17}"  Header="17" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour18}"  Header="18" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour19}"  Header="19" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour20}"  Header="20" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour21}"  Header="21" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour22}"  Header="22" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour23}"  Header="23" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                                <DataGridTextColumn Width="20*" Binding="{Binding Hour24}"  Header="24" IsReadOnly="True"  CellStyle="{StaticResource CenterCellStyleFG}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Expander>
+                </Grid>
+
+
+            </TabItem>
+
+        </TabControl>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

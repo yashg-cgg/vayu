@@ -1,0 +1,16 @@
+﻿<Window x:Class="Vayu.ConstraintContingencyHistory.ViewModels.UptosNodePrice"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="340" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" >
+            <Button Name="Export" Content="ExportToCSV" Height="30" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" Command="{Binding Export5MinLMPsToExcel}"/>
+        </StackPanel>
+        <DataGrid Grid.Row="1" Name="NodePriceDataGrid" ItemsSource="{Binding NodePriceList}"  AlternatingRowBackground="LightSteelBlue"/>
+    </Grid>
+</Window>

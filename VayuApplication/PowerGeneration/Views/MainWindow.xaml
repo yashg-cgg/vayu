@@ -1,0 +1,73 @@
+﻿<Window    x:Class="Vayu.PowerGeneration.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Power Generation" Height="650" Width="Auto">
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/> 
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="Dates">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <DatePicker SelectedDate="{Binding FromSelectedDate}" Margin="5"/>
+                <DatePicker SelectedDate="{Binding EndSelectedDate}" Grid.Row="1" Margin="5"/>
+            </Grid>
+            <GroupBox Header="Market Type" Grid.Column="1"  >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ComboBox   Grid.Row="0" Margin=" 0 0 0 2" ItemsSource="{Binding PowerTypeList}" SelectedItem="{Binding PowerTypeSelectedItem, Mode=TwoWay}"/>
+                    <ComboBox  Grid.Row="1"  ItemsSource="{Binding ZoneList}" SelectedItem="{Binding ZoneSelectedItem, Mode=TwoWay}"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Types" BorderBrush="Black" BorderThickness="1" Grid.Column="2"  >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Content="Actual" IsChecked="{Binding ActualChecked}" Grid.Row="0"/>
+                    <CheckBox Content="Forecast" IsChecked="{Binding ForecastChecked}" Grid.Row="1" />
+                </Grid>
+            </GroupBox>
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                <Button  Margin="5" Content="Refresh" Command="{Binding RefreshCommand}"></Button>
+                 
+            </Grid>
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Updated Time:"/>
+                <StackPanel Grid.Row="1" >
+                    <TextBlock Text="{Binding UpdateTime}" Grid.Row="1" FontWeight="Bold" Foreground="DarkBlue"  ></TextBlock>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1" x:Name="Plot">
+            <oxy:PlotView Grid.Row="1" Height="auto" Margin="3" VerticalContentAlignment="Stretch" Background="Black" BorderBrush="Gray" BorderThickness="1" Model="{Binding PlotDataModel}"/>
+        </Grid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

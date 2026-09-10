@@ -1,0 +1,293 @@
+﻿<Window
+    x:Class="Vayu.ErcotACLSummaryReport.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+         Height="789" 
+        Width="1200" Background="#B9CDF7"
+        Title="Vayu Ercot ACL Summary Report">
+    <!--Icon="\Images\accountingApp.ico"-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid >
+        <Grid.RowDefinitions >
+            <RowDefinition MaxHeight="75" Height="60*"/>
+            <RowDefinition MaxHeight="200" Height="339*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"  Margin="2,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="143" />
+                <ColumnDefinition Width="323"/>
+                <ColumnDefinition Width="222"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="0" Grid.Column="0" Name="grpDate" Header="Date" BorderBrush="#FF1D1C1C" Margin="10,0,0,5" Grid.ColumnSpan="2">
+                <Grid Height="50" VerticalAlignment="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Grid.Column="0" Name="cbDateRange" Content="Range?" Margin="0,20,5,7" IsChecked="{Binding DateRangeCheckBoxChecked}"/>
+                    <TextBlock Grid.Column="1"  Margin="0,20,5,7" Text="From:"/>
+                    <DatePicker Grid.Column="2"  Margin="0,20,5,7" MinWidth="120" Height="25" SelectedDate="{Binding FromSelectedDate, Mode=TwoWay}"/>
+                    <TextBlock Grid.Column="3" Text="Through"  Margin="0,20,5,7"/>
+                    <DatePicker Grid.Column="4" Margin="0,20,5,7" MinWidth="120" Height="25" SelectedDate="{Binding ThroDate, Mode=TwoWay}" IsEnabled="{Binding IsChecked, ElementName=cbDateRange}" />
+                </Grid>
+            </GroupBox>
+            <Button Grid.Column="2" Width="90" Height="25" Content="Refresh" Margin="6,20,126,16" Command="{Binding RunRefreshommand}"/>
+        </Grid>
+
+        <TabControl Grid.Row="1" Margin="0,0,0,-496">
+
+            <TabItem  Header="Collateral and Unsecured Credit" >
+                <ScrollViewer Margin="0,0,0,-21">
+                    <StackPanel >
+                        <GroupBox  Header="OptionsToInclude"  Grid.Row="1">
+                            <StackPanel Orientation="Horizontal" >
+                                <CheckBox  IsChecked="{Binding CheckedAll, Mode=TwoWay}" Content="All"  Checked="All_checked" Unchecked="Al_unchecked"></CheckBox>
+                                <CheckBox  IsChecked="{Binding CheckedLetterOfCredit, Mode=TwoWay}" Content="LetterOfCredit"  Checked="LetterOfCredit_checked" Unchecked="LetterOfCredit_unchecked"></CheckBox>
+                                <CheckBox  IsChecked="{Binding CheckedSuretyBond, Mode=TwoWay}" Content="SuretyBond" Checked="SuretyBond_checked" Unchecked="SuretyBond_unchecked" ></CheckBox>
+                                <!--<CheckBox  IsChecked="{Binding CheckedGuarantee, Mode=TwoWay}" Content="Guarantee" Checked="Guarantee_checked" Unchecked="Guarantee_unchecked"></CheckBox>-->
+                                <!--<CheckBox  IsChecked="{Binding CheckedUnsecuredCreditLimit, Mode=TwoWay}" Content="UnsecuredCreditLimit" Checked="UnsecuredCreditLimit_checked" Unchecked="UnsecuredCreditLimit_unchecked"></CheckBox>-->
+                                <CheckBox  IsChecked="{Binding CheckedApprovedCRRBilateralTrades, Mode=TwoWay}" Content="ApprovedCRRBilateralTrades" Checked="ApprovedCRRBilateralTrades_checked" Unchecked="ApprovedCRRBilateralTrades_unchecked"></CheckBox>
+                                <CheckBox  IsChecked="{Binding CheckedCRRLockedACL, Mode=TwoWay}" Content="CRRLockedACL" Checked="CRRLockedACL_checked" Unchecked="CRRLockedACL_unchecked"></CheckBox>
+                                <Button Grid.Column="3" Width="90" Height="25" Content="Export" Margin="10,0." Command="{Binding CLExportCommand}" />
+                            </StackPanel>
+                        </GroupBox>
+                        <DataGrid x:Name="accDataDataGrid" Grid.Row="1"  HorizontalAlignment="Left" AlternatingRowBackground="#B9CDF7" IsReadOnly="True"
+				         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" CanUserAddRows="False" 
+                      ItemsSource="{Binding DataList}" Margin="0,0,0,37" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="40*"
+						                    Binding="{Binding BusinessDate, StringFormat={}\{0:MM/dd/yyyy\}}"						                    
+						                    Header="BusinessDate" />
+                                <DataGridTextColumn Width="35*"
+						                    Binding="{Binding Cash}"						                    
+						                    Header="Cash" />
+                                <DataGridTextColumn Width="60*"
+						                    Binding="{Binding TotalSecuredCollateral}"						                    
+						                    Header="TotalSecuredCollateral" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TPES}"						                    
+						                    Header="TPES" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding IndependentAmount}"						                    
+						                    Header="IndependentAmount" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding RemainderCollateral}"						                    
+						                    Header="RemainderCollateral" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding LetterOfCredit}"						                    
+						                    Header="LetterOfCredit"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding SuretyBond}"						                    
+						                    Header="SuretyBond"/>
+                                <!--<DataGridTextColumn Width="50*"
+						                    Binding="{Binding Guarantee}"						                    
+						                    Header="Guarantee"/>
+                            <DataGridTextColumn Width="50*"
+						                    Binding="{Binding UnsecuredCreditLimit}"						                    
+						                    Header="UnsecuredCreditLimit"/>-->
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ApprovedCRRBilateralTrades}"						                    
+						                    Header="ApprovedCRRBilateralTrades"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding CRRLockedACL}"						                    
+						                    Header="CRRLockedACL"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem  Header="TPES and CRR ACL">
+                <ScrollViewer>
+                    <StackPanel >
+                        <GroupBox  Header="OptionsToInclude"  Grid.Row="1">
+                            <StackPanel Orientation="Horizontal" >
+                                <CheckBox Margin="2" IsChecked="{Binding CheckedAllcrr, Mode=TwoWay}" Content="All"  Checked="CheckedAllcrr_checked" Unchecked="CheckedAllcrr_unchecked"></CheckBox>
+                                <CheckBox Margin="2" IsChecked="{Binding CheckedApprovedBilateralTrades, Mode=TwoWay}" Content="ApprovedBilateralTrades"  Checked="ApprovedBilateralTrades_checked" Unchecked="ApprovedBilateralTrades_unchecked"></CheckBox>
+                                <CheckBox Margin="2" IsChecked="{Binding CheckedACLLockedForCRR, Mode=TwoWay}" Content="ACLLockedForCRR"  Checked="ACLLockedForCRR_checked" Unchecked="ACLLockedForCRR_unchecked"></CheckBox>
+                                <CheckBox Margin="2" IsChecked="{Binding TPESInExcessOfSecuredCollateral, Mode=TwoWay}" Content="TPESInExcessOfSecuredCollateral" Checked="TPESInExcessOfSecuredCollateral_checked" Unchecked="TPESInExcessOfSecuredCollateral_unchecked" ></CheckBox>
+                                <CheckBox Margin="2" IsChecked="{Binding CheckedOutstandingSecuredCollateralRequest, Mode=TwoWay}" Content="OutstandingSecuredCollateralRequest" Checked="OutstandingSecuredCollateralRequest_checked" Unchecked="OutstandingSecuredCollateralRequest_unchecked"></CheckBox>
+                                <CheckBox Margin="2" IsChecked="{Binding CheckedAdditionalSecuredCollateralRequired, Mode=TwoWay}" Content="AdditionalSecuredCollateralRequired" Checked="AdditionalSecuredCollateralRequired_checked" Unchecked="AdditionalSecuredCollateralRequired_unchecked"></CheckBox>
+                                <Button Grid.Column="3" Width="90" Height="25" Content="Export" Margin="10,0." Command="{Binding CRRExportCommand}" />
+                            </StackPanel>
+
+                        </GroupBox>
+
+                        <DataGrid x:Name="crrDataDataGrid" Grid.Row="1"  HorizontalAlignment="Left" AlternatingRowBackground="#B9CDF7" IsReadOnly="True"
+				         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" CanUserAddRows="False" 
+                      ItemsSource="{Binding CRRDataList}" Margin="0,0,0,37" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="40*"
+						                    Binding="{Binding BusinessDate, StringFormat={}\{0:MM/dd/yyyy\}}"						                    
+						                    Header="BusinessDate" />
+                                <DataGridTextColumn Width="35*"
+						                    Binding="{Binding TPES}"						                    
+						                    Header="TPES" />
+                                <DataGridTextColumn Width="60*"
+						                    Binding="{Binding IndependentAmount}"						                    
+						                    Header="IndependentAmount" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TPESAsPerOfSecuredCollateral}"						                    
+						                    Header="TPESAsPerOfSecuredCollateral"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding CRRACL}"						                    
+						                    Header="CRRACL"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding AdjustedCRRACL}"						                    
+						                    Header="AdjustedCRRACL"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ACLSentToCRR}"						                    
+						                    Header="ACLSentToCRR"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ApprovedBilateralTrades}"						                    
+						                    Header="ApprovedBilateralTrades" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ACLLockedForCRR}"						                    
+						                    Header="ACLLockedForCRR" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TPESInExcessOfSecuredCollateral}"						                    
+						                    Header="TPESInExcessOfSecuredCollateral" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding OutstandingSecuredCollateralRequest}"						                    
+						                    Header="OutstandingSecuredCollateralRequest"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding AdditionalSecuredCollateralRequired}"						                    
+						                    Header="AdditionalSecuredCollateralRequired"/>
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem  Header="TPEA and DAM ACL">
+                <ScrollViewer>
+                    <StackPanel Margin="0,0,-38,-81" >
+                        <GroupBox  Header="OptionsToInclude"  Grid.Row="1">
+                            <StackPanel Orientation="Horizontal" >
+                                <CheckBox Margin="2" IsChecked="{Binding CheckedAlldam, Mode=TwoWay}" Content="All"  Checked="CheckedAlldam_checked" Unchecked="CheckedAlldam_unchecked"></CheckBox>
+                                <!--<CheckBox Margin="2" IsChecked="{Binding CheckedGt, Mode=TwoWay}" Content="Guarantee"  Checked="Gt_checked" Unchecked="Gt_unchecked"></CheckBox>-->
+                                <!--<CheckBox Margin="2" IsChecked="{Binding CheckedUnsecuredCreditt, Mode=TwoWay}" Content="UnsecuredCreditLimit"  Checked="Uncrdt_checked" Unchecked="Uncrdt_unchecked"></CheckBox>-->
+                                <CheckBox Margin="2" IsChecked="{Binding TPEAInExcessOfRemainderCollateral, Mode=TwoWay}" Content="TPEAInExcessOfRemainderCollateralAndUnsecuredCredit" Checked="TPEAInExcessOfRemainderCollateralAndUnsecuredCredit_checked" Unchecked="TPEAInExcessOfRemainderCollateralAndUnsecuredCredit_unchecked" ></CheckBox>
+                                <CheckBox Margin="2" IsChecked="{Binding OutstandingAnyCollateralRequest, Mode=TwoWay}" Content="OutstandingAnyCollateralRequest" Checked="OutstandingAnyCollateralRequest_checked" Unchecked="OutstandingAnyCollateralRequest_unchecked"></CheckBox>
+                                <CheckBox Margin="2" IsChecked="{Binding CheckedAdditionalAnyCollateralRd, Mode=TwoWay}" Content="AdditionalAnyCollateralRequired" Checked="AdditionalAnyCollateralRd_checked" Unchecked="AdditionalAnyCollateralRd_unchecked"></CheckBox>
+                                <Button Grid.Column="3" Width="90" Height="25" Content="Export" Margin="10,0." Command="{Binding DAMExportCommand}" />
+                            </StackPanel>
+                        </GroupBox>
+                        <DataGrid x:Name="damDataDataGrid" Grid.Row="1"  HorizontalAlignment="Left" AlternatingRowBackground="#B9CDF7" IsReadOnly="True"
+				         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" CanUserAddRows="False" 
+                      ItemsSource="{Binding damDataList}" Margin="0,0,0,37" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="40*"
+						                    Binding="{Binding BusinessDate, StringFormat={}\{0:MM/dd/yyyy\}}"						                    
+						                    Header="BusinessDate" />
+                                <DataGridTextColumn Width="35*"
+						                    Binding="{Binding TPEA}"						                    
+						                    Header="TPEA" />
+                                <DataGridTextColumn Width="60*"
+						                    Binding="{Binding RemainderCollateral}"						                    
+						                    Header="RemainderCollateral" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TPEAAsPerOfAnyCollateralAndUnsecuredCreditLimit}"						                    
+						                    Header="TPEAAsPerOfAnyCollateralAndUnsecuredCreditLimit"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding DAMACL}"						                    
+						                    Header="DAMACL"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding AdjustedDAMACL}"						                    
+						                    Header="AdjustedDAMACL"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ACLSentToDAM}"						                    
+						                    Header="ACLSentToDAM"/>
+                                <!--<DataGridTextColumn Width="50*"
+						                    Binding="{Binding Guarantee}"						                    
+						                    Header="Guarantee" />
+                            <DataGridTextColumn Width="50*"
+						                    Binding="{Binding UnsecuredCreditLimit}"						                    
+						                    Header="UnsecuredCreditLimit" />-->
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TPEAInExcessOfRemainderCollateralAndUnsecuredCredit}"						                    
+						                    Header="TPEAInExcessOfRemainderCollateralAndUnsecuredCredit" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding OutstandingAnyCollateralRequest}"						                    
+						                    Header="OutstandingAnyCollateralRequest"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding AdditionalAnyCollateralRequired}"						                    
+						                    Header="AdditionalAnyCollateralRequired"/>
+
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem  Header="Collateral Transactions ACL">
+                <ScrollViewer>
+                    <StackPanel >
+                        <GroupBox  Header="ClTransactionsSummary"  Grid.Row="1">
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Grid.Column="3" Width="90" Height="25" Content="Export" Margin="10,0." Command="{Binding cltranExportCommand}" />
+                            </StackPanel>
+
+                        </GroupBox>
+
+                        <DataGrid x:Name="cltranDataDataGrid" Grid.Row="1"  HorizontalAlignment="Left" AlternatingRowBackground="#B9CDF7" IsReadOnly="True"
+				         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" CanUserAddRows="False" 
+                      ItemsSource="{Binding cltranDataList}" Margin="0,0,0,37" >
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem 
+                                           Click="Showdesc_Click"
+							               FontSize="11"
+									       Header="InvoiceStatements" >
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Width="40*"
+						                    Binding="{Binding BusinessDate, StringFormat={}\{0:MM/dd/yyyy\}}"						                    
+						                    Header="BusinessDate" >
+
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="35*"
+						                    Binding="{Binding CollateralType}"						                    
+						                    Header="ClType" />
+                                <DataGridTextColumn Width="60*"
+						                    Binding="{Binding BeginningBalance}"						                    
+						                    Header="BeginningBalance" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TransactionDate}"						                    
+						                    Header="TransactionDate"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TransactionAmount}"						                    
+						                    Header="TransactionAmount"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding EndingBalance}"						                    
+						                    Header="EndingBalance"/>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding Description}"						                    
+						                    Header="Description"/>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</Window>

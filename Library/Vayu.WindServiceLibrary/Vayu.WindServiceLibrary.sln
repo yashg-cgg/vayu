@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.WindServiceLibrary", "Vayu.WindServiceLibrary\Vayu.WindServiceLibrary.csproj", "{AABC5B86-C081-4019-9E92-0AC929284EDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AABC5B86-C081-4019-9E92-0AC929284EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABC5B86-C081-4019-9E92-0AC929284EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABC5B86-C081-4019-9E92-0AC929284EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABC5B86-C081-4019-9E92-0AC929284EDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1F0877A-B622-4721-AFA5-45DA4CFD66E7}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,53 @@
+﻿<Window  
+                  x:Class="Vayu.ConstraintContingencyHistory.Views.ConstraintDetails"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:prism="http://prismlibrary.com/"
+                  xmlns:local="clr-namespace:Vayu.ConstraintContingencyHistory.Views"
+                  prism:ViewModelLocator.AutoWireViewModel="True" 
+                  Title="Constraint Details" Width="800" Height="400"
+                  WindowStartupLocation="CenterScreen"
+                  WindowStyle="ThreeDBorderWindow">
+    <Window.Resources>
+        <local:CurrencyColorConverter x:Key="c2c" />
+    </Window.Resources>
+    <Grid>
+        <DataGrid AlternatingRowBackground="LightGray"
+		          AutoGenerateColumns="False"
+		          CanUserAddRows="False"
+		          FontFamily="Microsoft Sans Serif, 8.25pt"
+		          FontWeight="ExtraLight"
+		          ItemsSource="{Binding ConstraintList}"
+		          SelectionUnit="Cell">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="60*"
+				                    Binding="{Binding ConstraintDate}"
+				                    CanUserReorder="False"
+				                    Header="Date"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="100*"
+				                    Binding="{Binding ConstraintText}"
+				                    CanUserReorder="False"
+				                    Header="Monitored"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="60*"
+				                    Binding="{Binding ContingencyText}"
+				                    CanUserReorder="False"
+				                    Header="Contingency"
+				                    IsReadOnly="True" />
+
+                <DataGridTextColumn  Header="Price"
+                                     Width="60*"
+                                     CanUserReorder="False"
+                                     Binding="{Binding Price,StringFormat=0.00}"  >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Foreground"
+                                  Value="{Binding Price, Converter={StaticResource c2c}}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn> 
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

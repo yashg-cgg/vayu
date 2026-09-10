@@ -1,0 +1,868 @@
+﻿<Window 
+                  
+                 x:Class="Vayu.Node_Price_Hourly.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+      xmlns:my="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+    xmlns:local="clr-namespace:Vayu.Node_Price_Hourly.Views"
+    prism:ViewModelLocator.AutoWireViewModel="False" WindowState="Maximized"
+        Title="Node Price Hourly" Height="1446" Width="1500" >
+    <Window.Resources>
+
+        <local:DataGridCellColorConverter x:Key="myBGColor" />
+        <local:DataGridCellForeColorConverter x:Key="myFGColor" />
+        <local:DataGridCellForeColorConverterSimple x:Key="myFGColorSimple" />
+        <Style x:Key="CenterCellStyleFGSimple" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text, Converter={StaticResource myFGColorSimple}}" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ContextMenu x:Key="contextMenu"
+		             Background="Lavender"
+		             FontWeight="DemiBold">
+            <MenuItem Click="exportMenuItem_Click" Header="Export" />
+        </ContextMenu>
+        <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="25" />
+        </Style>
+        <Style x:Key="defCStyle" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource myBGColor}">
+                        <MultiBinding.Bindings>
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="." />
+                        </MultiBinding.Bindings>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource myFGColor}">
+                        <MultiBinding.Bindings>
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="." />
+                        </MultiBinding.Bindings>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Dates">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Name="ercotRadioButton"
+							             Grid.Column="3" Grid.Row="1"
+							             Checked="ercotRadioButton_Checked"
+							             Content="ERCOT"
+							             GroupName="Market" 
+                                         IsChecked="True"/>
+                    <Button Name="refreshButton" Grid.Column="2"
+				        Click="refreshButton_Click"
+				        Content="Refresh"
+                            Margin="10,20"
+				        FontSize="14"
+				        FontWeight="Bold" />
+                    <DatePicker Name="FromNodeDatePicker"
+				            Grid.Column="0" 
+				            SelectedDateChanged="FromNodeDatePicker_SelectedDateChanged">
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="IsReadOnly" Value="True" />
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                    <DatePicker Name="ToNodeDatePicker"
+				            Grid.Column="1"
+				            SelectedDateChanged="ToNodeDatePicker_SelectedDateChanged">
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="IsReadOnly" Value="True" />
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                    <RadioButton Name="RangeRadioButton"
+				             Grid.Row="1" 
+				             Checked="RangeRadioButton_Checked"
+				             Content="Range"
+				             IsChecked="True" />
+                    <RadioButton Name="CollectionRadioButton"
+				             Grid.Column="1" Grid.Row="1"
+				             Checked="CollectionRadioButton_Checked"
+				             Content="Collection" />
+                    <ComboBox Name="CollectionComboBox"
+				           Grid.Column="0" Grid.Row="2"
+				          DropDownClosed="CollectionComboBox_DropDownClosed" />
+                    <ListBox Name="DateCollectionListBox"
+				         Grid.Column="1" Grid.ColumnSpan="2"
+				          Grid.Row="2" Grid.RowSpan="2" />
+                </Grid>
+            </GroupBox>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <GroupBox Grid.Row="2"  BorderBrush="#FF0D0D0D">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Name="UptosCheckBox" Content="UPTOs"   Checked="UptosCheckBox_Checked" Unchecked="UptosCheckBox_Unchecked" />
+                        <CheckBox x:Name="nodeTypeCheckBox" Content="Node Type" Grid.Column="1"  Click="nodeTypeCheckBox_Click" />
+                        <Label x:Name="countLabel" Content="Count" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="2"/>
+                        <Label x:Name="totalRecordsLabel" Grid.Column="3"  BorderBrush="Gray" BorderThickness="1" Padding="0"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Aggregate">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Name="AggAvgRadioButton"
+						             Checked="AggAvgRadioButton_Checked"
+						             Content="Avg."
+						             IsChecked="True" />
+                        <RadioButton Name="AggMaxRadioButton"
+						             Grid.Column="1"
+						             Checked="AggMaxRadioButton_Checked"
+						             Content="Max" />
+                        <RadioButton Name="AggMinRadioButton"
+						             Grid.Column="2" 
+						             Checked="AggMinRadioButton_Checked"
+						             Content="Min" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="1" Header="Aggregate">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Name="daRadioButton"  Grid.Column="0"
+						             Checked="daRadioButton_Checked"
+						             Content="DA"
+						             IsChecked="True" />
+                        <RadioButton Name="rtRadioButton"
+						               Grid.Column="1"
+						             Checked="rtRadioButton_Checked"
+						             Content="RT" />
+                        <RadioButton Name="dartRadioButton"
+						             Grid.Column="2"
+						             
+						             Checked="dartRadioButton_Checked"
+						             Content="DART" />
+                        <RadioButton Name="ratioRadioButton"
+						             Grid.Column="3"
+						             Click="ratioRadioButton_Click"
+						             Content="RATIO" />
+                    </Grid>
+                </GroupBox>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Filters">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Name="NullCheckBox"
+							          Grid.Column="0"
+							          Checked="NullCheckBox_Checked"
+							          Content="Show Nulls"
+							          IsChecked="False"
+							          Unchecked="NullCheckBox_Unchecked" />
+                        <ComboBox Name="PathComboBox"
+							         Grid.Column="1"
+							          AllowDrop="True"
+							          DropDownClosed="PathComboBox_DropDownClosed"
+							          SelectedIndex="0"
+							          StaysOpenOnEdit="True"
+							          Text="UPTOs">
+                            <ComboBoxItem Content="ALL" />
+                            <ComboBoxItem Content="UPTOs" />
+                        </ComboBox>
+                        <ComboBox Name="NodeTypeComboBox"
+						           Grid.Column="2" Text="Node Type"
+						          SelectionChanged="NodeTypeComboBox_SelectionChanged" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox  Grid.Row="1"  
+				          BorderBrush="#FF030303"
+				          Header="Hour LMP" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Name="lmpHourCheckBox"
+						          Grid.Column="0"
+						          Checked="lmpHourCheckBox_Checked"
+						          Content="Hour" Margin="10,10" />
+                        <ComboBox Name="filterLmpHourComboBox"
+						          Grid.Column="1" HorizontalContentAlignment="Center"
+						          SelectedIndex="0"
+                                  Width="50"
+						          SelectionChanged="filterLmpHourComboBox_SelectionChanged">
+                            <ComboBoxItem Content="1" />
+                            <ComboBoxItem Content="2" />
+                            <ComboBoxItem Content="3" />
+                            <ComboBoxItem Content="4" />
+                            <ComboBoxItem Content="5" />
+                            <ComboBoxItem Content="6" />
+                            <ComboBoxItem Content="7" />
+                            <ComboBoxItem Content="8" />
+                            <ComboBoxItem Content="9" />
+                            <ComboBoxItem Content="10" />
+                            <ComboBoxItem Content="11" />
+                            <ComboBoxItem Content="12" />
+                            <ComboBoxItem Content="13" />
+                            <ComboBoxItem Content="14" />
+                            <ComboBoxItem Content="15" />
+                            <ComboBoxItem Content="16" />
+                            <ComboBoxItem Content="17" />
+                            <ComboBoxItem Content="18" />
+                            <ComboBoxItem Content="19" />
+                            <ComboBoxItem Content="20" />
+                            <ComboBoxItem Content="21" />
+                            <ComboBoxItem Content="22" />
+                            <ComboBoxItem Content="23" />
+                            <ComboBoxItem Content="24" />
+                        </ComboBox>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Name="grpLMP"  Grid.Row="2" BorderBrush="#FF0D0D0D" Header="LMP Data">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Name="rdbPrice" Height="16"  Grid.Column="0" Content="Price" Checked="rdbPrice_Checked" IsChecked="True" />
+                        <RadioButton Name="rdbCongestion" Grid.Column="1"  Checked="rdbCongestion_Checked" Content="Congestion" />
+                        <RadioButton Name="rdbLoss" Grid.Column="2" Checked="rdbLoss_Checked" Content="Loss" />
+                    </Grid>
+                </GroupBox>
+            </Grid>
+            <GroupBox Header="Max/Min" Grid.Column="3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Name="MaxRadioButton"
+						              Grid.Column="0"
+						             Content="Max"
+						             IsChecked="True" />
+                    <RadioButton Name="MinRadioButton"
+						               Grid.Column="1"
+						             Content="Min" />
+                    <RadioButton Name="AvgRadioButton"
+						               Grid.Column="2" 
+						             Content="Avg." />
+                    <RadioButton Name="PeakAvgRadioButton"
+						              Grid.Column="3"
+						             Content="Peak Avg." />
+                    <RadioButton Name="OffPeakRadioButton"
+						              Grid.Column="0" Grid.Row="1"
+						             Content="Off Peak Avg." />
+                    <RadioButton Name="HourRadioButton"
+						              Grid.Column="2" Grid.Row="1"
+						             Content="Hour" />
+                    <TextBox Name="MinTextBox"
+						        Grid.Column="1" Grid.Row="2" />
+                    <TextBox Name="MaxTextBox"
+						         Grid.Column="2" Grid.Row="2"/>
+                    <Button  Grid.Column="3" Grid.Row="2"
+						        Click="filterButton_Click"
+						        Content="Filter" />
+                    <ComboBox Name="hourComboBox"
+						           Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center"
+HorizontalContentAlignment="Center"						          SelectedIndex="0">
+                        <ComboBoxItem Content="1" />
+                        <ComboBoxItem Content="2" />
+                        <ComboBoxItem Content="3" />
+                        <ComboBoxItem Content="4" />
+                        <ComboBoxItem Content="5" />
+                        <ComboBoxItem Content="6" />
+                        <ComboBoxItem Content="7" />
+                        <ComboBoxItem Content="8" />
+                        <ComboBoxItem Content="9" />
+                        <ComboBoxItem Content="10" />
+                        <ComboBoxItem Content="11" />
+                        <ComboBoxItem Content="12" />
+                        <ComboBoxItem Content="13" />
+                        <ComboBoxItem Content="14" />
+                        <ComboBoxItem Content="15" />
+                        <ComboBoxItem Content="16" />
+                        <ComboBoxItem Content="17" />
+                        <ComboBoxItem Content="18" />
+                        <ComboBoxItem Content="19" />
+                        <ComboBoxItem Content="20" />
+                        <ComboBoxItem Content="21" />
+                        <ComboBoxItem Content="22" />
+                        <ComboBoxItem Content="23" />
+                        <ComboBoxItem Content="24" />
+                    </ComboBox>
+                    <ComboBox Name="dartComboBox"
+						          Grid.Column="0" Grid.Row="3" VerticalContentAlignment="Center"
+ HorizontalContentAlignment="Center"						          SelectedIndex="0">
+                        <ComboBoxItem Content="DA" />
+                        <ComboBoxItem Content="RT" />
+                        <ComboBoxItem Content="DART" />
+                        <ComboBoxItem Content="RATIO" />
+                    </ComboBox>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Name="groupBox5" Grid.Column="4"
+				          BorderBrush="#FF030303"
+				          Header="Zone">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox Name="ZoneListBox" Grid.Row="0"
+ Grid.Column="0"						         SelectionMode="Multiple">
+                        <ListBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightGreen</SolidColorBrush>
+                        </ListBox.Resources>
+                    </ListBox>
+                    <ListBox Name="SinkZoneListBox" Grid.Row="0" Grid.Column="2"
+						         SelectionMode="Multiple">
+                        <ListBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightGreen</SolidColorBrush>
+                        </ListBox.Resources>
+                    </ListBox>
+                    <Button Name="ZoneFilterButton" Grid.Column="1" Grid.Row="2"
+						        Click="ZoneFilterButton_Click"
+						        Content="Zone Filter" />
+                    <Button Name="SelectAllButton" Grid.Column="0" Grid.Row="1"
+						        Click="SelectAllButton_Click"
+						        Content="Select All" />
+                    <Button Name="UnSelectAllButton" Grid.Column="0" Grid.Row="2"
+						        Click="UnSelectAllButton_Click"
+						        Content="UnSelect All" />
+                    <Button Name="SinkSelectAllButton"
+						         Grid.Column="2" Grid.Row="1"
+						        Click="SinkSelectAllButton_Click"
+						        Content="Select All" />
+                    <Button Name="SinkUnSelectAllButton"
+						        Grid.Column="2" Grid.Row="2"
+						       
+						        HorizontalAlignment="Left"
+						        VerticalAlignment="Top"
+						        Click="SinkUnSelectAllButton_Click"
+						        Content="UnSelect All" />
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <TabControl Name="tabControl1"
+		            Grid.Row="1"
+		            HorizontalAlignment="Stretch"
+		            VerticalAlignment="Stretch">
+            <TabItem Name="NodesItem" Header="Nodes"  >
+                <DataGrid Name="nodeDataGrid"
+				          HorizontalAlignment="Stretch"
+				          VerticalAlignment="Stretch"
+				          CanUserReorderColumns="False"
+				          CanUserResizeColumns="True"
+				          CanUserResizeRows="False"
+				          CellStyle="{StaticResource defCStyle}"
+				          ColumnHeaderStyle="{StaticResource HeaderStyle}"
+				          EnableRowVirtualization="True"
+				          LoadingRow="PathGrid_LoadingRow"
+				          RowHeight="20"
+				          SelectedCellsChanged="nodeDataGrid_SelectedCellsChanged"
+				          SelectionChanged="nodeDataGrid_SelectionChanged_1"
+				          SelectionMode="Extended"
+				          SelectionUnit="CellOrRowHeader"
+				          VirtualizingPanel.IsVirtualizing="True"
+				          VirtualizingPanel.VirtualizationMode="Recycling">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="LMPGraph_Click" Header="LMP Graphs" />
+                            <MenuItem Click="NodeAnalyzer_Click" Header="Node Analyzer" />
+                            <MenuItem Click="NodeMaps_Click" Header="Show Node Map" />
+                            <MenuItem Click="MenuItem_Click" Header="Export to Excel" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="110*"
+						                    MinWidth="40"
+						                    Binding="{Binding NodeName}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Node"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding NodeType}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="NodeType"
+						                    IsReadOnly="True"
+						                    Visibility="Hidden" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding ZoneName}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Zone"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="150*"
+						                    MinWidth="40"
+						                    Binding="{Binding SinkName}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Sink"
+						                    IsReadOnly="True"
+						                    Visibility="Hidden" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding SinkType}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="NodeType"
+						                    IsReadOnly="True"
+						                    Visibility="Hidden" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding SinkZone}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Zone"
+						                    IsReadOnly="True"
+						                    Visibility="Hidden" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding Max,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Max"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding Min,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Min"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding Avg,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Avg"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="85*"
+						                    MinWidth="40"
+						                    Binding="{Binding PeakAvg,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Peak Avg"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="85*"
+						                    MinWidth="40"
+						                    Binding="{Binding OffPeakAvg,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Off Peak Avg"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="85*"
+						                    MinWidth="40"
+						                    Binding="{Binding Avg1_11,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Avg 1-11"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="89*"
+						                    MinWidth="40"
+						                    Binding="{Binding Avg12_24,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Avg 12-24"
+						                    IsReadOnly="True" />
+
+                        <!--<DataGridTemplateColumn Header="1 LMP" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DataGrid Height="100" AutoGenerateColumns="False" ItemsSource="{Binding HE1_List}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Price" Width="auto" Binding="{Binding Path=Price}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Congestion" Width="auto" Binding="{Binding Path=Congestion}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Loss" Width="auto" Binding="{Binding Path=Loss}"></DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>-->
+                        <DataGridTextColumn Width="89*" MinWidth="40" Binding="{Binding SRTMin, StringFormat=0.00}" CanUserReorder="False" FontWeight="Bold" Header="RT Min" IsReadOnly="True" />
+                        <DataGridTextColumn Width="89*" MinWidth="40" Binding="{Binding SRTMax, StringFormat=0.00}" CanUserReorder="False" FontWeight="Bold" Header="RT Max" IsReadOnly="True" />
+                        <DataGridTextColumn Width="89*" MinWidth="40" Binding="{Binding PathMinRT}" CanUserReorder="False" FontWeight="Bold" Header="Min RT Date" IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE1,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="1"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE2,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="2"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE3,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="3"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE4,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="4"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE5,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="5"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE6,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="6"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE7,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="7"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE8,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="8"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE9,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="9"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE10,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="10"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE11,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="11"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE12,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="12"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE13,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="13"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE14,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="14"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE15,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="15"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE16,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="16"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE17,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="17"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE18,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="18"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE19,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="19"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE20,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="20"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE21,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="21"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE22,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="22"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE23,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="23"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding HE24,
+						                                      StringFormat=0.00}"
+						                    CanUserReorder="False"
+						                    Header="24"
+						                    IsReadOnly="True" />
+                    </DataGrid.Columns>
+
+                    <!--<DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding HE1_List}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Price" Width="auto" Binding="{Binding Path=LMPPrice}" />
+                                    <DataGridTextColumn Header="Congestion" Width="auto" Binding="{Binding Path=Congestion}" />
+                                    <DataGridTextColumn Header="Loss" Width="auto" Binding="{Binding Path=Loss}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>-->
+
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Hour LMP"   >
+                <DataGrid Name="nodeHourLmpDataGrid"  
+				          HorizontalAlignment="Stretch"
+				          VerticalAlignment="Stretch"
+				          AutoGenerateColumns="False"
+				          CanUserReorderColumns="False"
+				          CanUserResizeColumns="True"
+				          CanUserResizeRows="False"
+				          ColumnHeaderStyle="{StaticResource HeaderStyle}"
+				          ContextMenu="{StaticResource contextMenu}"
+				          EnableRowVirtualization="True"
+				          RowHeight="20"
+				          VirtualizingPanel.IsVirtualizing="True"
+				          VirtualizingPanel.VirtualizationMode="Recycling">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="150*"
+						                    MinWidth="40"
+						                    Binding="{Binding NodeName}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Node"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding NodeType}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="NodeType"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="80*"
+						                    MinWidth="40"
+						                    Binding="{Binding ZoneName}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Zone"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="150*"
+						                    MinWidth="40"
+						                    Binding="{Binding SinkName}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Sink"
+						                    IsReadOnly="True"
+						                    Visibility="Hidden" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding SinkType}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="NodeType"
+						                    IsReadOnly="True"
+						                    Visibility="Hidden" />
+                        <DataGridTextColumn Width="80*"
+						                    MinWidth="40"
+						                    Binding="{Binding SinkZone}"
+						                    CanUserReorder="False"
+						                    FontWeight="Bold"
+						                    Header="Zone"
+						                    IsReadOnly="True"
+						                    Visibility="Hidden" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding DA}"
+						                    CanUserReorder="False"
+						                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+						                    Header="DA"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding RT}"
+						                    CanUserReorder="False"
+						                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+						                    Header="RT"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding DART}"
+						                    CanUserReorder="False"
+						                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+						                    Header="DART"
+						                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+						                    MinWidth="40"
+						                    Binding="{Binding RATIO}"
+						                    CanUserReorder="False"
+						                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+						                    Header="RATIO"
+						                    IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Name="NodesMapItem" Header="Nodes Map"  >
+                <Grid>
+                    <my:Map x:Name="myMap"
+					        Margin="20"
+					        HorizontalAlignment="Stretch"
+					        VerticalAlignment="Stretch"
+					        Center="39.3683,-95.2734,0.0000"
+					        CredentialsProvider="AiNuiCLvcznKfTUSjWoygnL1mArN5y-kquVndVduuGYtnznAP-Y0cy5fw213OUOO"
+					        Mode="Road"
+					        Padding="20"
+					        ZoomLevel="4.000" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

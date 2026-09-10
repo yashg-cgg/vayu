@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9AC2CC75-7C96-4CAF-8ADC-EFC2266CDAC8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Vayu.LTC_Portfolio</RootNamespace>
+    <AssemblyName>Vayu.LTC Portfolio</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>DE19A9B7A3B0BE8891DD7A118AB2F34718402CF6</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Vayu.LTC Portfolio_3_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\..\Library\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary\bin\Debug\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Model\ImportHelper.cs" />
+    <Compile Include="ViewModels\ErrorDialogViewModel.cs" />
+    <Compile Include="ViewModels\PathDetailViewModel.cs" />
+    <Compile Include="ViewModels\PieChartViewModel.cs" />
+    <Compile Include="Views\ErrorDialog.xaml.cs">
+      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PathDetail.xaml.cs">
+      <DependentUpon>PathDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PieChart.xaml.cs">
+      <DependentUpon>PieChart.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\ErrorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Converters.cs" />
+    <Compile Include="Model\Cost.cs" />
+    <Compile Include="Model\DACongestion.cs" />
+    <Compile Include="Model\DataService.cs" />
+    <Compile Include="Model\HourlyPivotData.cs" />
+    <Compile Include="Model\IDataService.cs" />
+    <Compile Include="Model\PNL.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\PathDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PieChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Vayu.LTC Portfolio_1_TemporaryKey.pfx" />
+    <None Include="Vayu.LTC Portfolio_2_TemporaryKey.pfx" />
+    <None Include="Vayu.LTC Portfolio_3_TemporaryKey.pfx" />
+    <None Include="Vayu.LTC Portfolio_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OxyPlot.Core">
+      <Version>2.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="OxyPlot.Wpf">
+      <Version>2.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.DryIoc" Version="8.0.0.1909" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\CRRCalculationLibrary\Vayu.CRRCalculationLibrary.csproj">
+      <Project>{85E5258B-A6E0-44B1-9938-25EE49A3BDA6}</Project>
+      <Name>Vayu.CRRCalculationLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\CRRPeriodCongestionLibrary\Vayu.CRRPeriodCongestionLibrary.csproj">
+      <Project>{03CA3348-8FCA-422A-B5B7-B7D6A2650D2A}</Project>
+      <Name>Vayu.CRRPeriodCongestionLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj">
+      <Project>{66820de1-00f5-48aa-acb0-d1b1d22298bf}</Project>
+      <Name>Vayu.CommonAccessLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CommonControls\Vayu.CommonControls.csproj">
+      <Project>{bcc53775-2408-469d-94d1-690356ddb919}</Project>
+      <Name>Vayu.CommonControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CRRCreditLibrary\Vayu.CRRCreditLibrary\Vayu.CRRCreditLibrary.csproj">
+      <Project>{9eee2d58-0472-4c61-9031-f993a115c3cc}</Project>
+      <Name>Vayu.CRRCreditLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CRRSubmissionLibrary\Vayu.CRRSubmissionLibrary.csproj">
+      <Project>{c2464b11-9282-45e5-8044-dd6fc75b485b}</Project>
+      <Name>Vayu.CRRSubmissionLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.DBLibrary\Vayu.DBLibrary\Vayu.DBLibrary.csproj">
+      <Project>{ABE2FCEE-90FA-4DA9-838D-4D49214B1204}</Project>
+      <Name>Vayu.DBLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary.csproj">
+      <Project>{8B3D3471-5340-48AE-89EE-012557063EEF}</Project>
+      <Name>Vayu.NodePriceLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ConstraintContingencyHistory\Vayu.ConstraintContingencyHistory.csproj">
+      <Project>{d4dc1413-523b-47ed-abe8-1735ba9bec64}</Project>
+      <Name>Vayu.ConstraintContingencyHistory</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\chartpng.png" />
+    <Resource Include="Images\export_excel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\MahApps.Metro.dll" />
+    <Content Include="Images\icon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

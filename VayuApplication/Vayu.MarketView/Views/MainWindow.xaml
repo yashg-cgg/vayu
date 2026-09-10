@@ -1,0 +1,659 @@
+﻿<Window   x:Class="Vayu.MarketView.Views.MainWindow"
+                    
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:prism="http://prismlibrary.com/"
+                   xmlns:local="clr-namespace:Vayu.MarketView.Views"
+                   xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+                   xmlns:vm="clr-namespace:Vayu.MarketViewNameSpace.ViewModel" xmlns:viewmodels="clr-namespace:Vayu.MarketView.ViewModels" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"   
+                   prism:ViewModelLocator.AutoWireViewModel="False"
+                   Title="Vayu-MarketView" HorizontalContentAlignment="Center" Height="1000" Width="1400" Loaded="Window_Loaded_1"
+                   >
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:ValueToShapeColorConverter x:Key="V2SC" />
+            <!--<local:ColorSwapper x:Key="ColorSwap"/>-->
+            <vm:DataGridBackColorConverter x:Key="myBGColor"/>
+            <vm:DataGridBackColorConverterLMP x:Key="myBGColorLMP"/>
+            <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <local:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter"/>
+            <Style TargetType="DataGridCell" x:Key="NodeDeenergizedStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding NodeDeenergized}" Value="True">
+                        <Setter Property="Foreground" Value="Red"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding NodeDeenergized}" Value="False">
+                        <Setter Property="Foreground" Value="Black"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="CenterCellStyleBG" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Foreground" 
+                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=Content.Text, 
+                        Converter={StaticResource myBGColor}}" />
+            </Style>
+            <Style x:Key="CenterCellStyleBGLMP" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Background" 
+                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=Content.Text, 
+                        Converter={StaticResource myBGColorLMP}}" />
+            </Style>
+            <ContextMenu x:Key="constraintsContextMenu" Background="Lavender" FontWeight="DemiBold">
+                <MenuItem Header="Navigate" Command="{Binding NavigateConstraints}"/>
+                <MenuItem Header="Constraint History" Command="{Binding ConstraintHistory}"/>
+                <MenuItem Header="Sensitivities" Command="{Binding AllErcotShiftFactors}" IsEnabled="{Binding isErcotEnabled , Mode=TwoWay}" />
+                <MenuItem  Header="Constraint Outage Mapping" Click="Outages_Click"/>
+            </ContextMenu>
+            <ControlTemplate x:Key="squareShape">
+                <Rectangle Width="10" Height="10" Fill="{Binding Path=., Converter={StaticResource V2SC}}" Stroke="Black" StrokeThickness="0.8" Margin="-5,-5,0,0"/>
+            </ControlTemplate>
+            <ControlTemplate x:Key="circleWithStrokeShape">
+                <Ellipse Stroke="Black" StrokeThickness="0.8" Width="5" Height="5" Margin="-5,-5,0,0" Fill="{Binding Path=., Converter={StaticResource V2SC}}"/>
+            </ControlTemplate>
+            <ControlTemplate x:Key="starShape">
+                <Polygon Fill="{Binding Path=., Converter={StaticResource V2SC}}" Stroke="Black" StrokeThickness="0.8" Points="3.52671151375484,4.85410196624968 2.85316954888546,0.927050983124842 5.70633909777092,-1.85410196624968 1.76335575687742,-2.42705098312484 7.34763812293426E-16,-6 -1.76335575687742,-2.42705098312484 -5.70633909777092,-1.85410196624969 -2.85316954888546,0.927050983124842 -3.52671151375484,4.85410196624968 -7.34763812293426E-16,3"/>
+            </ControlTemplate>
+            <ControlTemplate x:Key="TriangleShape">
+                <Polygon Fill="{Binding Path=., Converter={StaticResource V2SC}}" Stroke="Black" StrokeThickness="0.8" Points="5.19615242270663,-3 -5.19615242270663,-3 -1.46952762458685E-15,6" />
+            </ControlTemplate>
+            <ControlTemplate x:Key="DiamondShape">
+                <Polygon Fill="{Binding Path=., Converter={StaticResource V2SC}}" Stroke="Black" StrokeThickness="0.8" Points="0,5.5 5.5,0 0,-5.5 -5.5,0" />
+            </ControlTemplate>
+            <Style x:Key="lmpStyle" TargetType="map:Pushpin">
+                <Setter Property="Template" Value="{StaticResource circleWithStrokeShape}"></Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding TypeName}" Value="ZONE">
+                        <Setter Property="Template" Value="{StaticResource starShape}"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding TypeName}" Value="HUB">
+                        <Setter Property="Template" Value="{StaticResource TriangleShape}"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding TypeName}" Value="AGGREGATE">
+                        <Setter Property="Template" Value="{StaticResource DiamondShape}"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding TypeName}" Value="INTERFACE">
+                        <Setter Property="Template" Value="{StaticResource squareShape}"></Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="MapFillColor" TargetType="map:MapPolyline">
+                <Setter Property="Background" Value="{Binding FillColor}">
+                </Setter>
+            </Style>
+            <local:StringColorConverter x:Key="strColor"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Expander IsExpanded="True">
+            <GroupBox Grid.Row="0" Header="{Binding LMPHeader}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="43.545" />
+                        <ColumnDefinition Width="541.455"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Expander Grid.Row="0" Grid.Column="0" ExpandDirection="Right" IsExpanded="True" Grid.ColumnSpan="2">
+                        <Expander.Content >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="180" />
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+
+                                <!--<Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Content="Markets" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" x:Name="market"  Height="15"
+                                        ItemsSource="{Binding Markets}" SelectedItem="{Binding SelectedMarket}" SelectionChanged="ComboBox_SelectionChanged_1"/>
+                                    -->
+                                <!--<DatePicker x:Name="mktDateTime"  Margin="0,0,0,0" Grid.Column="2" SelectedDate="{Binding MarketDateTime, Mode=TwoWay}" SelectedDateFormat="Short"/>-->
+                                <!--
+                                    <TextBlock Margin="0,0,0,0" Text="{Binding SliderDisplayTime, Mode=TwoWay}" Grid.Column="2" />
+                                    <Button  Content="Current" Grid.Column="3" Command="{Binding OnCurrent}"/>
+
+                                    <TextBlock Grid.Row="1" Margin="2 0 0 0 " VerticalAlignment="Center"  Text="Portfolio" FontWeight="Bold"   Grid.ColumnSpan="2" />
+                                    <TextBlock Grid.Row="2" FontWeight="Bold" Text="Zone"   VerticalAlignment="Center" Margin="10 0 0 0 " Grid.Column="0" />
+
+                                    <ComboBox Grid.Column="1" Grid.Row="1"  x:Name="traderPortFolioComboBox"  IsTextSearchEnabled="True" 
+                                           IsEditable="True" ItemsSource="{Binding TraderPortfolioList}" SelectedValue="{Binding TraderPortfolioSelectedItem}"/>
+                                    <ComboBox  x:Name="traderPortFolioComboBox2"  Grid.Row="2" Grid.Column="1"  IsTextSearchEnabled="True" 
+                                            ItemsSource="{Binding DistinctZoneList}" SelectedValue="{Binding ZoneSelectedItem}"/>
+
+                                    <Button Content="Add" Grid.Column="1" Grid.Row="3" Margin="0 0 0 0 "  Command="{Binding AddPortfolio}"/>
+                                    <Button Content="Remove" Grid.Column="1" Grid.Row="4" Margin="0 0 0 0 " Command="{Binding RemovePortfolio}"/>
+                                    <Button Content="All Portfolios" Grid.Column="1" Grid.Row="5" Margin="0 0 0 0 " Command="{Binding AddAllPortfolio}"/>
+
+
+                                    <ListBox x:Name="portfolioListBox" Grid.Row="1" Grid.Column="2" Grid.RowSpan="5"  ItemsSource="{Binding PortfolioList}" ScrollViewer.CanContentScroll="True"  BorderBrush="DarkOliveGreen"  BorderThickness="1" 
+                                       SelectedItem="{Binding SelectedPortfolioListItem}"   ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="2,2,2,2" />
+
+                                    <Button Content="Refresh" Command="{Binding OnRefresh}" Grid.Column="3" Grid.Row="1" Margin="0 0 0 0"/>
+                                    <TextBox x:Name="txtRefreshMap" Text="{Binding TextChangeTxtBox}" Width="80" Height="22" Margin="-95,-10,4,4" Visibility="Hidden"  TextChanged="txtRefreshMap_TextChanged"/>
+                                    <Button   Content="Un-Pin" Command="{Binding UnPin}"  Grid.Column="3" Grid.Row="2" Margin="0 0 0 0" />
+                                    <CheckBox Content="Historical" Grid.Column="3" Grid.Row="3"
+              IsChecked="{Binding IsHistoricalChecked, Mode=TwoWay}"             />
+                                    <Button Content="Play" Command="{Binding PlayCommand}" Grid.Column="3" Grid.Row="4"  Visibility="{Binding IsHistoricalChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <Button Content="Stop" Command="{Binding StopCommand}" Grid.Column="3" Grid.Row="5"  Visibility="{Binding IsHistoricalChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <Slider x:Name="dateTimeSlider" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="6"
+                                            Minimum="0"
+                                            Maximum="576"
+                                            Value="{Binding SliderValue, Mode=TwoWay}"
+                                            TickFrequency="1"
+                                            IsSnapToTickEnabled="True"
+                                            Width="500"
+                                            Visibility="{Binding IsHistoricalChecked, Converter={StaticResource BoolToVisibilityConverter}}"
+                                            >
+                                    </Slider>
+
+
+                                </Grid>-->
+
+
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Content="Markets" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" x:Name="market" Height="15"
+              ItemsSource="{Binding Markets}" SelectedItem="{Binding SelectedMarket}" SelectionChanged="ComboBox_SelectionChanged_1"/>
+                                    <!--<DatePicker x:Name="mktDateTime" Margin="0,0,0,0" Grid.Column="2" SelectedDate="{Binding MarketDateTime, Mode=TwoWay}" SelectedDateFormat="Short"/>-->
+                                    <TextBlock Margin="0,0,0,0" Text="{Binding SliderDisplayTime, Mode=TwoWay}" Grid.Column="2" />
+
+                                    <Button Content="Current" Grid.Column="3" Grid.Row="0" Width="95" Margin="0,0,100,0" Command="{Binding OnCurrent}"/>
+                                    <Button Content="Add" Grid.Column="3" Grid.Row="0" Margin="100,0,0,0" Width="95" Command="{Binding AddPortfolio}"/>
+
+                                    <Button Content="Refresh" Grid.Column="3" Grid.Row="1" Width="95" Margin="0,0,100,0" Command="{Binding OnRefresh}"/>
+                                    <Button Content="Remove" Grid.Column="3" Grid.Row="1" Margin="100,0,0,0" Width="95" Command="{Binding RemovePortfolio}"/>
+
+                                    <Button Content="Un-Pin" Grid.Column="3" Grid.Row="2" Width="95" Margin="0,0,100,0" Command="{Binding UnPin}"/>
+                                    <Button Content="All Portfolios" Grid.Column="3" Grid.Row="2" Margin="100,0,0,0" Width="95" Command="{Binding AddAllPortfolio}"/>
+
+                                    <TextBlock Grid.Row="1" Margin="2 0 0 0 " VerticalAlignment="Center" Text="Portfolio" FontWeight="Bold" Grid.ColumnSpan="2" />
+                                    <TextBlock Grid.Row="2" FontWeight="Bold" Text="Zone" VerticalAlignment="Center" Margin="10 0 0 0 " Grid.Column="0" />
+
+                                    <ComboBox Grid.Column="1" Grid.Row="1" x:Name="traderPortFolioComboBox" IsTextSearchEnabled="True" 
+              IsEditable="True" ItemsSource="{Binding TraderPortfolioList}" SelectedValue="{Binding TraderPortfolioSelectedItem}"/>
+                                    <ComboBox x:Name="traderPortFolioComboBox2" Grid.Row="2" Grid.Column="1" IsTextSearchEnabled="True" 
+              ItemsSource="{Binding DistinctZoneList}" SelectedValue="{Binding ZoneSelectedItem}"/>
+
+                                    <ListBox x:Name="portfolioListBox" Grid.Row="1" Grid.Column="2" Grid.RowSpan="5" ItemsSource="{Binding PortfolioList}" 
+             ScrollViewer.CanContentScroll="True" BorderBrush="DarkOliveGreen" BorderThickness="1" 
+             SelectedItem="{Binding SelectedPortfolioListItem}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="2,2,2,2" />
+
+                                    <TextBox x:Name="txtRefreshMap" Text="{Binding TextChangeTxtBox}" Width="80" Height="22" Margin="-95,-10,4,4" 
+             Visibility="Hidden" TextChanged="txtRefreshMap_TextChanged"/>
+                                    <CheckBox Content="Historical" Grid.Column="3" Grid.Row="3"
+              IsChecked="{Binding IsHistoricalChecked, Mode=TwoWay}" />
+                                    <Button Content="Play" Command="{Binding PlayCommand}" Grid.Column="3" Grid.Row="4"  
+            Visibility="{Binding IsHistoricalChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <Button Content="Stop" Command="{Binding StopCommand}" Grid.Column="3" Grid.Row="5"  
+            Visibility="{Binding IsHistoricalChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                                    <Slider x:Name="dateTimeSlider" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="6"
+            Minimum="0"
+            Maximum="576"
+            Value="{Binding SliderValue, Mode=TwoWay}"
+            TickFrequency="1"
+            IsSnapToTickEnabled="True"
+            Width="500"
+            Visibility="{Binding IsHistoricalChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                                    <TextBlock Grid.Row="3" FontWeight="Bold" Text="Search:" VerticalAlignment="Center" Margin="10 0 0 0 " Grid.Column="0" />
+                                    <TextBox x:Name="searchTextBox" Grid.Row="3" Grid.Column="1" Width="150" 
+              Text="{Binding SearchText, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  BorderThickness="2"/>
+                                </Grid>
+
+
+
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="35"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="65"/>
+                                        <ColumnDefinition Width="*"/>
+
+                                    </Grid.ColumnDefinitions>
+                                    <Label Margin="0,0,0,0" Content="Time: " VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1"  Text="{Binding UpdateTime, Mode=TwoWay}" VerticalAlignment="Center" Margin="1 2 0 0" Background="LightGreen" />
+                                    <CheckBox  Grid.Column="2" x:Name="chkSettlementLocationsOnly" Content="Settlement Locations Only" Margin="2,0,0,0" IsChecked="{Binding SettlementOnly,Mode=TwoWay}" IsEnabled="{Binding SettlementEnable}" VerticalAlignment="Center" />
+                                    <CheckBox Content="UPTOs Only"  IsChecked="{Binding UPTOOnly,Mode=TwoWay}" IsEnabled="{Binding UPTOEnable}" VerticalAlignment="Center" Visibility="Hidden"/>
+
+                                    <RadioButton x:Name="UTCRadioButton" FontWeight="Bold" Grid.Column="3" Margin="2 0 0 0" Content="UTC" IsChecked="{Binding UTCChecked,Mode=TwoWay}"  />
+                                    <RadioButton x:Name="CRRRadioButton" FontWeight="Bold" Grid.Column="4" Margin="2 0 0 0" Content="CRR" IsChecked="{Binding CRRChecked,Mode=TwoWay}"/>
+                                    <RadioButton x:Name="VirtualRadioButton" FontWeight="Bold" Grid.Column="5" Margin="2 0 0 0" Content="Virtual" IsChecked="{Binding VirtualChecked,Mode=TwoWay}"  />
+
+                                    <TextBlock Text="Count :" Grid.Column="6"  Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="6" Margin="50 0 0 0 " Text="{Binding Count, Mode=TwoWay}" VerticalAlignment="Center" Background="LightGreen" />
+
+                                </Grid>
+                                <DataGrid Grid.Row="2" IsReadOnly="True" Width="535" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedItem="{Binding SelectedLMP}"
+				          Margin="3,3,0,0" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False" Name="SPPLocationMarginal"
+                  SelectionUnit="FullRow" SelectionMode="Extended" SelectedCellsChanged="DataGrid_SelectedCellsChanged" ItemsSource="{Binding LatestLMPList,Mode=TwoWay}" Grid.RowSpan="2" >
+                                    <DataGrid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Click="LMPGraph_Click" Header="LMP Graphs" />
+                                            <MenuItem Click="NodeAnalyzer_Click" Header="LMP Satistics" />
+                                            <MenuItem Command="{Binding NavigateLMP}" Header="Navigate" />
+                                        </ContextMenu>
+                                    </DataGrid.ContextMenu>
+
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="130*" 
+						                    Binding="{Binding NodeName,
+						                                      Mode=TwoWay}"
+						                    Header="Node Name" CellStyle="{StaticResource NodeDeenergizedStyle}" />
+                                        <DataGridTextColumn Width="80*" Binding="{Binding Zone,Mode=TwoWay}" Foreground="Black" Header="Zone"/>
+                                        <DataGridTextColumn Width="50*"
+						                    Binding="{Binding LMP, 
+						                                      Mode=TwoWay,
+						                                      StringFormat=F2}"  Foreground="Black"
+                                                               Header="LMP"  CellStyle="{StaticResource CenterCellStyleBGLMP}" />
+                                        <!-- CellStyle="{StaticResource CenterCellStyleBGLMP}" -->
+                                        <DataGridTextColumn Width="55*"
+						                    Binding="{Binding EnergyPrice,
+						                                      Mode=TwoWay,
+						                                      StringFormat=F2}"
+						                    Header="Energy" CellStyle="{StaticResource CenterCellStyleBG}" />
+                                        <DataGridTextColumn Width="60*"
+						                    Binding="{Binding Congestion,
+						                                      Mode=TwoWay,
+						                                      StringFormat=F2}"
+						                    Header="RTCong" CellStyle="{StaticResource CenterCellStyleBG}" />
+                                        <DataGridTextColumn Width="60*"
+						                    Binding="{Binding DACongestion,
+						                                      Mode=TwoWay,
+						                                      StringFormat=F2}"
+                                                               Header="DACong" CellStyle="{StaticResource CenterCellStyleBG}" />
+                                        <DataGridTextColumn Width="50*"
+						                    Binding="{Binding DART,
+						                                      Mode=TwoWay,
+						                                      StringFormat=F2}"
+						                    Header="DARTCong" CellStyle="{StaticResource CenterCellStyleBG}" />
+
+
+                                        <!--<DataGridTextColumn Width="55*"
+						                    Binding="{Binding Loss,
+						                                      Mode=TwoWay,
+						                                      StringFormat=F2}"
+						                    Header="Loss" CellStyle="{StaticResource CenterCellStyleBG}" />-->
+                                        <DataGridTextColumn Width="116*"  Foreground="Black"
+						                    Binding="{Binding DateTime,
+						                                      Mode=TwoWay}"
+						                    Header="Date Time" />
+                                    </DataGrid.Columns>
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGrid.CellStyle>
+                                </DataGrid>
+                            </Grid>
+                        </Expander.Content>
+                    </Expander>
+                    <Grid  x:Name="LmpMapZone" Grid.ColumnSpan="2" ></Grid>
+                    <map:Map x:Name="LmpMap" 
+				         Grid.Row="0"
+				         Grid.Column="2"
+				         Height="Auto"
+                         Center="{Binding MapCenterLocation, Mode=TwoWay}"
+				         Margin="3,2,0,0"
+				         BorderBrush="Black"
+				         BorderThickness="1"
+				         CredentialsProvider="WZzxSMjvyjl6x64wWSZc~jXJKvEtWLE1etQkt3z-A7w~Ag6sUMdwHweZYw9UPpkKbqJlzM0z9Y_StoEbmQLiUT7fY9rIe2GCXu82yRbTMUl"
+				         Mode="Road"
+				         Padding="20"
+				         ZoomLevel="5.000">
+                        <map:MapLayer x:Name="zoneLayer">
+                            <map:MapItemsControl ItemsSource="{Binding ZoneLocationList, Mode=TwoWay}">
+                                <map:MapItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <!--<map:MapPolygon x:Name="ColorMapp" ToolTipService.ToolTip="{Binding Name}" Locations="{Binding ZoneLocations}"/>-->
+                                        <map:MapPolygon x:Name="ColorMapp" />
+                                    </DataTemplate>
+                                </map:MapItemsControl.ItemTemplate>
+                            </map:MapItemsControl>
+                        </map:MapLayer>
+                        <map:MapLayer x:Name="LMPMapLayer">
+                            <map:MapItemsControl ItemsSource="{Binding LocationList, Mode=TwoWay}">
+                                <map:MapItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <map:Pushpin Location="{Binding MapLocation}" ToolTipService.ToolTip="{Binding Name}" >
+                                        </map:Pushpin>
+                                    </DataTemplate>
+                                </map:MapItemsControl.ItemTemplate>
+                            </map:MapItemsControl>
+                        </map:MapLayer>
+                        <map:MapLayer x:Name="PolyConstrainsLayer" >
+                            <map:MapItemsControl  ItemsSource="{Binding PolyLineConstraints, Mode=TwoWay}" >
+                                <map:MapItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <map:MapPolygon Locations="{Binding Locations}" ToolTipService.ToolTip="{Binding Name}" Stroke="Black"
+                                                    Opacity="0.5" StrokeThickness="0.5" Fill="DarkRed" />
+                                    </DataTemplate>
+                                </map:MapItemsControl.ItemTemplate>
+                            </map:MapItemsControl>
+                        </map:MapLayer>
+                        <map:MapLayer x:Name="ConstrainsLayer">
+                            <map:MapItemsControl ItemsSource="{Binding EclipsLineConstraints, Mode=TwoWay}">
+                                <map:MapItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <map:Pushpin Location="{Binding MapLocation}" ToolTipService.ToolTip="{Binding Name}" >
+                                            <map:Pushpin.Template>
+                                                <ControlTemplate>
+                                                    <Ellipse Width="10" Height="10" Fill="HotPink" />
+                                                </ControlTemplate>
+                                            </map:Pushpin.Template>
+                                        </map:Pushpin>
+                                    </DataTemplate>
+                                </map:MapItemsControl.ItemTemplate>
+                            </map:MapItemsControl>
+                        </map:MapLayer>
+                        <map:MapLayer x:Name="LMPNavigateLayer" Visibility="{Binding LMPNavigateVisibility}">
+                            <map:MapItemsControl ItemsSource="{Binding NavigateLMPLocations, Mode=TwoWay}">
+                                <map:MapItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <map:Pushpin Location="{Binding MapLocation}" ToolTipService.ToolTip="{Binding Name}" Background="{Binding MyColor}">
+                                            <!--<map:Pushpin.Template>
+                                            <ControlTemplate>
+                                                <Ellipse Width="10" Height="10" Fill="HotPink" >
+                                                </Ellipse>
+                                            </ControlTemplate>
+                                        </map:Pushpin.Template>-->
+                                        </map:Pushpin>
+                                    </DataTemplate>
+                                </map:MapItemsControl.ItemTemplate>
+                            </map:MapItemsControl>
+                        </map:MapLayer>
+                        <map:MapLayer x:Name="NavigateLayer" Visibility="{Binding NavigateVisibility}" Panel.ZIndex="4">
+                            <map:MapItemsControl ItemsSource="{Binding NavigateConstraintLocations, Mode=TwoWay}">
+                                <map:MapItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <map:Pushpin Location="{Binding MapLocation}" ToolTipService.ToolTip="{Binding Name}" Background="{Binding MyColor}">
+                                            <!--<map:Pushpin.Template>
+                                            <ControlTemplate>
+                                                <Ellipse Width="10" Height="10" Fill="HotPink" >
+                                                </Ellipse>
+                                            </ControlTemplate>
+                                        </map:Pushpin.Template>-->
+                                        </map:Pushpin>
+                                    </DataTemplate>
+                                </map:MapItemsControl.ItemTemplate>
+                            </map:MapItemsControl>
+                        </map:MapLayer>
+                        <Expander HorizontalAlignment="Right" Margin="0,0,18,0" Name="expander1" VerticalAlignment="Top" Width="90" Header="Map Type" FontWeight="Bold" AllowDrop="False" IsExpanded="True">
+                            <Grid Height="140">
+                                <Button Content="Road" Height="23" HorizontalAlignment="Left" Margin="6,16,0,0" Name="buttonRoad" VerticalAlignment="Top" Width="75" Opacity="0.7" />
+                                <Button Content="Aerial" Height="23" HorizontalAlignment="Left" Margin="6,45,0,0" Name="buttonAerial" VerticalAlignment="Top" Width="75" Opacity="0.7" />
+                                <Button Content="Aerial Label" Height="23" HorizontalAlignment="Left" Margin="6,74,0,0" Name="buttonAerialWithLabels" VerticalAlignment="Top" Width="75" Opacity="0.7" />
+                                <Button Content="-" Name="ZoomInbutton" Height="23" Margin="46,107,15,10" Opacity="0.7"/>
+                                <Button Content="+" Name="ZoomOutbutton" Height="23" Margin="15,107,48,10" Opacity="0.7"/>
+                            </Grid>
+                            <Expander.BorderBrush>
+                                <SolidColorBrush />
+                            </Expander.BorderBrush>
+                            <Expander.Background>
+                                <SolidColorBrush />
+                            </Expander.Background>
+                        </Expander>
+                        <Expander Grid.Column="1" Header="Layers" HorizontalAlignment="Left" Margin="0,10,0,0" Name="Layers" VerticalAlignment="Top" ExpandDirection="Right" Height="106" Width="130" IsExpanded="True" FontWeight="Bold">
+                            <Grid Opacity="1" Margin="0,0,0,-17">
+                                <CheckBox Content="LMP Prices" HorizontalAlignment="Left" Margin="6,3,0,0" Name="LMPCheckBox" VerticalAlignment="Top" IsEnabled="True" 
+                                         Style="{StaticResource {x:Type ToggleButton}}" Width="80" Opacity="0.7" />
+                                <CheckBox Content="Constraints" HorizontalAlignment="Left" Margin="6,25,0,0" Name="ConstraintCheckBox" VerticalAlignment="Top" 
+                                         Style="{StaticResource {x:Type ToggleButton}}" Width="80" Opacity="0.7" />
+                            </Grid>
+                        </Expander>
+                    </map:Map>
+                </Grid>
+            </GroupBox>
+        </Expander>
+
+        <Expander Grid.Row="1" Header= "{Binding ConstraintsHeader}" IsExpanded="{Binding IsHistoricalChecked, Converter={StaticResource BoolToCollapsedConverter}}" >
+            <Grid Height="250">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <CheckBox Grid.Row="0"
+        			Margin="20,5,0,0"
+        			HorizontalAlignment="Left"
+        			VerticalAlignment="Top"
+        			Content="AllDay ?"
+        			FontWeight="Bold"
+        			IsChecked="{Binding IsAllDay, Mode=TwoWay}"/>
+                <DataGrid Grid.Row="1" Height="Auto" Name="LatestConstraintGrid" Margin="3,2,0,0" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" IsReadOnly="True"
+        			CanUserAddRows="False" ItemsSource="{Binding LatestConstraintsList, Mode=OneWay}" Foreground="Black" ContextMenu="{StaticResource constraintsContextMenu}" AutoGenerateColumns="False"
+        			SelectedItem="{Binding SelectedConstrain}"  local:HideColByMarket.HideCol="{Binding ElementName=market,Path=Text,Mode=TwoWay}">
+                    <!-- local:HideColByMarket.HideCol="{Binding ElementName=market,Path=Text,Mode=TwoWay}"-->
+                    <DataGrid.Columns>
+                        <!--<DataGridTextColumn Width="17*"  
+                                 Binding="{Binding MarketDate, StringFormat=MM/dd/yyyy HH:mm:ss tt}" 
+                                 Header="Market Date" />
+                        <DataGridTextColumn Width="11*" 
+                                 Binding="{Binding ShadowPrice, StringFormat=F2}" 
+                                 CellStyle="{StaticResource CenterCellStyleBG}" 
+                                 Header="Shadow Price" />
+                        <DataGridTextColumn Width="42*" TextBlock.TextAlignment="Center"                             
+                                 Binding="{Binding ConstraintText }" Header="Constraint Text">
+
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="17*" 
+                                 Binding="{Binding ConstraintType}" 
+                                 Header="Monitored Type " >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="50*" 
+                                 Binding="{Binding ContigencyText}" 
+                                 Header="Contigency Text">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="ToolTip" 
+                                            Value="{Binding ContigencyText}"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                            -->
+                        <!--<DataGridTextColumn.ElementStyle> 
+                                <Style TargetType="TextBlock"> 
+                                    <Setter Property="TextWrapping" Value="Wrap" /> 
+                                </Style> 
+                            </DataGridTextColumn.ElementStyle>-->
+                        <!--
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="25*" 
+                                 Binding="{Binding ContingencyDesc}" 
+                                 Header="Contingency Desc" />
+                        <DataGridTextColumn Width="-100" 
+                                 Header="." Visibility="Collapsed"/>
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding SourceZone}" 
+                                 Header="Source Zone" />
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding SinkZone}" 
+                                 Header="Sink Zone" />
+                        <DataGridTextColumn Width="10*" 
+                                 Binding="{Binding MonitoredID1}" 
+                                 Header="MonitoredID1" />
+                        <DataGridTextColumn Width="15*" 
+                                 Binding="{Binding MonitoredID2}" 
+                                 Header="MonitoredID2" />
+                        <DataGridTextColumn Width="15*" 
+                                 Binding="{Binding RatingType}" 
+                                 Header="Rating Type" />
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding RatingMW}" 
+                                 Header="Rating MW" />
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding PostCTGFlowMW}" 
+                                 Header="Post CTG Flow MW" />
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding PercentViolation}" 
+                                 Header="Percent Violation" />
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding ConstrainedSCEDLimitMW }" 
+                                 Header="ConstrainedSCEDLimitMW" />
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding SCEDRatingMVA}" 
+                                 Header="SCEDRatingMVA" />
+                        <DataGridTextColumn Width="12*" 
+                                 Binding="{Binding PostCTGFlowMVA}" 
+                                 Header="PostCTGFlowMVA" />-->
+
+
+
+                        <DataGridTextColumn Width="15*"   Foreground="Black"
+                                 Binding="{Binding MarketDate, StringFormat=MM/dd/yyyy HH:mm:ss tt}" 
+                                 Header="Market Date" />
+                        <DataGridTextColumn Width="11*" Foreground="Black"
+                                 Binding="{Binding ShadowPrice, StringFormat=F2}" 
+                                 CellStyle="{StaticResource CenterCellStyleBG}" 
+                                 Header="Shadow Price" />
+                        <DataGridTextColumn Width="18*" Foreground="Black" 
+                                 Binding="{Binding ContigencyText}" 
+                                 Header="Contigency Text">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="ToolTip" 
+                                            Value="{Binding ContigencyText}"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Width="25*"  Foreground="Black"
+                                 Binding="{Binding ContingencyDesc}" 
+                                 Header="Contingency Desc" />
+
+
+                        <DataGridTextColumn Width="21*" TextBlock.TextAlignment="Center"  Foreground="Black"                           
+                                 Binding="{Binding ConstraintText }" Header="Constraint Text">
+
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Width="17*" Foreground="Black"
+                                 Binding="{Binding ConstraintType}" 
+                                 Header="Monitored Element Type " >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding FromStation}" 
+                                 Header="From Station" />
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding ToStation}" 
+                                 Header="To Station" />
+
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding FromKV}" 
+                                 Header="From KV" />
+
+
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding ToKV}" 
+                                 Header="To KV" />
+
+
+                        <!--<DataGridTextColumn Width="-100" 
+                                 Header="." Visibility="Collapsed"/>-->
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding SourceZone}" 
+                                 Header="Source Zone" />
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding SinkZone}" 
+                                 Header="Sink Zone" />
+                        <DataGridTextColumn Width="10*"  Foreground="Black"
+                                 Binding="{Binding MonitoredID1}" 
+                                 Header="MonitoredID1" />
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding MonitoredID2}" 
+                                 Header="MonitoredID2" />
+                        <DataGridTextColumn Width="15*" Foreground="Black"
+                                 Binding="{Binding RatingType}" 
+                                 Header="Rating Type" />
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding RatingMW}" 
+                                 Header="Discount Factor" />
+                        <DataGridTextColumn Width="12*" Foreground="Black" 
+                                 Binding="{Binding ConstrainedSCEDLimitMW , StringFormat=0.00}" 
+                                 Header="ConstrainedSCEDLimitMW" />
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding SCEDRatingMVA, StringFormat=0.00}" 
+                                 Header="SCEDRatingMVA" />
+
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding PostCTGFlowMW, StringFormat=0.00}" 
+                                 Header="Post CTG Flow MW" />
+
+                        <DataGridTextColumn Width="12*" Foreground="Black"
+                                 Binding="{Binding PostCTGFlowMVA, StringFormat=0.00}" 
+                                 Header="PostCTGFlowMVA" />
+
+                        <DataGridTextColumn Width="12*"  Foreground="Black"
+                                 Binding="{Binding PercentViolation, StringFormat=0.00}" 
+                                 Header="Percent Violation" />
+
+                        <DataGridTextColumn Width="10*"  Foreground="Black"
+                                 Binding="{Binding DSTFlag}" 
+                                 Header="DST Flag" />
+
+
+
+
+                    </DataGrid.Columns>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGrid.CellStyle>
+                </DataGrid>
+            </Grid>
+        </Expander>
+
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

@@ -1,0 +1,303 @@
+﻿<Window
+     
+    x:Class="Vayu.OutageConstraintMapping.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Srch="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"   
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Outage Constraint Mapping" Height="750" Width="1430" WindowState="Maximized">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8*"  />
+            <ColumnDefinition Width="165*"  />
+            <ColumnDefinition Width="557*"/>
+            
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Background=" #F1F1F2">
+        </Grid>
+        
+        
+        <Grid Grid.Column="1" Background=" #F1F1F2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.05*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.19*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.2*"/>
+
+            </Grid.RowDefinitions>
+           
+         
+
+
+
+            <Grid Grid.Row="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="1.5*"/>
+                    <RowDefinition Height="1.8*"/>
+                    <RowDefinition Height="1.9*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="3*"/>
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <GroupBox Header="Criteria"    BorderBrush="#FF1D1C1C"   Width="125"  Grid.Row="0" Grid.Column="0"  HorizontalAlignment="left">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="left">
+                        <RadioButton Content="Range  "   Background=" #F1F1F2" VerticalAlignment="Center" HorizontalAlignment="right"  IsChecked="{Binding RangeChecked}"/>
+                        <RadioButton Content="All"       Background=" #F1F1F2" VerticalAlignment="Center" HorizontalAlignment="Center"  IsChecked="{Binding AllChecked}"  />
+                    </StackPanel>
+                </GroupBox>
+                <CheckBox  Grid.Row="0" Grid.Column="1" Content="Start" IsChecked="{Binding StartChecked}"  Margin="0 23 0 0"  HorizontalAlignment="left"   VerticalAlignment="Stretch"/>
+
+
+
+
+
+                <Label  Grid.Row="1" Grid.Column="0" Content="Shadow Price"  />
+                <TextBox  Grid.Row="1" Grid.Column="1" x:Name="ShadowPriceTextBox"  Text="500" Width="160" HorizontalAlignment="left"  />
+
+
+                <Label   Grid.Row="2" Grid.Column="0" Content="From Date" Height="30" />
+                <DatePicker Grid.Row="2" Grid.Column="1"  x:Name="FromDate" Width="160" Height="30"  IsEnabled="{Binding IsStartDateEnabled}" SelectedDate="{Binding StartDate}"  HorizontalAlignment="left"  />
+
+
+
+                <Label  Grid.Row="3" Grid.Column="0" Content="To Date" Height="30"  />
+                <DatePicker  Grid.Row="3" Grid.Column="1"  x:Name="ToDate" Width="160" Height="30"      IsEnabled="{Binding IsEndDateEnabled}" SelectedDate="{Binding EndDate}" VerticalAlignment="Top" HorizontalAlignment="left"/>
+
+
+                <Button  Grid.Row="5"  Grid.ColumnSpan="2" Content="Retrieve" Width="110" Height="25"  Command="{Binding Retrieve}" HorizontalAlignment="center" />
+
+          </Grid>
+
+            <Grid Grid.Row="2">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="1.1*"/>
+                    <ColumnDefinition Width="1*"/>
+
+                </Grid.ColumnDefinitions>
+                <Button  Grid.Column="0"    Width="73" Height="25" Content="UnSelectAll" Click="UnSelectallButton_Click_2" HorizontalAlignment="Left"/>
+                <Button  Grid.Column="1"     Width="120" Height="25" Content="SelectAllOutages" Click="SelectAllButton_Click_1" HorizontalAlignment="left"/>
+                <Button   Grid.Column="2"    Width="100" Height="25" Content="SelectAllFamily" x:Name="SelectFamilyButton"  Click="SelectFamilyButton_Click"  HorizontalAlignment="left"/>
+
+            </Grid>
+
+            
+
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="3.5*"/>
+                        <RowDefinition Height="3.5*"/>
+                        <RowDefinition Height="3.5*"/>
+                        <RowDefinition Height="3.5*"/>
+                        <RowDefinition Height="3.5*"/>
+                        <RowDefinition Height="3.5*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0"  Content="Outage Search" Height="30"  />
+                <Srch:AutoCompleteBox  Grid.Column="1"  x:Name="Outage_AutoCompleteBox" Width="150" Height="25" FilterMode="Contains"
+            	ItemsSource="{Binding SearchOutageList}" MaxDropDownHeight="180" SelectionChanged="Outage_AutoCompleteBox_SelectionChanged"/>
+
+
+             <Label  Grid.Row="1" Grid.Column="0" Content="Family Search" Height="30" />
+             <Srch:AutoCompleteBox Grid.Row="1" Grid.Column="1" x:Name="Family_AutoCompleteBox" Width="150" Height="25" FilterMode="Contains"
+            	   ItemsSource="{Binding SearchFamilyList}" MaxDropDownHeight="180" SelectionChanged="Family_AutoCompleteBox_SelectionChanged" />
+
+
+
+                <Label  Grid.Row="2" Grid.Column="0" Content="Constraint Search :" Height="30"/>
+                <Srch:AutoCompleteBox  Grid.Row="2" Grid.Column="1" x:Name="Constraint_AutoCompleteBox" Width="150" Height="25" FilterMode="Contains" 
+            	ItemsSource="{Binding SearchConstraintList}" MaxDropDownHeight="180" SelectionChanged="Constraint_AutoCompleteBox_SelectionChanged" />
+
+
+
+                <Label  Grid.Row="3" Grid.Column="0" Content="Outage Count :" Height="30"/>
+                <Srch:AutoCompleteBox  Grid.Row="3" Grid.Column="1" x:Name="Outage_Acount" Width="150" Text="{Binding CountoutageList}" MaxDropDownHeight="180" Height="25"/>
+
+
+               
+
+                <Label  Grid.Row="4" Grid.Column="0" Content="Family Count :" Height="30"/>
+                <TextBox Grid.Row="4" Grid.Column="1" x:Name="FamilyTextBox" Text="{Binding FamilyCount}" VerticalAlignment="Top" Width="150" />
+                
+                
+                
+             
+                <Label  Grid.Row="5" Grid.Column="0" Content="Constraint Count :" Height="30"/>
+                <TextBox Grid.Row="5" Grid.Column="1" x:Name="ConstraintTextBox" Text="{Binding ConstraintCount}" VerticalAlignment="Top" Width="150" Height="25" />
+
+            </Grid>
+
+
+
+
+
+        </Grid>
+
+       
+
+
+        <Grid Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="123*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="180"/>
+                <RowDefinition Height="180*"/>
+                <RowDefinition Height="180*"/>
+                <RowDefinition Height="179*"/>
+
+            </Grid.RowDefinitions>
+
+            <DataGrid Grid.Row="0" x:Name="OutageDataGrid" Width="Auto" HorizontalAlignment="Stretch"  MaxHeight="200" VerticalScrollBarVisibility="Visible"
+              VerticalAlignment="Top" 
+                  CanUserAddRows="False" CanUserResizeColumns="False" AlternatingRowBackground="LightGray"
+                  IsReadOnly="True" ItemsSource="{Binding OutageList}" SelectionChanged="OutageDataGrid_SelectionChanged" AutoGenerateColumns="False" Grid.ColumnSpan="2" >
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding DriverName,Mode=TwoWay}"  MinWidth="700" 
+                                    CanUserReorder="True" Header="Outage Name"
+                                    IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Source,Mode=TwoWay}" Width="604"
+                                    CanUserReorder="True" Header="Source"
+                                    IsReadOnly="True"/>
+                </DataGrid.Columns>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected"
+                        Value="True">
+                                <Setter Property="Background"
+                        Value="LightSteelBlue" />
+                                <Setter Property="Foreground"
+                        Value="Black" />
+                                <Setter Property="BorderThickness"
+                                        Value="1"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+
+            <DataGrid Grid.Row="1" x:Name="FamilyDataGrid" HorizontalAlignment="Stretch" Height="340" MaxHeight="340" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False"  Width="Auto" AlternatingRowBackground="LightGray" IsReadOnly="True" CanUserAddRows="False" ItemsSource="{Binding ConstraintFamilyList,Mode=TwoWay}" SelectionChanged="FamilyDataGrid_SelectionChanged" Grid.ColumnSpan="2" Margin="0,0,0,20" Grid.RowSpan="2">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="700" Header="Constraint Family" Binding="{Binding ConstraintFamily,Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="302" Header="Outage Name" Binding="{Binding ConstraintDriverName,Mode=TwoWay}" />
+                    <DataGridTextColumn Width="302" Header="Source" Binding="{Binding ConstraintSource,Mode=TwoWay}"/>
+                </DataGrid.Columns>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected"
+                        Value="True">
+                                <Setter Property="Background"
+                        Value="LightSteelBlue" />
+                                <Setter Property="Foreground" 
+                        Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+
+
+            <DataGrid  Grid.Row="2" x:Name="ConstraintDataGrid" HorizontalAlignment="Stretch" MaxHeight="150" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" Width="Auto"  AlternatingRowBackground="LightGray" IsReadOnly="True" CanUserAddRows="False" ItemsSource="{Binding ConstraintList}" SelectionChanged="ConstraintDataGrid_SelectionChanged" Grid.ColumnSpan="2" >
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="ConstraintSesitivity_Click" Header="Constraint Sensitivity"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="1304" Header="Constraint Name" Binding="{Binding ConstraintName,Mode=TwoWay}"/>
+                </DataGrid.Columns>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected"
+                        Value="True">
+                                <Setter Property="Background"
+                        Value="LightSteelBlue" />
+                                <Setter Property="Foreground"
+                        Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+
+
+            <DataGrid  Grid.Row="3" x:Name="ContigencyDataGrid" HorizontalAlignment="Stretch" MaxHeight="150" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False"  Width="Auto" AlternatingRowBackground="LightGray" IsReadOnly="True" CanUserAddRows="False" ItemsSource="{Binding ContingencyList}" Grid.ColumnSpan="2">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn  MinWidth="1304" Width="*" Header="Contigency Name" Binding="{Binding ContingencyName,Mode=TwoWay}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected"
+                        Value="True">
+                                <Setter Property="Background"
+                        Value="LightSteelBlue" />
+                                <Setter Property="Foreground"
+                        Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+
+        </Grid>
+
+
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

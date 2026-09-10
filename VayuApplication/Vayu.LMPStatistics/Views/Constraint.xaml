@@ -1,0 +1,218 @@
+﻿<Window   x:Class="Vayu.LMPStatistics.Views.Constraint"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"   xmlns:local="clr-namespace:Vayu.LMPStatistics.Views"      xmlns:pc="clr-namespace:Vayu.LMPStatistics.ViewModels"    
+             prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Constraints" Height="570" Width="1600" WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="420*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Name="sourceSinkDataGrid"   BorderBrush="Black"  
+ BorderThickness="1"                               AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                               AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"
+                               CanUserResizeRows="False" IsReadOnly="True" ItemsSource="{Binding SourceSinkList,Mode=TwoWay}"
+                               SelectedValue="{Binding SourceSinkDataSelected}" SelectionMode="Single"      Grid.Column="0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Source}"
+                                                 CanUserReorder="False" Header="Source"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Sink}"
+                                                 CanUserReorder="False" Header="Sink"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <GroupBox  Grid.Row="0" Grid.Column="1"
+			          BorderBrush="#FF1D1C1C"
+			          Header="MarketType">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton x:Name="RtRadioButton" Grid.Row="0" Grid.Column="0"
+					             Content="RT"
+					             IsChecked="{Binding RTChecked, Mode=TwoWay}" />
+                    <RadioButton x:Name="DaRadioButton" Grid.Row="0" Grid.Column="1"
+					             Content="DA"
+					             IsChecked="{Binding DAChecked, Mode=TwoWay}" />
+                </Grid>
+            </GroupBox>
+
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0"  Margin="0,0,0,0" Content="Start Date: " VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1"  Text="{Binding StartTime, Mode=TwoWay}" VerticalAlignment="Center" Margin="1 2 0 0" Background="LightGreen" />
+                <Label Grid.Column="0" Grid.Row="1"  Margin="0,0,0,0" Content="End Date: " VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Grid.Row="1"  Text="{Binding EndTime, Mode=TwoWay}" VerticalAlignment="Center" Margin="1 2 0 0" Background="LightGreen" />
+                <Button x:Name="RefreshButton"  Grid.Column="2"   Margin="20" Command="{Binding Refresh}" Content="Refresh" Grid.RowSpan="2" />
+                
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="0" Grid.Column="0" Background="ForestGreen">
+                <TextBlock Text="Positively Exposed" 
+                       FontSize="30" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" />
+            </Border>
+            <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+            <DataGrid x:Name="constraintDataGrid"
+		            Margin="0 2 0 0"
+		          HorizontalAlignment="Stretch"
+		          VerticalAlignment="Stretch"
+		          AlternatingRowBackground="AliceBlue"
+		          AreRowDetailsFrozen="True"
+                      ItemsSource="{Binding PtvConstraintList}"
+		          AutoGenerateColumns="False"
+		          CanUserAddRows="False"
+		          FontFamily="Microsoft Sans Serif, 8.25pt"
+		          FontWeight="ExtraLight"
+		          SelectionMode="Single"
+		          SelectionUnit="Cell"
+		          VirtualizingStackPanel.IsVirtualizing="True"
+		          VirtualizingStackPanel.VirtualizationMode="Recycling"   >
+            
+
+            <DataGrid.Columns>
+                    <DataGridTextColumn Width="90*"
+				                    CanUserReorder="False"
+				                    Header="Date"
+                                        Binding="{Binding MaxConstraintDate,
+								                                               StringFormat={}\{0:MM/dd/yyyy\}}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="130*"
+				                    CanUserReorder="False"
+				                    Header="Last Occurance"
+                                        Binding="{Binding ConstraintDate , StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="130*"
+				                    CanUserReorder="False"
+				                    Header="Constraints"
+                                        Binding="{Binding ConstraintText}"
+				                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="130*"
+				                    CanUserReorder="False"
+				                    Header="Contingency"
+                                        Binding="{Binding ContingencyText}"
+				                    IsReadOnly="True" />
+                        <DataGridTextColumn Width="50*"
+				                    CanUserReorder="False"
+                                        Binding="{Binding Count}"
+				                    Header="Count"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="80*"
+				                    Binding="{Binding Sensitivity}"
+				                    CanUserReorder="False"
+				                    Header="ShiftFactor"
+				                    IsReadOnly="True"/>
+                    <DataGridTextColumn Width="80*"
+				                    CanUserReorder="False"
+				                    Header="Hours"
+                                        Binding="{Binding TopHours}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="80*"
+				                    CanUserReorder="False"
+				                    Header="Impact"
+                                        Binding="{Binding Impact}"
+				                    IsReadOnly="True" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="1" Background="IndianRed">
+                <TextBlock Text="Negatively Exposed" 
+                       FontSize="30" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" />
+            </Border>
+            <DataGrid x:Name="constraintNegative"
+		           Grid.Column="1" Grid.Row="1" Margin="0 2 0 0"
+		          HorizontalAlignment="Stretch"
+		          VerticalAlignment="Stretch"
+		          AlternatingRowBackground="AliceBlue"
+		          AreRowDetailsFrozen="True"
+		          AutoGenerateColumns="False"
+                      ItemsSource="{Binding NegConstraintList}"
+		          CanUserAddRows="False"
+		          FontFamily="Microsoft Sans Serif, 8.25pt"
+		          FontWeight="ExtraLight"
+		          SelectionMode="Single"
+		          SelectionUnit="Cell"
+		          VirtualizingStackPanel.IsVirtualizing="True"
+		          VirtualizingStackPanel.VirtualizationMode="Recycling"   >
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="90*"
+				                    CanUserReorder="False"
+				                    Header="Date"
+                                        Binding="{Binding MaxConstraintDate,
+								                                               StringFormat={}\{0:MM/dd/yyyy\}}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="130*"
+				                    CanUserReorder="False"
+				                    Header="Last Occurance"
+                                        Binding="{Binding ConstraintDate , StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="130*"
+				                    CanUserReorder="False"
+				                    Header="Constraints"
+                                        Binding="{Binding ConstraintText}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="130*"
+				                    CanUserReorder="False"
+				                    Header="Contingency"
+                                        Binding="{Binding ContingencyText}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="50*"
+				                    CanUserReorder="False"
+				                    Header="Count"
+                                         Binding="{Binding Count}"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="80*"
+				                    Binding="{Binding Sensitivity}"
+				                    CanUserReorder="False"
+				                    Header="ShiftFactor"
+				                    IsReadOnly="True"/>
+                    <DataGridTextColumn Width="80*"
+				                    CanUserReorder="False"
+                                        Binding="{Binding TopHours}"
+				                    Header="Hours"
+				                    IsReadOnly="True" />
+                    <DataGridTextColumn Width="80*"
+				                    CanUserReorder="False"
+                                         Binding="{Binding Impact}"
+				                    Header="Impact"
+				                    IsReadOnly="True" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+        
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

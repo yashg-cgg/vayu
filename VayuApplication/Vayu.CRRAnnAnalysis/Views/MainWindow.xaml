@@ -1,0 +1,558 @@
+﻿<Window x:Class="Vayu.CRRAnnAnalysis.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Vayu.CRRAnnAnalysis.Views"
+        mc:Ignorable="d"
+        Title="CRR Annual Analysis" Height="1003" Width="1683">
+    <Window.Resources>
+        <ResourceDictionary>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="250"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <!--<ColumnDefinition Width="300*"/>-->
+                <!--<ColumnDefinition Width="150*"/>-->
+
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="0*"/>
+                    <RowDefinition Height="0*"/>
+                  
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" Margin="10 5 2 2" ItemsSource="{Binding YearList}"
+                          SelectedItem="{Binding StartYear,Mode=TwoWay}"
+                          IsEditable="True"
+                          IsReadOnly="True"
+                          Text="Start Year"
+                          Foreground="Gray"
+                          />
+                <!--<DatePicker Name="StartDatePicker" BorderThickness="1" BorderBrush="Black" Margin="10 5 2 2"
+                            Grid.Column="0"
+                            SelectedDate="{Binding StartDate}"
+                            SelectedDateFormat="Short"/>-->
+                <ComboBox Grid.Column="1" Margin="10 5 2 2" ItemsSource="{Binding YearList}"
+                          SelectedItem="{Binding EndYear,Mode=TwoWay}"
+                          IsEditable="True"
+                          IsReadOnly="True"
+                          Text="End Year"
+                          Foreground="Gray"
+                          />
+                <ComboBox Grid.Column="2" 
+                          Margin="10 5 2 2" 
+                          ItemsSource="{Binding MonthList}"
+                          SelectedItem="{Binding SelectedMonth,Mode=TwoWay}"
+                          IsEditable="True"
+                          IsReadOnly="True"
+                          Text="Select Month"
+                          Foreground="Gray"
+                    />
+                <!--<DatePicker Name="EndDatePicker" BorderThickness="1" BorderBrush="Black" Margin="10 5 15 2"
+                            Grid.Column="1"
+                            SelectedDate="{Binding EndDate}"
+                            SelectedDateFormat="Short"/>-->
+                <ComboBox Name="marketComboBox"
+		              Grid.Column="3" BorderThickness="1" BorderBrush="Black" Margin="10 5 15 2"
+		              ItemsSource="{Binding ISOMarketList}"
+		              SelectedValue="{Binding Path=MarketComboSelectedValue, Mode=TwoWay}" />
+                <GroupBox Grid.Row="1" Grid.ColumnSpan="4" Header="Hours" Margin="0,0,0,1">
+                    <Grid Margin="0,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton 
+				             Content="PeakWD"
+				             FontWeight="Normal"  Grid.Column="0"  Width="auto"
+				             GroupName="RTDA"
+                            
+                            IsChecked="{Binding IsPeakWD,Mode=TwoWay}"/>
+                        
+                        <RadioButton 
+				             Content="OFFPEAK" Grid.Column="1"   Margin="1 0 0 0"
+				             FontWeight="Normal"
+				             GroupName="RTDA"
+                             IsChecked="{Binding IsOffPeak,Mode=TwoWay}"  />
+                        <RadioButton
+				             Content="PEAKWE" Grid.Column="2" Margin="2 0 0 0"
+                            HorizontalContentAlignment="Right"
+				             FontWeight="Normal"
+				             GroupName="RTDA" 
+                             IsChecked="{Binding IsPeakWe,Mode=TwoWay}"/>
+                        <!--<RadioButton
+				             Content="24H " Grid.Column="3"
+                             Margin="6 0 0 0 "  Width="auto"
+				             FontWeight="Normal" 
+				             GroupName="RTDA"  
+                             IsChecked="{Binding Hour24Checked}"/>-->
+                        <!--<Button x:Name="updateButton" Content="Refresh" Margin="0 0 2 0 "    Background="#3da3ff" Grid.Column="4" Click="Refresh_Click" Command="{Binding RunRetrieveFetchDataAndUpdateChartCommand}" FontSize="10" />-->
+                        <Button Name="ResetButton" Grid.Column="5"
+		                Command="{Binding ResetCommand}" Content="Reset"     FontSize="10" />
+                    </Grid>
+                </GroupBox>
+                <!--<Grid Grid.Row="2" Grid.ColumnSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Content="RT" Grid.Column="0" Margin="2"
+					          IsChecked="{Binding FilterDayComparisonRTChecked,Mode=TwoWay}" />
+                    <RadioButton Content="DA" Grid.Column="1" Margin="2"
+					          IsChecked="{Binding FilterDayComparisonDAChecked,Mode=TwoWay}" />
+                    <RadioButton Content="CRR"  Grid.Column="2" Margin="2"
+					          IsChecked="{Binding FilterDayComparisonCrrChecked,Mode=TwoWay}" />
+                    <RadioButton Content="DA-CRR"  Grid.Column="3" Margin="-3"
+					          IsChecked="{Binding FilterDayComparisonDACrrChecked,Mode=TwoWay}" />
+                    <ComboBox Name="SpreadComboBox" Grid.Column="4"     Margin="3"
+					          ItemsSource="{Binding SpreadComboList}"
+					          SelectedValue="{Binding Path=SpreadComboSelectedValue,Mode=TwoWay}" />
+
+                    <Button  Grid.Column="5" Margin="2" Content="Paste" Click="Paste_Click" Background="#ffc107" Command="{Binding PasteCommand}" />
+                </Grid>-->
+                <Grid Grid.Row="2" Grid.ColumnSpan="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Current Month -->
+                    <TextBlock Grid.Column="0"
+               VerticalAlignment="Center"
+               Text="Current Month"
+               FontWeight="SemiBold"
+               Margin="2"/>
+
+                    <TextBox Grid.Column="1"
+             Margin="2"
+             Text="{Binding CurrentMonthValue}"
+             IsReadOnly="True"
+             Background="#F5F5F5"
+             HorizontalContentAlignment="Right"/>
+
+                    <!-- DA Avg OBL -->
+                    <TextBlock Grid.Column="2"
+               VerticalAlignment="Center"
+               Text="DA Avg (OBL)"
+               FontWeight="SemiBold"
+               Margin="2"/>
+
+                    <TextBox Grid.Column="3"
+             Margin="2"
+             Text="{Binding DAAvgOblValue}"
+             IsReadOnly="True"
+             Background="#F5F5F5"
+             HorizontalContentAlignment="Right"/>
+
+                    <!-- DA Avg OPT -->
+                    <TextBlock Grid.Column="4"
+               VerticalAlignment="Center"
+               Text="DA Avg (OPT)"
+               FontWeight="SemiBold"
+               Margin="2"/>
+
+                    <TextBox Grid.Column="5"
+             Margin="2"
+             Text="{Binding DAAvgOptValue}"
+             IsReadOnly="True"
+             Background="#F5F5F5"
+             HorizontalContentAlignment="Right"/>
+
+                    <!-- Spread -->
+                    <ComboBox Grid.Column="6"
+              Margin="3"
+              ItemsSource="{Binding SpreadComboList}"
+              SelectedValue="{Binding SpreadComboSelectedValue, Mode=TwoWay}" />
+
+                    <!-- Paste -->
+                    <Button Grid.Column="7"
+            Margin="2"
+            Content="Paste"
+            Background="#ffc107"
+            Command="{Binding PasteCommand}"
+            Click="Paste_Click"/>
+                </Grid>
+
+                <Grid Grid.Row="3" Grid.ColumnSpan="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Semister Selection" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton 
+				             HorizontalAlignment="Left"
+				             Content="1st6"
+				             GroupName="semSelection"
+				             IsChecked="{Binding IsFirstSemester,Mode=TwoWay}"   />
+                            <RadioButton 
+				             
+				             HorizontalAlignment="Left"
+				             Content="2nd6"
+				             GroupName="semSelection"
+				             IsChecked="{Binding IsSecondSemester,Mode=TwoWay}" Grid.Column="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Hedge Type" Grid.Column="1">
+                        <ComboBox Name="hedgetype"	Margin="0 0 0 2"		          
+					          ItemsSource="{Binding HedgeComboList}"
+					          SelectedValue="{Binding Path=HedgeComboSelectedValue,Mode=TwoWay}" />
+                    </GroupBox>
+                    <GroupBox Header="Sequence" Grid.Column="2">
+                        <ComboBox Margin="0 0 0 2"
+                                  ItemsSource="{Binding SequenceList}"
+                                  SelectedItem="{Binding SelectedSequence,Mode=TwoWay}"/>
+                    </GroupBox>
+                    
+                    <Button Grid.Column="3" Margin="10" Content="Load" Command="{Binding LoadCommand}" Background="#198754" />
+                </Grid>
+                <!--<Grid Grid.Row="4" Grid.ColumnSpan="3" >
+                    <GroupBox Name="summaryGB"  
+			          BorderBrush="#FF1D1C1C"
+			          Header="Summary"  >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Name="cbTotal"
+					         Grid.Column="0"
+					          Content="Total"
+					          IsChecked="{Binding ShowSummaryTotal,
+					                              Mode=TwoWay}" />
+                            <CheckBox Name="cbAvg"
+					          Grid.Column="1"
+					          Content="Avg"
+					          IsChecked="{Binding ShowSummaryAvg,
+					                              Mode=TwoWay}" />
+                            <CheckBox Name="cbMinPct"
+					          Grid.Column="2"
+					          Content="Min"
+					          IsChecked="{Binding ShowSummaryMin,
+					                              Mode=TwoWay}" />
+                            <CheckBox Name="cbMaxPct"
+					          Grid.Column="3"
+					          Content="Max"
+					          IsChecked="{Binding ShowSummaryMax,
+					                              Mode=TwoWay}" />
+                            <CheckBox Name="cbWinPct"
+					          Grid.Column="4"
+					          Content="Win %"
+					          IsChecked="{Binding ShowSummaryWin,
+					                              Mode=TwoWay}" />
+                            <CheckBox 
+					          Grid.Column="5"
+					          Content="Risk"
+					          IsChecked="{Binding ShowSummaryRisk,
+					                              Mode=TwoWay}" />
+                        </Grid>
+                    </GroupBox>
+                </Grid>-->
+
+            </Grid>
+            <GroupBox Grid.Column="1" Header="Source/Sink" Margin="0 1 0 0"  >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Name="sourceComboBox"
+				           Grid.Column="0" Margin="0 0 0 2"
+				          DisplayMemberPath="NodeName"
+				          GotFocus="sourceComboBox_GotFocus"
+				          IsEditable="True"
+				          IsTextSearchEnabled="True"
+				          ItemsSource="{Binding SourceNodeList}"
+				          SelectedValue="{Binding SourceComboSelectedItem}" >
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                    <ComboBox Name="sinkComboBox"
+				           Grid.Column="1" Margin="0 0 0 2"
+				          DisplayMemberPath="NodeName"
+				          GotFocus="sinkComboBox_GotFocus"
+				          IsEditable="True"
+				          IsTextSearchEnabled="True"
+				          ItemsSource="{Binding SinkNodeList}"
+				          SelectedValue="{Binding SinkComboSelectedItem}" >
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                    <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Name="addSourceSinkButton" Margin="0 0 2 0"
+				        Command="{Binding AddSourceSinkCommand}" Background="#198754"
+                                Click="Add_Click" Grid.Column="0"
+				        Content="Add"/>
+                        <Button Name="removeSourceSinkButton"  Grid.Column="1" Background="#91b7f1"
+				        Command="{Binding RemoveSourceSinkCommand}" Margin="0 0 2 0"
+                                Click="Remove_Click"
+				        Content="Remove" />
+                        <Button Name="removeAllSourceSinkButton" Grid.Column="2" Margin="0 0 2 0"
+				        Command="{Binding RemoveAllSourceSinkCommand}" Background="#0dcaf0"
+                                Click="RemoveALl_Click"
+				        Content="Remove All" />
+                        <Button Name="SwapButton" Grid.Column="3" 
+				        Command="{Binding SwapCommand}"
+				        Content="Swap" />
+                    </Grid>
+                    <DataGrid Name="sourceSinkDataGrid" Background="Azure"
+				          Grid.Row="2" Grid.ColumnSpan="2"
+				          HorizontalAlignment="Stretch"
+				          VerticalAlignment="Stretch"
+				          AutoGenerateColumns="False"
+				          CanUserAddRows="False"
+				          CanUserReorderColumns="False" Margin="1"
+				          CanUserResizeRows="False"
+                              BorderThickness="1" BorderBrush="Black"
+				          IsReadOnly="True"
+                         ScrollViewer.CanContentScroll="True" 
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+				          ItemsSource="{Binding SourceSinkList,
+				                                Mode=TwoWay}"
+				          SelectedValue="{Binding Path=SourceSinkDataSelected}"
+				          SelectionChanged="sourceSinkDataGrid_SelectionChanged"
+				          SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*"
+						                    Binding="{Binding Source}"
+						                    CanUserReorder="False"
+						                    Header="Source" />
+                            <DataGridTextColumn Width="*"
+						                    Binding="{Binding Sink}"
+						                    CanUserReorder="False"
+						                    Header="Sink" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </GroupBox>
+            <GroupBox Name="groupBox14"
+				          Grid.Column="2"  
+				          BorderBrush="#FF1D1C1C"
+				          Header="Months"  >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="35*"/>
+                        <RowDefinition Height="35*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Name="JanCheckBox"
+						          Grid.Row="0" Grid.Column="0"
+						          Content="Jan"
+						          IsChecked="{Binding JanChecked,
+						                              Mode=TwoWay}"   />
+                    <CheckBox Name="FebCheckBox"
+						          Grid.Row="0" Grid.Column="1" 
+						          Content="Feb"
+						          IsChecked="{Binding FebChecked,
+						                              Mode=TwoWay}"   />
+                    <CheckBox Name="MarCheckBox"
+						          Grid.Row="0" Grid.Column="2"  Content="Mar"
+						          IsChecked="{Binding MarChecked,  Mode=TwoWay}"   />
+                    <CheckBox Name="AprCheckBox"
+						          Grid.Row="1" Grid.Column="0"
+						          Content="Apr"
+						          IsChecked="{Binding AprChecked,  Mode=TwoWay}"   />
+                    <CheckBox Name="MayCheckBox"
+						          Grid.Row="1" Grid.Column="1"
+						          Content="May"
+						          IsChecked="{Binding MayChecked,
+						                              Mode=TwoWay}"  />
+                    <CheckBox Name="JunCheckBox"
+						            Grid.Row="1" Grid.Column="2"
+						          Content="Jun"
+						          IsChecked="{Binding JunChecked,
+						                              Mode=TwoWay}" />
+                    <CheckBox Name="JulCheckBox"  Grid.Row="2" Grid.Column="0"
+						          Content="Jul"
+						          IsChecked="{Binding JulChecked,
+						                              Mode=TwoWay}"  />
+                    <CheckBox Name="AugCheckBox"
+						           Grid.Row="2" Grid.Column="1"
+						          Content="Aug"
+						          IsChecked="{Binding AugChecked,
+						                              Mode=TwoWay}" />
+                    <CheckBox Name="SepCheckBox"
+						           Grid.Row="2" Grid.Column="2"
+						          Content="Sep"
+						          IsChecked="{Binding SepChecked,
+						                              Mode=TwoWay}"/>
+                    <CheckBox Name="OctCheckBox"
+						           Grid.Row="3" Grid.Column="0"
+						          Content="Oct"
+						          IsChecked="{Binding OctChecked,
+						                              Mode=TwoWay}"   />
+                    <CheckBox Name="NovCheckBox"
+						            Grid.Row="3" Grid.Column="1"
+						          Content="Nov"
+						          IsChecked="{Binding NovChecked,
+						                              Mode=TwoWay}"   />
+                    <CheckBox Name="DecCheckBox"
+						             Grid.Row="3" Grid.Column="2"
+						          Content="Dec"
+						          IsChecked="{Binding DecChecked,
+						                              Mode=TwoWay}"  />
+                    <!--<Button Name="WinterButton" Margin="0 0 2 2"
+						          Grid.Row="4" Grid.Column="0"
+						       Command="{Binding WinterClickCommand}"
+						        Content="Winter"   />
+                    <Button Name="SpringButton"
+						           Grid.Row="4" Grid.Column="1"  Margin="0 0 2 2"
+						        Command="{Binding SpringClickCommand}"
+						        Content="Spring"   />
+                    <Button Name="SummerButton"
+						          Grid.Row="4" Grid.Column="2"  Margin="0 0 2 2"
+						        Command="{Binding SummerClickCommand}"
+						        Content="Summer"/>
+                    <Button Name="FallButton"
+						          Grid.Row="5" Grid.Column="0"  Margin="0 0 2 2"
+						         Command="{Binding FallClickCommand}"
+						        Content="Fall"/>
+                    <Button Name="NoneMonthButton"
+						           Grid.Row="5" Grid.Column="1"  Margin="0 0 2 2"
+						        Command="{Binding ClearAllMonthsCommand}"
+						        Content="None"   />
+                    <Button Name="RefrteshButton" 
+                            Content="Refresh" 
+                            Command="{Binding RefreshCmd}"   Margin="0 0 2 2"
+                             Grid.Row="5" Grid.Column="2" />
+                    <Button Name="AllButton"   Margin="0 0 2 2"
+                            Content="All" 
+                            Command="{Binding AllCmd}" 
+                            Grid.Row="6" Grid.Column="0"/>-->
+
+                </Grid>
+            </GroupBox>
+            
+        </Grid>
+        <Grid Grid.Row="1" >
+            <DataGrid ItemsSource="{Binding SequenceTable}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="All">
+                <DataGrid.Columns>
+                    <!--YeaR-->
+                    <DataGridTextColumn Header="Year" Binding="{Binding Year}"/>
+
+                    <!-- Seq Columns-->
+                    <DataGridTextColumn Header="Seq6" Binding="{Binding Seq6}"/>
+                    <DataGridTextColumn Header="Seq5" Binding="{Binding Seq5}"/>
+                    <DataGridTextColumn Header="Seq4" Binding="{Binding Seq4}"/>
+                    <DataGridTextColumn Header="Seq3" Binding="{Binding Seq3}"/>
+                    <DataGridTextColumn Header="Seq2" Binding="{Binding Seq2}"/>
+                    <DataGridTextColumn Header="Seq1" Binding="{Binding Seq1}"/>
+                    <!-- Last 3 Months -->
+                    <DataGridTextColumn
+Header="{Binding DataContext.LastMonth1Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding LastMonth1}"/>
+
+                    <DataGridTextColumn
+Header="{Binding DataContext.LastMonth2Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding LastMonth2}"/>
+
+                    <DataGridTextColumn
+Header="{Binding DataContext.LastMonth3Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding LastMonth3}"/>
+
+                    <!-- Semester Months -->
+                    <DataGridTextColumn
+Header="{Binding DataContext.SemMonth1Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding SemMonth1}"/>
+
+                    <DataGridTextColumn
+Header="{Binding DataContext.SemMonth2Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding SemMonth2}"/>
+
+                    <DataGridTextColumn
+Header="{Binding DataContext.SemMonth3Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding SemMonth3}"/>
+
+                    <DataGridTextColumn
+Header="{Binding DataContext.SemMonth4Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding SemMonth4}"/>
+
+                    <DataGridTextColumn
+Header="{Binding DataContext.SemMonth5Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding SemMonth5}"/>
+
+                    <DataGridTextColumn
+Header="{Binding DataContext.SemMonth6Header, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+Binding="{Binding SemMonth6}"/>
+                </DataGrid.Columns>
+                
+            </DataGrid>
+        </Grid> 
+    </Grid>
+
+</Window>

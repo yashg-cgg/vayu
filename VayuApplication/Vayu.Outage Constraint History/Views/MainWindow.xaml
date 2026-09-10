@@ -1,0 +1,217 @@
+﻿<Window    x:Class="Vayu.Outage_Constraint_History.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/" xmlns:pc="clr-namespace:Vayu.Outage_Constraint_History.Views"
+                 prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Outage Constraint History " Height="888" Width="1533">
+    <Window.Resources>
+        <ResourceDictionary> 
+            <pc:DataGridBackColorConverter x:Key="myBGColor" />
+            <Style x:Key="CenterCellStyleBG" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text, Converter={StaticResource myBGColor}}" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0"  Content="From Date" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
+                <Label Grid.Row="1"  Content="End Date" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
+                <DatePicker   x:Name="FromDate" Grid.Column="1" Margin="2" IsEnabled="True" SelectedDate="{Binding StartDate}" />
+                 
+                <DatePicker   x:Name="ToDate"  Grid.Column="1" Margin="2" Grid.Row="1" IsEnabled="True" SelectedDate="{Binding EndDate}" />
+                <Button  Content="Retrieve" Grid.Column="0"  Grid.Row="2" Margin="2" Command="{Binding Retrieve}" />
+                <Button Content="ExportToCSV" Grid.Column="1" Grid.Row="2"   Margin="2" Command="{Binding RunExportCSVCommand}" />
+            </Grid>
+            <GroupBox Grid.Column="1" Header="Months">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox x:Name="JanCheckBox" Grid.Column="0" Grid.Row="0"
+            				Content="Jan"
+            				IsChecked="{Binding JanChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="FebCheckBox"
+            				 Grid.Column="1" Grid.Row="0"
+            				Content="Feb"
+            				IsChecked="{Binding FebChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="MarCheckBox" Grid.Column="2" Grid.Row="0"
+            				Content="Mar"
+            				IsChecked="{Binding MarChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="AprCheckBox" Grid.Column="3" Grid.Row="0"
+            				Content="Apr"
+            				IsChecked="{Binding AprChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="MayCheckBox" Grid.Column="0" Grid.Row="1"
+            				Content="May"
+            				IsChecked="{Binding MayChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="JunCheckBox" Grid.Column="1" Grid.Row="1"
+            				Content="Jun"
+            				IsChecked="{Binding JunChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="JulCheckBox"  Grid.Column="2" Grid.Row="1"
+            				Content="Jul"
+            				IsChecked="{Binding JulChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="AugCheckBox" Grid.Column="3" Grid.Row="1"
+            				Content="Aug"
+            				IsChecked="{Binding AugChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="SepCheckBox" Grid.Column="0" Grid.Row="2"
+            				Content="Sep"
+            				IsChecked="{Binding SepChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="OctCheckBox" Grid.Column="1" Grid.Row="2"
+            				Content="Oct"
+            				IsChecked="{Binding OctChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="NovCheckBox" Grid.Column="2" Grid.Row="2"
+            				Content="Nov"
+            				IsChecked="{Binding NovChecked, Mode=TwoWay}" />
+                    <CheckBox x:Name="DecCheckBox" Grid.Column="3" Grid.Row="2"
+            				Content="Dec"
+            				IsChecked="{Binding DecChecked, Mode=TwoWay}" />
+                    <Button x:Name="WinterButton" Grid.Column="4" Command="{Binding WinterBoxesCommand}"
+            				  
+            				Content="Winter"  />
+                    <Button x:Name="SpringButton" Grid.Column="4" Grid.Row="1"   Command="{Binding SpringBoxesCommand}"
+            				  Content="Spring" />
+                    <Button x:Name="SummerButton"
+            			 Grid.Column="4" Grid.Row="2"   Command="{Binding SummerBoxesCommand}" Content="Summer" />
+                    <Button x:Name="FallButton" Grid.Column="4" Grid.Row="4" Command="{Binding FallBoxesCommand}" Content="Fall"  />
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <DataGrid  ScrollViewer.VerticalScrollBarVisibility="Auto"  x:Name="messageDataGrid"
+	 Grid.Row="1" ScrollViewer.CanContentScroll="True" 
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+		    AlternatingRowBackground="LightGray"
+            AreRowDetailsFrozen="True"
+		    AutoGenerateColumns="False"
+		    CanUserAddRows="False"
+	     	ItemsSource="{Binding ConstraintList}"
+	    	SelectionMode="Single"
+			SelectionUnit="Cell"
+			VirtualizingPanel.IsVirtualizing="True"
+			VirtualizingPanel.VirtualizationMode="Recycling" HorizontalScrollBarVisibility="Auto" Grid.ColumnSpan="2"
+		         >
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="150*"
+				                    Binding="{Binding Outages}"
+				                    CanUserReorder="False"
+				                    Header="Outages"
+				                    IsReadOnly="True"/>
+                <DataGridTextColumn Width="250*"
+				                    Binding="{Binding Constraint}"
+				                    CanUserReorder="False"
+				                    Header="Constraint"
+				                    IsReadOnly="True"/>
+
+                <DataGridTextColumn Width="135*"
+						                    Binding="{Binding OutageCurrentMonth,
+						                                      StringFormat={}{0:0}}"
+						                    CellStyle="{StaticResource CenterCellStyleBG}"
+						                    ClipboardContentBinding="{x:Null}"
+						                    Header="OutageCurrentMonth" />
+
+                <DataGridTextColumn Width="135*"
+						                    Binding="{Binding ConstraintNextDay,
+						                                      StringFormat={}{0:0}}"
+						                    CellStyle="{StaticResource CenterCellStyleBG}"
+						                    ClipboardContentBinding="{x:Null}"
+						                    Header="ConstraintNextDay" />
+                <DataGridTextColumn Width="135*"
+						                    Binding="{Binding ConstraintNext10Day,
+						                                      StringFormat={}{0:0}}"
+						                    CellStyle="{StaticResource CenterCellStyleBG}"
+						                    ClipboardContentBinding="{x:Null}"
+						                    Header="ConstraintNext10Day" />
+                <DataGridTextColumn Width="135*"
+						                    Binding="{Binding ConstraintNext30Day,
+						                                      StringFormat={}{0:0}}"
+						                    CellStyle="{StaticResource CenterCellStyleBG}"
+						                    ClipboardContentBinding="{x:Null}"
+						                    Header="ConstraintNext30Day" />
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+        <DataGrid ScrollViewer.CanContentScroll="True"  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  x:Name="SeasonConstraintDataGrid"
+                	 Grid.Row="2"
+                	HorizontalAlignment="Stretch"
+                	AlternatingRowBackground="LightGray"
+                	AreRowDetailsFrozen="True"
+                	AutoGenerateColumns="False"
+                	CanUserAddRows="False"
+                	ItemsSource="{Binding SeasonConstraintList}"
+                	SelectionMode="Single"
+                	SelectionUnit="Cell"
+                	VirtualizingPanel.IsVirtualizing="True"
+                	VirtualizingPanel.VirtualizationMode="Recycling" HorizontalScrollBarVisibility="Auto"
+		         >
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="150*"
+                    		Binding="{Binding Outages}"
+                    		CanUserReorder="False"
+                    		Header="Outages"
+                    		IsReadOnly="True"/>
+                <DataGridTextColumn Width="250*"
+                    		Binding="{Binding Constraint}"
+                    		CanUserReorder="False"
+                    		Header="Constraint"
+                    		IsReadOnly="True"/>
+
+                <DataGridTextColumn Width="135*"
+                    		Binding="{Binding OutageCurrentMonth, StringFormat=\{0:0\}}"
+                    		CellStyle="{StaticResource CenterCellStyleBG}"
+                    		ClipboardContentBinding="{x:Null}"
+                    		Header="OutageCurrentMonth" />
+
+                <DataGridTextColumn Width="135*"
+                    		Binding="{Binding ConstraintNextDay, StringFormat=\{0:0\}}"
+                    		CellStyle="{StaticResource CenterCellStyleBG}"
+                    		ClipboardContentBinding="{x:Null}"
+                    		Header="ConstraintNextDay" />
+                <DataGridTextColumn Width="135*"
+                    		Binding="{Binding ConstraintNext10Day, StringFormat=\{0:0\}}"
+                    		CellStyle="{StaticResource CenterCellStyleBG}"
+                    		ClipboardContentBinding="{x:Null}"
+                    		Header="ConstraintNext10Day" />
+                <DataGridTextColumn Width="135*"
+                    		Binding="{Binding ConstraintNext30Day, StringFormat=\{0:0\}}"
+                    		CellStyle="{StaticResource CenterCellStyleBG}"
+                    		ClipboardContentBinding="{x:Null}"
+                    		Header="ConstraintNext30Day" />
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

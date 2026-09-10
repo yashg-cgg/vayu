@@ -1,0 +1,74 @@
+﻿<Window  
+          
+         x:Class="Vayu.HourlyResourceOutgae.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+     xmlns:oxyplot="http://oxyplot.org/wpf" 
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Vayu - Resource Outage" Height="Auto" Width="997">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Grid Name="layout">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.8*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition  Height="*"/>
+                    <RowDefinition  Height="*"/>
+                </Grid.RowDefinitions>
+                <DatePicker Grid.Row="0" Margin="2" SelectedDate="{Binding FromSelectedDate, Mode=TwoWay}" />
+                <DatePicker Grid.Row="1" Margin="2" SelectedDate="{Binding EndSelectedDate, Mode=TwoWay}" />
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition  Height="*"/>
+                    <RowDefinition  Height="*"/>
+                </Grid.RowDefinitions>
+                <ComboBox  Grid.Row="0"
+				          Margin="1"
+				          IsEditable="True"
+				          ItemsSource="{Binding ProductList}"
+				          SelectedItem="{Binding ProductSelectedItem,
+				                                 Mode=TwoWay}" />
+                <Button Grid.Row="1" Command="{Binding RefreshCommand}"
+				        Content="Refresh" />
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox Grid.Column="0" Grid.Row="0" Content="South"   IsChecked="{Binding SouthChecked, Mode=TwoWay}" />
+                <CheckBox Grid.Column="1" Grid.Row="0" Content="North"   IsChecked="{Binding NorthChecked, Mode=TwoWay}" />
+                <CheckBox Grid.Column="2" Grid.Row="0" Content="West"   IsChecked="{Binding WestChecked, Mode=TwoWay}" />
+                <CheckBox Grid.Column="0" Grid.Row="1" Content="Houston"  IsChecked="{Binding HoustonChecked, Mode=TwoWay}" />
+                <CheckBox Grid.Column="1" Grid.Row="2" Content="Total"   IsChecked="{Binding TotalChecked, Mode=TwoWay}" />
+            </Grid>
+            </Grid>
+        <Grid Grid.Row="2">
+            <oxyplot:PlotView Grid.Row="1"
+		          Height="Auto"
+		          Margin="0,2,10,4"
+		          VerticalContentAlignment="Stretch"
+		          Background="Black"
+		          BorderBrush="Gray"
+		          BorderThickness="1"
+		          Model="{Binding PlotDataModel}" />
+        </Grid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

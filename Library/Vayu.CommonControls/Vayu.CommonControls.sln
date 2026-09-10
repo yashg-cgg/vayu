@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33423.256
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CommonControls", "Vayu.CommonControls.csproj", "{BCC53775-2408-469D-94D1-690356DDB919}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCC53775-2408-469D-94D1-690356DDB919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCC53775-2408-469D-94D1-690356DDB919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCC53775-2408-469D-94D1-690356DDB919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCC53775-2408-469D-94D1-690356DDB919}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {560D43AA-672F-47E2-86E1-116784231CA6}
+	EndGlobalSection
+EndGlobal

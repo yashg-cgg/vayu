@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9E1086A2-C6D6-490F-A64A-C212A709EC25}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Vayu.ErcotLambdaPNLCalculation</RootNamespace>
+    <AssemblyName>Vayu.ErcotLambdaPNLCalculation</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CalcualtePNL.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="DataItem.cs" />
+    <Compile Include="DataService.cs" />
+    <Compile Include="DAVolumes.cs" />
+    <Compile Include="DAVolumes1.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceSinkData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj">
+      <Project>{66820de1-00f5-48aa-acb0-d1b1d22298bf}</Project>
+      <Name>Vayu.CommonAccessLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Library\Vayu.DBLibrary\Vayu.DBLibrary\Vayu.DBLibrary.csproj">
+      <Project>{abe2fcee-90fa-4da9-838d-4d49214b1204}</Project>
+      <Name>Vayu.DBLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Library\Vayu.EnergyLMP\Vayu.EnergyLMP\Vayu.EnergyLMP.csproj">
+      <Project>{0599b951-f6a4-4274-8a84-ab34a6f923aa}</Project>
+      <Name>Vayu.EnergyLMP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Library\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary.csproj">
+      <Project>{8b3d3471-5340-48ae-89ee-012557063eef}</Project>
+      <Name>Vayu.NodePriceLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

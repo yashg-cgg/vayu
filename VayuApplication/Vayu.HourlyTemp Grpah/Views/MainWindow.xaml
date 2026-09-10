@@ -1,0 +1,565 @@
+﻿<Window  
+          
+        x:Class="Vayu.HourlyTemp_Grpah.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf" xmlns:vm="clr-namespace:Vayu.TemperatureGraph.ViewModels;assembly=Vayu.TemperatureGraph"
+    prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Vayu- Hourly Temperature" Height="1450" Width="Auto">
+    <Window.Resources>
+        <ResourceDictionary>
+            <vm:DataGridBackColorConverter x:Key="myBGColor"/>
+            <vm:ValueToForegroundColorConverter x:Key="ValueToForeground"/>
+            <Style x:Key="CenterCellStyleBG" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Foreground" 
+                        Value="{Binding RelativeSource={RelativeSource Self},
+                         Path=Content.Text,
+                        Converter={StaticResource myBGColor}}" />
+            </Style>
+
+            <Style TargetType="DataGridCell" x:Key="MaxMinAvgStyle">
+                <Style.Triggers>
+                    <DataTrigger>
+                        <Setter Property="Background" Value="LightGoldenrodYellow"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE1CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE1CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE2CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE2CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE3CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE3CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE4CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE4CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE5CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE5CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE6CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE6CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE7CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE7CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE8CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE8CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE9CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE9CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE10CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE10CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE11CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE11CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE12CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE12CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE13CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE13CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE14CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE14CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE15CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE15CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE16CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE16CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE17CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE17CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE18CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE18CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE19CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE19CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE20CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE20CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE21CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE21CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE22CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE22CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE23CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE23CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="DataGridCell" x:Key="IsHE24CurrentTemperatureStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHE24CurrentTemperature}" Value="True">
+                        <Setter Property="Background" Value="LightGreen"/>
+                    </DataTrigger>
+
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="23*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Market">
+                    <ComboBox x:Name="MarketName" 
+                      IsEditable="True"  ItemsSource="{Binding ISOMarketList}" 
+                      SelectedValue="{Binding MarketComboSelectedValue, Mode=TwoWay}" />
+                </GroupBox>
+            </Grid>
+            <GroupBox Header="Select Dates" Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker x:Name="startdate" Grid.Column="0"
+                            SelectedDate="{Binding StartDate}"
+                            SelectedDateFormat="Short" />
+                    <DatePicker x:Name="Enddate"
+                           Grid.Column="1"
+                            SelectedDate="{Binding Enddate}" 
+                            SelectedDateFormat="Short" />
+                </Grid>
+                </GroupBox>
+            <GroupBox Grid.Column="2" Header="Select City">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox IsEditable="True"
+                          Grid.Column="0"
+				          IsTextSearchEnabled="True"
+                          ItemsSource="{Binding SourceNodeList}"
+                          SelectedValue="{Binding SelectedNodeValue, Mode=TwoWay}"
+                           SelectedIndex="-1" />
+                    <ComboBox IsEditable="True" 
+                          IsTextSearchEnabled="True"  Grid.Column="1"
+                          ItemsSource="{Binding SelectCityList}"
+                          SelectedValue="{Binding SelectedCityValue, Mode=TwoWay}"
+                            SelectedIndex="-1" />
+                    <Button Content="Refresh"
+                             Grid.Column="2"
+                          	Command="{Binding RunRefreshCommand}"
+                               Width="82"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Details"  >
+                <ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Button Content="ExportToCSV" Width="76" Height="26"    HorizontalAlignment="Center"  Margin="5,5,0,05"   Command="{Binding RunExportCSVCommand}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0">
+                                <DataGrid x:Name="TempDataGrid"
+				          Grid.Row="1"
+                                  Grid.ColumnSpan="1"
+				          HorizontalAlignment="Left"
+				          AlternatingRowBackground="LightGray"
+				          AutoGenerateColumns="False"
+				          CanUserAddRows="False"
+				          IsReadOnly="True"   
+                          ItemsSource="{Binding HourlyTemperatureList}" 
+                           Height="1250"  Width="1500"
+                          RenderTransformOrigin="0.81,0.491">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="70"  Foreground="Black"
+						                    Binding="{Binding Date }"
+						                    Header="Date" />
+                                        <DataGridTextColumn Width="60"  Foreground="Black"
+						                    Binding="{Binding Zone }"
+						                    Header="Zone" />
+                                        <DataGridTextColumn Width="60"  Foreground="Black"
+						                    Binding="{Binding City }"
+						                    Header="City" />
+                                        <DataGridTextColumn Width="50"  Foreground="Black"
+						                    Binding="{Binding Max, StringFormat=N2 }"                                                 
+						                    Header="Max" >
+                                            <DataGridTextColumn.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="Background" Value="DarkGoldenrod"/>
+                                                </Style>
+                                            </DataGridTextColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Width="50"  Foreground="Black"
+						                    Binding="{Binding Avg, StringFormat=N2 }"
+						                    Header="Avg" >
+                                            <DataGridTextColumn.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="Background" Value="Goldenrod"/>
+                                                </Style>
+                                            </DataGridTextColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Width="50"  Foreground="Black"
+						                    Binding="{Binding Min, StringFormat=N2 }"
+						                    Header="Min" >
+                                            <DataGridTextColumn.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="Background" Value="PaleGoldenrod"/>
+                                                </Style>
+                                            </DataGridTextColumn.CellStyle>
+                                        </DataGridTextColumn>
+
+
+                                        <DataGridTextColumn Header="HE:1"  Foreground="Black" Binding="{Binding Hour1,  Mode=TwoWay, StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE1CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:2"  Foreground="Black" Binding="{Binding Hour2, Mode=TwoWay, StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE2CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:3"  Foreground="Black" Binding="{Binding Hour3, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE3CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:4"  Foreground="Black" Binding="{Binding Hour4, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE4CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:5"  Foreground="Black" Binding="{Binding Hour5, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE5CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:6"  Foreground="Black" Binding="{Binding Hour6, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE6CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:7"  Foreground="Black" Binding="{Binding Hour7, Mode=TwoWay,StringFormat=N2}"   IsReadOnly="True" CellStyle="{StaticResource IsHE7CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:8"  Foreground="Black" Binding="{Binding Hour8, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE8CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:9"  Foreground="Black" Binding="{Binding Hour9, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE9CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:10"  Foreground="Black" Binding="{Binding Hour10, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE10CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:11"  Foreground="Black" Binding="{Binding Hour11, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE11CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:12"  Foreground="Black" Binding="{Binding Hour12, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE12CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:13"  Foreground="Black" Binding="{Binding Hour13, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE13CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="HE:14"  Foreground="Black" Binding="{Binding Hour14, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE14CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:15"  Foreground="Black" Binding="{Binding Hour15, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE15CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:16"  Foreground="Black" Binding="{Binding Hour16, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE16CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:17"  Foreground="Black" Binding="{Binding Hour17, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE17CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:18"   Foreground="Black" Binding="{Binding Hour18, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE18CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:19"  Foreground="Black" Binding="{Binding Hour19, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE19CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:20"  Foreground="Black" Binding="{Binding Hour20, Mode=TwoWay,StringFormat=N2}"   IsReadOnly="True" CellStyle="{StaticResource IsHE20CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="HE:21"  Foreground="Black" Binding="{Binding Hour21, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE21CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:22"  Foreground="Black" Binding="{Binding Hour22, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE22CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:23"  Foreground="Black" Binding="{Binding Hour23, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE23CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="HE:24" Foreground="Black" Binding="{Binding Hour24, Mode=TwoWay,StringFormat=N2}"  IsReadOnly="True" CellStyle="{StaticResource IsHE24CurrentTemperatureStyle}" Width="1*">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Graph"  >
+                <oxy:PlotView 
+		          Height="Auto"
+		          VerticalContentAlignment="Stretch"
+		          Background="Black"
+		          BorderBrush="Gray" 
+		          BorderThickness="1"
+		          Model="{Binding PlotDataModel}" />
+            </TabItem>
+        </TabControl>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

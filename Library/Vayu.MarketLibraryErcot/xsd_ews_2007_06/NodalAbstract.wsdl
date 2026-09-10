@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:ns="http://www.ercot.com/wsdl/2007-06/nodal/ewsAbstract" xmlns:ns2="http://www.ercot.com/schema/2007-06/nodal/ews/message" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ercot.com/wsdl/2007-06/nodal/ewsAbstract" attributeFormDefault="unqualified" elementFormDefault="qualified">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.ercot.com/schema/2007-06/nodal/ews/message">
+			<xsd:include schemaLocation="Message.xsd"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="RequestMessage">
+		<wsdl:part name="Message" element="ns2:RequestMessage"/>
+	</wsdl:message>
+	<wsdl:message name="ResponseMessage">
+		<wsdl:part name="Message" element="ns2:ResponseMessage"/>
+	</wsdl:message>
+	<wsdl:message name="FaultMessage">
+		<wsdl:part name="part1" element="ns2:FaultMessage"/>
+	</wsdl:message>
+	<wsdl:portType name="Operations">
+		<wsdl:operation name="MarketTransactions">
+			<wsdl:input message="ns:RequestMessage"/>
+			<wsdl:output message="ns:ResponseMessage"/>
+			<wsdl:fault name="fault1" message="ns:FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="MarketInfo">
+			<wsdl:input message="ns:RequestMessage"/>
+			<wsdl:output message="ns:ResponseMessage"/>
+			<wsdl:fault name="fault1" message="ns:FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="Alerts">
+			<wsdl:input message="ns:RequestMessage"/>
+			<wsdl:output message="ns:ResponseMessage"/>
+			<wsdl:fault name="fault1" message="ns:FaultMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="NodalSOAP" type="ns:Operations">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="MarketTransactions">
+			<soap:operation soapAction="http://www.ercot.com/Nodal/MarketTransactions"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault1">
+				<soap:body use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="MarketInfo">
+			<soap:operation soapAction="http://www.ercot.com/Nodal/MarketInfo"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault1">
+				<soap:body use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="Alerts">
+			<soap:operation soapAction="http://www.ercot.com/Nodal/Alerts"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault1">
+				<soap:body use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="Nodal">
+		<wsdl:port name="NodalSOAP" binding="ns:NodalSOAP">
+			<soap:address location="http://www.ercot.com/Nodal/"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

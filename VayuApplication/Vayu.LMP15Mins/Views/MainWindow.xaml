@@ -1,0 +1,42 @@
+﻿<Window  x:Class="Vayu.LMP15Mins.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+          Title="VAYU - LMP 15mins Prices"  Height="180" Width="825"
+              WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="MinWidth" Value="0" />
+                <Setter Property="MinHeight" Value="22" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+      
+        <DataGrid  Grid.Row="2" HorizontalAlignment="Stretch" ItemsSource="{Binding LMP15MinList, Mode=TwoWay}" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                              AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" VerticalScrollBarVisibility="Visible" 
+                   HorizontalScrollBarVisibility="Visible" RowHeight="21" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Source}" CanUserReorder="False" Header="Source" IsReadOnly="True" 
+                                                Width="250*"  />
+                <DataGridTextColumn Binding="{Binding Sink}" CanUserReorder="False" Header="Sink" IsReadOnly="True"
+                                                Width="250*" />
+                <DataGridTextColumn Binding="{Binding Source15minsLMP}" CanUserReorder="False" Header="Source15minsLMP" IsReadOnly="True" 
+                                                Width="Auto" MinWidth="120" />
+                <DataGridTextColumn Binding="{Binding Sink15minsLMP}" CanUserReorder="False" Header="Sink15minsLMP" IsReadOnly="True" 
+                                                Width="Auto" MinWidth="120" />
+                <DataGridTextColumn Binding="{Binding Sink_Source}" CanUserReorder="False" Header="Sink-Source" IsReadOnly="True" 
+                                                Width="Auto" MinWidth="120" />
+                <DataGridTextColumn Binding="{Binding MarketDateTime}" CanUserReorder="False" Header="MarketDateTime" IsReadOnly="True" 
+                                                Width="Auto" MinWidth="180" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+    
+</Window>

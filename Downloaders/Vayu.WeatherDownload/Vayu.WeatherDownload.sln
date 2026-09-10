@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.WeatherDownload", "WeatherDownload\Vayu.WeatherDownload.csproj", "{A00C7248-02ED-4D52-9E6F-45F10BC8F65F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CommonAccessLibrary", "..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj", "{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A00C7248-02ED-4D52-9E6F-45F10BC8F65F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A00C7248-02ED-4D52-9E6F-45F10BC8F65F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A00C7248-02ED-4D52-9E6F-45F10BC8F65F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A00C7248-02ED-4D52-9E6F-45F10BC8F65F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA790F93-8676-4057-B637-D0CA24527163}
+	EndGlobalSection
+EndGlobal

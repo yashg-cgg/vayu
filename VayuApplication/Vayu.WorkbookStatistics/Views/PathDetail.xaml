@@ -1,0 +1,249 @@
+﻿<Window    x:Class="Vayu.WorkbookStatistics.Views.PathDetail"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"     
+                  ResizeMode="NoResize"     
+        WindowStartupLocation="CenterScreen"
+             prism:ViewModelLocator.AutoWireViewModel="False" Title="Path Details">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Header="Scaling" Margin="5" Visibility="{Binding VisibileGroup}"  BorderBrush="#FF1D1C1C">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Width="60" Grid.Column="0"  Height="25"   Text="{Binding TextScale1}" HorizontalAlignment="Left" Visibility="{Binding VisibleText1}"/>
+                <Button Content="Scale" Grid.Column="1" Width="60" Height="25" Margin="2" Click="ButtonClickScale" FontWeight="Bold" Visibility="{Binding VisibleScale1}"/>
+            </Grid>
+        </GroupBox>
+        <DataGrid x:Name="grdPathConstraintDataList"
+		          Grid.Row="1"
+		          Margin="0,10,0,0"
+		          HorizontalAlignment="Stretch"
+		          VerticalAlignment="Stretch"
+		          AlternatingRowBackground="LightGray"
+		          AreRowDetailsFrozen="True"
+		          AutoGenerateColumns="False"
+		          CanUserAddRows="False"
+		          ItemsSource="{Binding PathDetailList}"
+		          ScrollViewer.CanContentScroll="True"
+		          ScrollViewer.IsDeferredScrollingEnabled="True"
+		          SelectedItem="{Binding SelectedConstraintPathValue,
+		                                 Mode=TwoWay}"
+		          SelectionMode="Extended"
+		          SelectionUnit="Cell"
+		          VirtualizingStackPanel.IsVirtualizing="True"
+		          VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="90*"
+				                    MinWidth="40"
+				                    Binding="{Binding ID}"
+				                    CanUserReorder="False"
+				                    FontWeight="Bold"
+				                    Header="Constraint ID"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="150*"
+				                    MinWidth="40"
+				                    Binding="{Binding Constraint}"
+				                    CanUserReorder="False"
+				                    FontWeight="Bold"
+				                    Header="Source"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="150*"
+				                    MinWidth="40"
+				                    Binding="{Binding Contingency}"
+				                    CanUserReorder="False"
+				                    FontWeight="Bold"
+				                    Header="Sink"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE1,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="1"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE2,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="2"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE3,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="3"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE4,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="4"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE5,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="5"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE6,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="6"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE7,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="7"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE8,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="8"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE9,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="9"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE10,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="10"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE11,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="11"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE12,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="12"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE13,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="13"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE14,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="14"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE15,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="15"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE16,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="16"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE17,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="17"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE18,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="18"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE19,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="19"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE20,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="20"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE21,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="21"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE22,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="22"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE23,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="23"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+				                    MinWidth="40"
+				                    Binding="{Binding HE24,
+				                                      StringFormat={}\{0:N1\}}"
+				                    CanUserReorder="False"
+				                    Header="24"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="55*"
+				                    MinWidth="40"
+				                    Binding="{Binding Sum,
+				                                        StringFormat={}\{0:N\}}"
+				                    CanUserReorder="False"
+				                    Header="Total"
+				                    IsReadOnly="True" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu Name="IndividualPathDetails" StaysOpen="True">
+                    <MenuItem Command="{Binding ShowPathConstraintDialogCommand}" Header="Path Details" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</Window>

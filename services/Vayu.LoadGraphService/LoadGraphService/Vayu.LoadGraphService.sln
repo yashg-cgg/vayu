@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.LoadGraphService", "LoadGraphService\Vayu.LoadGraphService.csproj", "{C6B24555-ACD7-45B1-ABF9-4799A2803860}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CommonAccessLibrary", "..\..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj", "{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.LoadGraphLibrary", "..\..\..\Library\Vayu.LoadGraphLibrary\Vayu.LoadGraphLibrary.csproj", "{B00860E4-9E91-4799-A9DE-AE891E8540B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.WCFPubSubBase", "..\..\..\Library\WCFPubSubBase\Vayu.WCFPubSubBase.csproj", "{0C01AAB6-01E5-44DF-88B5-9F77645600B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.WCFServerClientBase", "..\..\..\Library\WCFServerClientBase\Vayu.WCFServerClientBase.csproj", "{082BA82E-795E-4258-8267-84E642B15DE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6B24555-ACD7-45B1-ABF9-4799A2803860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B24555-ACD7-45B1-ABF9-4799A2803860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B24555-ACD7-45B1-ABF9-4799A2803860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B24555-ACD7-45B1-ABF9-4799A2803860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00860E4-9E91-4799-A9DE-AE891E8540B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B00860E4-9E91-4799-A9DE-AE891E8540B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B00860E4-9E91-4799-A9DE-AE891E8540B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B00860E4-9E91-4799-A9DE-AE891E8540B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C01AAB6-01E5-44DF-88B5-9F77645600B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C01AAB6-01E5-44DF-88B5-9F77645600B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C01AAB6-01E5-44DF-88B5-9F77645600B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C01AAB6-01E5-44DF-88B5-9F77645600B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{082BA82E-795E-4258-8267-84E642B15DE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{082BA82E-795E-4258-8267-84E642B15DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{082BA82E-795E-4258-8267-84E642B15DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{082BA82E-795E-4258-8267-84E642B15DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CCD4DD26-2EE6-47F7-A5EF-9C4B02E40BB5}
+	EndGlobalSection
+EndGlobal

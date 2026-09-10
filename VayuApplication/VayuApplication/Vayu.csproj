@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{16D3EF8D-E780-4B13-A303-92F9A8471860}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VayuApplication</RootNamespace>
+    <AssemblyName>VayuApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>C:\VayuPrismTest\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://prismvytest.psastra.com:8061/</InstallUrl>
+    <UpdateUrl>http://prismvytest.psastra.com:8061/</UpdateUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>88</ApplicationRevision>
+    <ApplicationVersion>0.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>C4DC597BDA3DCC79B3D0D4D427BF485F4013A2E4</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Vayu_3_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Themes\Headers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\LightTeal.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\DataItem.cs" />
+    <Compile Include="Model\DataService.cs" />
+    <Compile Include="Model\IDataService.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Vayu_1_TemporaryKey.pfx" />
+    <None Include="Vayu_2_TemporaryKey.pfx" />
+    <None Include="Vayu_3_TemporaryKey.pfx" />
+    <None Include="Vayu_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro">
+      <Version>2.4.10</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.Core">
+      <Version>8.1.97</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.DryIoc" Version="8.0.0.1909" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\CityTemperatureServiceLibrary\Vayu.CityTemperatureServiceLibrary.csproj">
+      <Project>{acae0bf5-e173-48ab-acbb-9f5d5428cd69}</Project>
+      <Name>Vayu.CityTemperatureServiceLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\LMPriceWindow\Vayu.LMPriceWindow.csproj">
+      <Project>{92425cbb-7bc8-4eb5-af06-682c77a14098}</Project>
+      <Name>Vayu.LMPriceWindow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CircularDependancy\Vayu.CircularDependancy\Vayu.CircularDependancy.csproj">
+      <Project>{6fbca441-19af-4386-9454-1288e87be655}</Project>
+      <Name>Vayu.CircularDependancy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj">
+      <Project>{66820de1-00f5-48aa-acb0-d1b1d22298bf}</Project>
+      <Name>Vayu.CommonAccessLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CommonControls\Vayu.CommonControls.csproj">
+      <Project>{bcc53775-2408-469d-94d1-690356ddb919}</Project>
+      <Name>Vayu.CommonControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.CommonLibrary\Vayu.CommonLibrary\Vayu.CommonLibrary.csproj">
+      <Project>{c3761f67-8b05-4caf-9011-5edfa05071ce}</Project>
+      <Name>Vayu.CommonLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.DBLibrary\Vayu.DBLibrary\Vayu.DBLibrary.csproj">
+      <Project>{abe2fcee-90fa-4da9-838d-4d49214b1204}</Project>
+      <Name>Vayu.DBLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.EnergyLMP\Vayu.EnergyLMP\Vayu.EnergyLMP.csproj">
+      <Project>{0599b951-f6a4-4274-8a84-ab34a6f923aa}</Project>
+      <Name>Vayu.EnergyLMP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.ErcotSubmissionLibrary\Vayu.ErcotSubmissionLibrary.csproj">
+      <Project>{b3c81a8c-23d0-48a8-a97a-18a00d6e20e4}</Project>
+      <Name>Vayu.ErcotSubmissionLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.LatestConstraintsInformationLibrary\Vayu.LatestConstraintsInformationLibrary.csproj">
+      <Project>{ef0a4ba8-db67-4316-8a0b-a79f48a85be5}</Project>
+      <Name>Vayu.LatestConstraintsInformationLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.NodePriceFiveMinLibrary\Vayu.NodePriceFiveMinLibrary.csproj">
+      <Project>{55e481ea-c54b-4cd0-b455-7dddb9eeba12}</Project>
+      <Name>Vayu.NodePriceFiveMinLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary.csproj">
+      <Project>{8b3d3471-5340-48ae-89ee-012557063eef}</Project>
+      <Name>Vayu.NodePriceLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Vayu.VirtualBidSubmissionLibrary\Vayu.VirtualBidSubmissionLibrary.csproj">
+      <Project>{f97ca569-ddca-42dd-ad2b-feabdd4bcdd3}</Project>
+      <Name>Vayu.VirtualBidSubmissionLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerGeneration\Vayu.PowerGeneration.csproj">
+      <Project>{98fd8418-f62c-492b-ac23-37da5e772e42}</Project>
+      <Name>Vayu.PowerGeneration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.Actualvs7DayLoad\Vayu.Actualvs7DayLoad.csproj">
+      <Project>{15f65987-d6fb-4e52-b90c-1e944544ac89}</Project>
+      <Name>Vayu.Actualvs7DayLoad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.Admin\Vayu.Admin.csproj">
+      <Project>{2f6237d9-9751-421a-b8dc-ff9e93198b56}</Project>
+      <Name>Vayu.Admin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.BidsEvaluation\Vayu.BidsEvaluation.csproj">
+      <Project>{8a173d0f-bed1-445f-a1b4-4a09c96cb5e2}</Project>
+      <Name>Vayu.BidsEvaluation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CongestionVolatilityIndex\Vayu.CongestionVolatilityIndex.csproj">
+      <Project>{2fbfaaf1-5430-4b60-9c45-3c210110a9e7}</Project>
+      <Name>Vayu.CongestionVolatilityIndex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ConstraintAnalyzer\Vayu.ConstraintAnalyzer.csproj">
+      <Project>{5915e88c-9475-430b-8fa5-803c6af189cf}</Project>
+      <Name>Vayu.ConstraintAnalyzer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ConstraintContingencyHistory\Vayu.ConstraintContingencyHistory.csproj">
+      <Project>{d4dc1413-523b-47ed-abe8-1735ba9bec64}</Project>
+      <Name>Vayu.ConstraintContingencyHistory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ConstraintExposure\Vayu.ConstraintExposure.csproj">
+      <Project>{10cf4a3b-4b11-46f7-b2b1-8466b4670274}</Project>
+      <Name>Vayu.ConstraintExposure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ConstraintOutageMapping\Vayu.ConstraintOutageMapping.csproj">
+      <Project>{7f00a662-e073-4781-89a1-05749f7d4ff9}</Project>
+      <Name>Vayu.ConstraintOutageMapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ConstraintSensitiveAlgorithm\Vayu.ConstraintSensitivityAlgorithm.csproj">
+      <Project>{13aa6ef6-2266-4358-b5d1-c15975d0387e}</Project>
+      <Name>Vayu.ConstraintSensitivityAlgorithm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CRRAnalysis\Vayu.CRRAnalysis.csproj">
+      <Project>{136a8127-a5a4-47ac-8c37-8880d69ba06c}</Project>
+      <Name>Vayu.CRRAnalysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CRRAnnAnalysis\Vayu.CRRAnnAnalysis.csproj">
+      <Project>{579cb43b-63ed-4019-aa93-2339481d4ada}</Project>
+      <Name>Vayu.CRRAnnAnalysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CRRAuction\Vayu.CRRAuction.csproj">
+      <Project>{133c9567-c7dc-4338-9c5a-cf7b197d1e7e}</Project>
+      <Name>Vayu.CRRAuction</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CRRPathAnalyzer\Vayu.CRRPathAnalyzer.csproj">
+      <Project>{61f122ef-0301-4858-83e9-0044c5b2c9d0}</Project>
+      <Name>Vayu.CRRPathAnalyzer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CRRPeriods\Vayu.CRRPeriods.csproj">
+      <Project>{bc5adcf2-de20-4f72-99a5-e75be1a01fa6}</Project>
+      <Name>Vayu.CRRPeriods</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CRRPNLDetails\Vayu.CRRPNLDetails.csproj">
+      <Project>{37348e9b-cfe0-44c5-be8f-917b372c2956}</Project>
+      <Name>Vayu.CRRPNLDetails</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.CRRTopTenParticipants\Vayu.CRRTopTenParticipants.csproj">
+      <Project>{fa41e58b-b779-4f89-ad62-85da42c8835e}</Project>
+      <Name>Vayu.CRRTopTenParticipants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.DAMImpact\Vayu.DAMImpact.csproj">
+      <Project>{d9297df9-0613-4b20-87a5-e77995d8988a}</Project>
+      <Name>Vayu.DAMImpact</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ERCOT Market Overview\Vayu.ERCOT Market Overview.csproj">
+      <Project>{a5d799e2-4b8e-489e-b5af-f0921d02335d}</Project>
+      <Name>Vayu.ERCOT Market Overview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ErcotACLSummaryReport\Vayu.ErcotACLSummaryReport.csproj">
+      <Project>{5b461c59-bbec-4206-9350-2c0a117792b3}</Project>
+      <Name>Vayu.ErcotACLSummaryReport</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ErcotShiftFactor\Vayu.ErcotShiftFactor.csproj">
+      <Project>{ed023d8b-7ed1-446a-8097-48a2fbc5ea71}</Project>
+      <Name>Vayu.ErcotShiftFactor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.FuelMix\Vayu.FuelMix.csproj">
+      <Project>{4c3e5fd8-aff3-4060-a5f9-b982c07ff683}</Project>
+      <Name>Vayu.FuelMix</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.HourlyResourceOutgae\Vayu.HourlyResourceOutgae.csproj">
+      <Project>{5c74db71-2971-4ee9-9faa-fd0e8b50cee9}</Project>
+      <Name>Vayu.HourlyResourceOutgae</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.HourlyTemp Grpah\Vayu.HourlyTemp Grpah.csproj">
+      <Project>{d19f1058-6829-4dac-b72f-b55d6f4154a5}</Project>
+      <Name>Vayu.HourlyTemp Grpah</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.LMPStatistics\Vayu.LMPStatistics.csproj">
+      <Project>{add8065a-8f6c-4121-9fce-5e031d4bb10f}</Project>
+      <Name>Vayu.LMPStatistics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.LoadCurve\Vayu.LoadCurve.csproj">
+      <Project>{603a5707-64a8-4bbc-ad6f-af9306312826}</Project>
+      <Name>Vayu.LoadCurve</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.LoadForcast\Vayu.LoadForcast.csproj">
+      <Project>{a0c12227-c949-4f84-a976-92e0ea37ed55}</Project>
+      <Name>Vayu.LoadForcast</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.LTC Graphs\Vayu.LTC Graphs.csproj">
+      <Project>{58680f17-52f7-4a73-9043-1d410340247e}</Project>
+      <Name>Vayu.LTC Graphs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.LTC Portfolio Annual\Vayu.LTC PortfolioAnnual.csproj">
+      <Project>{18f3a29d-a733-48a0-82d2-38ec2a352e1d}</Project>
+      <Name>Vayu.LTC PortfolioAnnual</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.LTC Portfolio\Vayu.LTC Portfolio.csproj">
+      <Project>{9ac2cc75-7c96-4caf-8adc-efc2266cdac8}</Project>
+      <Name>Vayu.LTC Portfolio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.MarketView\Vayu.MarketView.csproj">
+      <Project>{b18329cc-2a6f-472a-9e2a-25198c938dda}</Project>
+      <Name>Vayu.MarketView</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.Node Price Hourly\Vayu.Node Price Hourly.csproj">
+      <Project>{e9b6289d-bbb9-454e-a362-4f71a723b0c2}</Project>
+      <Name>Vayu.Node Price Hourly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.NodePriceDaily\Vayu.NodePriceDaily.csproj">
+      <Project>{0bafb4f8-7195-45ca-89fa-a706ad29e7b0}</Project>
+      <Name>Vayu.NodePriceDaily</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.NodePriceGraph\Vayu.NodePriceGraph.csproj">
+      <Project>{9a7402bc-f68a-4d74-9f55-bbb61c07cc87}</Project>
+      <Name>Vayu.NodePriceGraph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.NodePriceMonitor\Vayu.NodePriceMonitor.csproj">
+      <Project>{ac860585-0fdb-42b8-82c6-a10961aa0beb}</Project>
+      <Name>Vayu.NodePriceMonitor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.NodeSensitivityAnalysis\Vayu.NodeSensitivityAnalysis.csproj">
+      <Project>{049e1c28-d012-4927-a2cd-9766168aa464}</Project>
+      <Name>Vayu.NodeSensitivityAnalysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.Notifications\Vayu.Notifications.csproj">
+      <Project>{60339953-9c93-424b-bfba-6f94e06b2d5c}</Project>
+      <Name>Vayu.Notifications</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.Outage Constraint History\Vayu.Outage Constraint History.csproj">
+      <Project>{b15ca3b1-8687-4527-9460-4a63426ee983}</Project>
+      <Name>Vayu.Outage Constraint History</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.OutageConstraintMapping\Vayu.OutageConstraintMapping.csproj">
+      <Project>{46507088-f5bf-4dce-87ae-5368e3e91ed6}</Project>
+      <Name>Vayu.OutageConstraintMapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.PerformanceReview\Vayu.PerformanceReview.csproj">
+      <Project>{f425b44e-de2b-4709-a4c0-184176e9388a}</Project>
+      <Name>Vayu.PerformanceReview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.PowerMap\Vayu.PowerMap.csproj">
+      <Project>{a205ced9-06a9-477f-b0a2-5e77f0277a92}</Project>
+      <Name>Vayu.PowerMap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ProfitLossDaily\Vayu.ProfitLossDaily.csproj">
+      <Project>{2079396b-5035-4924-b2ce-6462585f153b}</Project>
+      <Name>Vayu.ProfitLossDaily</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ProfitLossHour\Vayu.ProfitLossHour.csproj">
+      <Project>{ae74fb5d-ce98-487b-a9b3-147bf0c1ee08}</Project>
+      <Name>Vayu.ProfitLossHour</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.ReconciliationDashboard\Vayu.ReconciliationDashboard.csproj">
+      <Project>{5867ba65-0bd7-4649-adc4-c52f9bfaf454}</Project>
+      <Name>Vayu.ReconciliationDashboard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.RenewableOutageGraph\Vayu.RenewableOutageGraph.csproj">
+      <Project>{bc6a17fd-3fa2-42e5-9a14-3402df1e3e38}</Project>
+      <Name>Vayu.RenewableOutageGraph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.RT Constraint impact\Vayu.RT Constraint impact.csproj">
+      <Project>{92250aaa-9c78-4f51-b85f-7bba9b470750}</Project>
+      <Name>Vayu.RT Constraint impact</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.SystemDemand Curve\Vayu.SystemDemand Curve.csproj">
+      <Project>{47ba0430-03dc-4133-a575-9deb10eb2245}</Project>
+      <Name>Vayu.SystemDemand Curve</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.TemperatureGraph\Vayu.TemperatureGraph.csproj">
+      <Project>{9f53042e-e168-4a0b-97a4-520b81c41a5d}</Project>
+      <Name>Vayu.TemperatureGraph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.TemperatureHistoryDetails\Vayu.TemperatureHistoryDetails.csproj">
+      <Project>{184a563a-e773-48c3-b96e-49fed6c0d008}</Project>
+      <Name>Vayu.TemperatureHistoryDetails</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.UptosPathAnalysisAlgorithm\Vayu.UptosPathAnalysisAlgorithm.csproj">
+      <Project>{c4d09785-e58c-4582-820a-c552be34770d}</Project>
+      <Name>Vayu.UptosPathAnalysisAlgorithm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.UTCRiskCopy\Vayu.UTCRiskCopy.csproj">
+      <Project>{cf080449-fc8a-41c1-b98a-66843150437f}</Project>
+      <Name>Vayu.UTCRiskCopy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vayu.WorkbookStatistics\Vayu.WorkbookStatistics.csproj">
+      <Project>{43ae16ed-76a3-466c-8c50-63ccea4bd91c}</Project>
+      <Name>Vayu.WorkbookStatistics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Vayu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\vAYUU.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\Images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Logo1.png" />
+    <Resource Include="Images\Logo2.png" />
+    <Resource Include="Images\Logo3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

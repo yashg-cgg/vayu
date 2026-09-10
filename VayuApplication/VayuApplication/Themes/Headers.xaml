@@ -1,0 +1,70 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Assuming PrimaryBrush is already defined -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#FF008080" />
+    <!-- Teal color -->
+
+    <!-- GroupBox Header Style -->
+    <Style TargetType="GroupBox">
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border Background="{StaticResource PrimaryBrush}" Padding="8 4">
+                        <TextBlock Text="{Binding}" 
+                                   Foreground="White"
+                                   FontWeight="Bold"
+                                   FontSize="{StaticResource HeaderFontSize}"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Expander Header Style -->
+    <Style TargetType="Expander">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Expander">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <DockPanel>
+                            <!-- Header Section -->
+                            <ToggleButton x:Name="HeaderSite"
+                                        DockPanel.Dock="Top"
+                                        Content="{TemplateBinding Header}"
+                                        ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                        Background="{StaticResource PrimaryBrush}"
+                                        Foreground="White"
+                                        FontWeight="Bold"
+                                        Padding="8 4"
+                                        IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <!-- Content Section -->
+                            <ContentPresenter x:Name="ExpandSite"
+                                            DockPanel.Dock="Bottom"
+                                            Visibility="Collapsed"/>
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- DataGrid Column Header Style -->
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Padding" Value="8 4"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+</ResourceDictionary>

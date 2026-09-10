@@ -1,0 +1,164 @@
+﻿<Window   x:Class="Vayu.Admin.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="VAYU-Risk Central" Height="430" Width="500">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TabItem" x:Key="TabItemHeaderStyle">
+                <Setter Property="Background" Value="LightBlue"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontWeight" Value="Medium" />
+                <Setter Property="FontSize" Value="14px" />
+
+                <!-- Add more setters for other properties as needed -->
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid  x:Name="LayoutRoot" Background="Teal">
+        <TabControl Background="Teal">
+            <TabItem Header=" Risk Control" Style="{StaticResource TabItemHeaderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="130"/>
+                        <RowDefinition Height="90*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Details"    BorderBrush="#FF1D1C1C">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition  Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition  Height="Auto" />
+                                <RowDefinition  Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Content="Market" Grid.Row="0" VerticalAlignment="Top"  Grid.Column="0" />
+                            <Label Content="Portfolio" Grid.Row="1" Grid.Column="0" />
+                            <Label Content="Factor" Grid.Row="1" Grid.Column="2" />
+                            <Label Content="Products" Grid.Row="0" Grid.Column="2" />
+                            <ComboBox x:Name="MarketComboBox"  Grid.Column="1"  Grid.Row="0" IsEditable="True"
+            			ItemsSource="{Binding MarketList}" SelectedItem="{Binding SelectedMarket, Mode=TwoWay}"   />
+                            <ComboBox x:Name="ProductsComboBox" Grid.Column="3"  IsEditable="True" 
+            			ItemsSource="{Binding ProductList}" SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"    />
+                            <ComboBox x:Name="PortfolioComboBox" Grid.Column="1" Grid.Row="1" IsEditable="True"  Margin=" 0 4 0 0"
+            			ItemsSource="{Binding PortfolioList}" SelectedItem="{Binding SelectedPortfolio, Mode=TwoWay}" />
+                            <TextBox  Grid.Row="1" Grid.Column="3" Text="{Binding Factor}"  Margin=" 0 4 0 0"  />
+                            <Grid Grid.Row="2" Grid.ColumnSpan="4" Margin=" 0 4 0 0"  >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Grid.Row="2" Content="Save"    Command="{Binding SaveCommand}"/>
+                                <Button Grid.Column="1" Grid.Row="2" Content="Delete"   Command="{Binding DeleteCommand}"/>
+                                <Button  Grid.Column="2" Grid.Row="2" Content="Refresh"   Command="{Binding RefreshCommand}"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    <DataGrid Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="False" AlternatingRowBackground="LightGray"  Name="dgAdminData"
+                  ItemsSource="{Binding AdminDataList}" SelectionChanged="dgAdminData_SelectionChanged" >
+                        <DataGrid.Resources>
+                            <Style x:Key="headerStyle" TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding}"></TextBlock>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                            <Style x:Key="cellStyleCenter" TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
+                            </Style>
+                            <Style x:Key="cellStyleLeft" TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Left"></Setter>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns >
+
+                            <DataGridTextColumn Foreground="Black" FontWeight="DemiBold"   HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleCenter}"
+                                    Width="5*" Header="Portfolio" Binding="{Binding PortfolioName}" >
+                            </DataGridTextColumn>
+                            <DataGridTextColumn   FontWeight="Medium" FontSize="15" HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleLeft}"
+                                    Width="5*" Header="Factor" Binding="{Binding Factor}" >
+                            </DataGridTextColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Submission Reconcilation" Style="{StaticResource TabItemHeaderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="90"/>
+                        <RowDefinition Height="90*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Date" Grid.Row="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="30*"/>
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Name="StartDatePicker" Grid.Column="0"  SelectedDateFormat="Short"   SelectedDate="{Binding StartDate}"  Width="150" HorizontalAlignment="Left"  Margin="1 10 0 10"/>
+                            <Button Grid.Column="1"  Command="{Binding LoadCommand}"  Content="Refresh"  FontSize="15"   FontWeight="Bold"  Width="100px"  HorizontalAlignment="Left" Margin="5 10 0 10"/>
+                                                    </Grid>
+                    </GroupBox>
+                    <DataGrid Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="False" AlternatingRowBackground="LightGray"
+                              ItemsSource="{Binding SubmittedDataList}">
+                        <DataGrid.Resources>
+                            <Style x:Key="headerStyle" TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding}"></TextBlock>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                            <Style x:Key="cellStyleCenter" TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
+                            </Style>
+                            <Style x:Key="cellStyleLeft" TargetType="DataGridCell">
+                                <Setter Property="TextBlock.TextAlignment" Value="Left"></Setter>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns >
+
+                            <!--<DataGridTextColumn Foreground="Black" FontWeight="DemiBold"   HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleCenter}"
+                                    Width="5*" Header="Portfolio Name" Binding="{Binding PortfolioName}" >
+                            </DataGridTextColumn>-->
+                            <DataGridTextColumn Foreground="Black" FontWeight="DemiBold"   HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleCenter}"
+                                    Width="5*" Header="Risk1 MW" Binding="{Binding Risk1MW}" >
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Foreground="Black" FontWeight="DemiBold"   HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleCenter}"
+                                    Width="5*" Header="Submitted MW" Binding="{Binding SubmittedMW}" >
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Foreground="Black" FontWeight="DemiBold"   HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleCenter}"
+                                    Width="5*" Header="Submitted Count" Binding="{Binding SubmittedCount}" >
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Foreground="Black" FontWeight="DemiBold"   HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleCenter}"
+                                    Width="5*" Header="Expected Count" Binding="{Binding ExpectedCount}" >
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Foreground="Black" FontWeight="DemiBold"   HeaderStyle="{StaticResource headerStyle}" CellStyle="{StaticResource cellStyleCenter}"
+                                    Width="5*" Header="Status" Binding="{Binding Status}" >
+                            </DataGridTextColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

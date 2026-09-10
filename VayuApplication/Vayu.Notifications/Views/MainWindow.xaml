@@ -1,0 +1,157 @@
+﻿<Window    x:Class="Vayu.Notifications.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+                 xmlns:vm="clr-namespace:Vayu.Notifications.ViewModels"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="VAYU - Notifications" Height="570" Width="1525">
+    <Window.Resources>
+        <ResourceDictionary>
+            
+            <vm:DataGridBackColorConverter x:Key="myBGColor"/>
+            <vm:ValueToForegroundColorConverter x:Key="ValueToForeground"/>
+            <Style x:Key="CenterCellStyleFG" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Foreground" 
+                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=Content.Text, 
+                        Converter={StaticResource ValueToForeground}}" />
+                <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Submission/General Notification">
+
+                <Grid x:Name="LayoutRoot" >
+                   
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="148*"/>
+                        <ColumnDefinition Width="1161*"/>
+                        <ColumnDefinition Width="277*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="90"></RowDefinition>
+                        <RowDefinition Height="700*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="3" Orientation="Horizontal" Grid.ColumnSpan="3">
+                        <GroupBox Header="Notification Type" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox Name="NotificationType" Height="25" Width="130" Margin="8,0,0,0" VerticalContentAlignment="Center"  ItemsSource="{Binding NotificationType}" SelectedItem="{Binding NotificationTypeSelectedItem, Mode=TwoWay}"  ></ComboBox>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Date Range" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="2" Orientation="Horizontal">
+                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="From :-"></TextBlock>
+                                    <DatePicker Margin="15,0,0,0" VerticalAlignment="Center" SelectedDate="{Binding StartSelectedDate}"></DatePicker>
+                                </StackPanel>
+                                <StackPanel Margin="2" Orientation="Horizontal">
+                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="To :-"></TextBlock>
+                                    <DatePicker Margin="10,0,0,0" VerticalAlignment="Center"  SelectedDate="{Binding EndSelectedDate}"></DatePicker>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Search" BorderBrush="#FF1D1C1C" Height="70" Margin="6"  IsEnabled="{Binding grpSearch}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Staus :-"></TextBlock>
+                                <ComboBox Name="StausName" Height="25" Width="130" Margin="8,0,0,0" VerticalContentAlignment="Center"  ItemsSource="{Binding Staus}" SelectedItem="{Binding StausNameSelectedItem, Mode=TwoWay}"  ></ComboBox>
+                                <Button Height="27" Width="70" Margin="15,0,0,0" Content="Search" Command="{Binding RefreshCommand}" ></Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Buttons" BorderBrush="#FF1D1C1C" Height="70" Margin="6">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Height="27" Width="70" Margin="5,0,0,0" Content="Refresh" Command="{Binding RefreshCommand}"></Button>
+                                <Button Height="27" Width="100" Margin="5,0,0,0" Content="Export To Excel" Command="{Binding ExportToExcelCommand}"></Button>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <DataGrid Name="NotificationDataGrid" Grid.Row="1"  Margin="0,2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground="LightGray" AreRowDetailsFrozen="True" AutoGenerateColumns="False"
+		          CanUserAddRows="False" FontFamily="Microsoft Sans Serif, 8.25pt" FontWeight="ExtraLight" ItemsSource="{Binding NotificationList}" Visibility="{Binding Chkgenraltype}" Grid.ColumnSpan="3">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="20*" Binding="{Binding Verb}"  Header="Verb" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding Noun}"  Header="Noun" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding Source}"  Header="Source" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding UserId}"  Header="UserId" IsReadOnly="True" />
+                            <DataGridTextColumn Width="55*" Binding="{Binding MessageId}"  Header="MessageId" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding QSE}"  Header="QSE" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding ID}"  Header="ID" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding MessageType}"  Header="MessageType" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding Priority}"  Header="Priority" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding MessageSource}"  Header="MessageSource" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding IssuedTime}"  Header="IssuedTime" IsReadOnly="True" />
+                            <DataGridTextColumn Width="60*" Binding="{Binding MessageSummary}"  Header="MessageSummary" IsReadOnly="True"  />
+
+                           
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid Name="NotificationDataGrid2" Grid.Row="1"  Margin="0,2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground="LightGray" AreRowDetailsFrozen="True" AutoGenerateColumns="False"
+		          CanUserAddRows="False" FontFamily="Microsoft Sans Serif, 8.25pt" FontWeight="ExtraLight" ItemsSource="{Binding NotificationList}" Visibility="{Binding ChkSubmmissiontype}" Grid.ColumnSpan="3">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="20*" Binding="{Binding MarketDate,StringFormat={}{0:MM/dd/yy}}"  Header="MarketDate" IsReadOnly="True"  />
+                            <DataGridTextColumn Width="20*" Binding="{Binding SubmittedDateTime,StringFormat={}{0:MM/dd/yy}}"  Header="SubmittedDateTime" IsReadOnly="True" />
+                            <DataGridTextColumn Width="60*" Binding="{Binding MRID}"  Header="MRID" IsReadOnly="True"  />
+                            <DataGridTextColumn Width="20*" Binding="{Binding Status}"  Header="Status" IsReadOnly="True" CellStyle="{StaticResource CenterCellStyleFG}"/>
+                            <DataGridTextColumn Width="60*" Binding="{Binding Error}"  Header="Error" IsReadOnly="True"/>
+                            <DataGridTextColumn Width="20*" Binding="{Binding ErrorSeverity}"  Header="ErrorSeverity" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Operational Messages">
+                <Grid x:Name="LayoutRoot1" >
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="777*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="90"></RowDefinition>
+                        <RowDefinition Height="700*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="3" Orientation="Horizontal" Grid.ColumnSpan="2">
+                        <GroupBox Header="Date Range" BorderBrush="#FF1D1C1C" Height="70" >
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="2" Orientation="Horizontal">
+                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="From :-"></TextBlock>
+                                    <DatePicker Margin="5,0,0,0" Padding="0" VerticalAlignment="Center" SelectedDate="{Binding StartSelectedDate1}" Width="108"></DatePicker>
+                                </StackPanel>
+                                <StackPanel Margin="2" Orientation="Horizontal">
+                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="To :-"></TextBlock>
+                                    <DatePicker Margin="5,0,0,0" Padding="0" VerticalAlignment="Center"  SelectedDate="{Binding EndSelectedDate1}" Width="114"></DatePicker>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Search" BorderBrush="#FF1D1C1C" Height="70" Margin="10,0,0,0" >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Status :-"></TextBlock>
+                                <ComboBox Name="Status" Height="25" Width="130" Margin="10,0,0,0" VerticalContentAlignment="Center"  ItemsSource="{Binding Status , Mode=TwoWay}" SelectedItem="{Binding StatusNameSelectedItem}" ></ComboBox>
+                                <Button Height="27" Width="70" Margin="15,0,0,0" Content="Search" Command="{Binding RefreshCommand1}" ></Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Buttons" BorderBrush="#FF1D1C1C" Height="70" Margin="10,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Height="27" Width="70" Margin="5,0,0,0" Content="Refresh" Command="{Binding RefreshCommandops}"></Button>
+                                <Button Height="27" Width="100" Margin="5,0,0,0" Content="Export To Excel" Command="{Binding ExportToExcelCommand1}"></Button>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <DataGrid Name="MessagesDataGrid" Grid.Row="1"  Margin="0,2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground="LightGray" AreRowDetailsFrozen="True" AutoGenerateColumns="False"
+		          CanUserAddRows="False" FontFamily="Microsoft Sans Serif, 8.25pt" FontWeight="ExtraLight" ItemsSource="{Binding MessageList}" Grid.ColumnSpan="2" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="30*" Binding="{Binding Date}"  Header="Date" IsReadOnly="True" />
+                            <DataGridTextColumn Width="90*" Binding="{Binding Messages}"  Header="Message" IsReadOnly="True" />
+                            <DataGridTextColumn Width="20*" Binding="{Binding Status}"  Header="Status" IsReadOnly="True"/>
+                            <DataGridTextColumn Width="30*" Binding="{Binding Type}"  Header="Type" IsReadOnly="True"/>
+                            <DataGridTextColumn Width="20*" Binding="{Binding CreateDate}"  Header="Create Date" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+
+            </TabItem>
+        </TabControl>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

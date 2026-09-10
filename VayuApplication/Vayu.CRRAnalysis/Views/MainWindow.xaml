@@ -1,0 +1,302 @@
+﻿<Window  x:Class="Vayu.CRRAnalysis.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:cc="clr-namespace:Vayu.CRRAnalysis.Model"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="LTC Analysis" Height="650" Width="750">
+    <Window.Resources>
+        <ResourceDictionary>
+            
+            <cc:IsLesserConverter x:Key="lesserThanConverter" />
+            <Style x:Key="CenterCellStyleFGSimple" TargetType="{x:Type DataGridCell}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text, Converter={StaticResource lesserThanConverter}}" Value="true">
+                        <Setter Property="Foreground" Value="Red" />
+                    </DataTrigger>
+                </Style.Triggers>
+                <!--<Setter Property="Foreground"
+					Value="{Binding RelativeSource={RelativeSource Self},Path=Content.Text,
+					Converter={StaticResource myFGColorSimple}}" />-->
+                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+            <Style x:Key="CenterCellStyleFGSimpleR" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource CenterCellStyleFGSimple}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text, Converter={StaticResource lesserThanConverter}}" Value="true">
+                        <Setter Property="Foreground" Value="Red" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="Teal">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="180"></RowDefinition>
+            <RowDefinition Height="90*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox Name="groupBox9"
+				          Grid.Row="0"
+				          Width="300"
+				          Height="150"
+				          Margin="10,5,0,0"
+				          HorizontalAlignment="Left"
+				          VerticalAlignment="Top"
+				          BorderBrush="#FF1D1C1C"
+				          Header="Portfolio">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="454*" />
+                </Grid.ColumnDefinitions>
+                <ComboBox Name="portfolioComboBox"
+						          Width="97"
+						          Height="23"
+						          Margin="180,31,0,0"
+						          HorizontalAlignment="Left"
+						          VerticalAlignment="Top"
+						          HorizontalContentAlignment="Center"
+						          IsEditable="True"
+						          IsTextSearchEnabled="True"
+						          ItemsSource="{Binding PortfolioComboList}"
+						          SelectedValue="{Binding PortfolioComboSelectedItem}" />
+                <CheckBox Height="16"
+						          Margin="5,68,0,0"
+						          HorizontalAlignment="Left"
+						          VerticalAlignment="Top"
+						          Content="New Portfolios"
+						          IsChecked="{Binding ShowNewPortfolioChecked}" />
+                <Button Name="retrieveButton"
+						        Width="60"
+						        Height="30"
+						        Margin="112,61,0,0"
+						        HorizontalAlignment="Left"
+						        VerticalAlignment="Top"
+						        Command="{Binding RetrieveOldCommand}"
+						        Content="Retrieve" />
+                <ComboBox x:Name="auctionComboBox"
+						          Width="166"
+						          Height="25"
+						          Margin="9,31,0,0"
+						          HorizontalAlignment="Left"
+						          VerticalAlignment="Top"
+						          IsEditable="True"
+						          IsTextSearchEnabled="True"
+						          ItemsSource="{Binding AuctionPortfolioComboList}"
+						          SelectedValue="{Binding AuctionSelectedItem}"
+						          Text="{Binding Auctiontext}" />
+                <ComboBox Name="traderPortfolioComboBox"
+						          Width="110"
+						          Height="23"
+						          Margin="10,0,0,0"
+						          HorizontalAlignment="Left"
+						          VerticalAlignment="Top"
+						          HorizontalContentAlignment="Center"
+						          IsEditable="True"
+						          IsTextSearchEnabled="True"
+						          ItemsSource="{Binding TraderPortfolioComboList}"
+						          SelectedValue="{Binding TraderPortfolioComboSelectedItem}" />
+                <Button Width="55"
+						        Margin="130,0,0,0"
+						        HorizontalAlignment="Left"
+						        VerticalAlignment="Top"
+						        Command="{Binding ImportCommand}"
+						        Content="Import" />
+                <Button 
+                        HorizontalAlignment="Left"  Margin="180,62,0,0"
+                        VerticalAlignment="Top" 
+                        Width="90"
+                        Height="30"
+                        Content="ExportToCSV"
+                        Command="{Binding RunExportCSVCommand}"/>
+            </Grid>
+        </GroupBox>
+
+        <DataGrid Grid.Row="1" Name="PathDataGrid"
+					          Margin="4,10,0,10"
+					          HorizontalAlignment="Stretch"
+					          VerticalAlignment="Stretch"
+					          AutoGenerateColumns="False"
+					          CanUserAddRows="False"
+					          ItemsSource="{Binding PathList}"
+					          ScrollViewer.CanContentScroll="True">
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Width="100*"
+							                    MinWidth="60"
+							                    Binding="{Binding Source}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="Source"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="100*"
+							                    MinWidth="60"
+							                    Binding="{Binding Sink}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="Sink"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding ClassType}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="Class Type"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MW1}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MW1"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding Price1}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimpleR}"
+							                    Header="PRICE1"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="60*"
+							                    MinWidth="60"
+							                    Binding="{Binding HedgeType}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="Hedge Type"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding Premium}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="Premium"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding PriceLastOBL}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="PriceLastOBL"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding PriceLastOPT}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="PriceLastOPT"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding PriceLastDiff}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="PriceLastDiff"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding PricePrevOBL}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="PricePrevOBL"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding PricePrevOPT}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="PricePrevOPT"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding PricePrevDiff}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="PricePrevDiff"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MWOwnedOBL}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MWOwnedOBL"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MWOwnedOPT}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MWOwnedOPT"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MWSubmittedOBL}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MWSubmittedOBL"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MWSubmittedOPT}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MWSubmittedOPT"
+							                    IsReadOnly="True" />
+
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MWClearedOBL}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MWClearedOBL"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MWClearedOPT}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MWClearedOPT"
+							                    IsReadOnly="True" />
+
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MinDA}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MinDA"
+							                    IsReadOnly="True" />
+
+
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MaxDA}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MaxDA"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding MedianDA45}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="MedianDA45"
+							                    IsReadOnly="True" />
+
+
+
+
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

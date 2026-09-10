@@ -1,0 +1,317 @@
+﻿<Window    x:Class="Vayu.MarketView.Views.ConstraintHistory"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="False"
+         Title="ConstraintHistory" 
+         Width="1600" 
+        Height="570">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="b2v"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="LayoutRoot" Margin="0,0,0,0">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="84" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"
+		            Margin="0,10,0,0"
+		            Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                <TextBlock Name="ConstraintSearch" Width="60" Margin="5,25,0,0" Text="Constraint" />
+                <TextBox Width="604" Height="25" Margin="3,20,10,20" TextAlignment="Left" VerticalContentAlignment="Center" IsReadOnly="True" Text="{Binding ConstraintItem}"></TextBox>
+                <!--<TextBlock Name="ContingencySearch" Width="70" Margin="5,25,0,0" Text="Contingency" Visibility="Hidden" />
+                <TextBox Width="250" Height="25" Margin="03,18,10,0" VerticalAlignment="Top" Visibility="Hidden" IsReadOnly="True" Text="{Binding ContengencyItem}">
+                </TextBox>-->
+            </StackPanel>
+            <Button x:Name="ExportButton"
+				        Width="104"
+				        Height="29"
+				        Margin="15,18,0,18"
+				        Command="{Binding ExporttoExcelCommand}"
+				        Content="ExportToCSV" />
+        </StackPanel>
+        <DataGrid x:Name="constraintDataGrid"
+		          Grid.Row="1"
+		          Margin="0,2,0,0"
+		          HorizontalAlignment="Stretch"
+		          VerticalAlignment="Stretch"
+		          AlternatingRowBackground="LightGray"
+		          AreRowDetailsFrozen="True"
+		          AutoGenerateColumns="False"
+		          CanUserAddRows="False"
+		          FontFamily="Microsoft Sans Serif, 8.25pt"
+		          FontWeight="ExtraLight"
+		          ItemsSource="{Binding HistoryConstraintList}"
+		          SelectedItem="{Binding SelectedConstraint,
+		                                 Mode=TwoWay}"
+		          SelectionMode="Single"
+		          SelectionUnit="Cell"
+		          VirtualizingStackPanel.IsVirtualizing="True"
+		          VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="45*"
+				                    Binding="{Binding ConstraintDate,
+				                                      StringFormat={}{0:MM/dd/yy}}"
+				                    CanUserReorder="False"
+				                    Header="Date"
+				                    IsReadOnly="True" />
+                <DataGridTextColumn Width="250*"
+				                    Binding="{Binding ConstraintText}"
+				                    CanUserReorder="False"
+				                    Header="Constraint"
+				                    IsReadOnly="True" 
+                                     />
+                <DataGridTextColumn Width="150*"
+				                    Binding="{Binding ContingencyText}"
+				                    CanUserReorder="False"
+				                    Header="Contingency"
+				                    IsReadOnly="True"
+                                    Visibility="{Binding isConstraintChecked}"/>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>1</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE1, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>2</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE2, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>3</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE3, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>4</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE4, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>5</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE5, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>6</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE6, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>7</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE7, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>8</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE8, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>9</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE9, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>10</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE10, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>11</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE11, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>12</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE12, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>13</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE13, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>14</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE14, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>15</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock   Text="{Binding HE15, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>16</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock   Text="{Binding HE16, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>17</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding HE17, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>18</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE18, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>19</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE19, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>20</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE20, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>21</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE21, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>22</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding HE22, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>23</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE23, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>24</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding HE24, StringFormat=0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

@@ -1,0 +1,49 @@
+﻿<Window x:Class="Vayu.CommonControls.DateRange"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Vayu - Date Range" Height="282" Width="808.952" Background="Gainsboro">
+    <Grid  IsManipulationEnabled="True" Margin="0,0,48,17">
+        <Grid Height="219" HorizontalAlignment="Left" Margin="14,12,0,0" Name="grid1" VerticalAlignment="Top" Width="703">
+            <ListBox Height="143" HorizontalAlignment="Left" Margin="196,34,0,0" Name="SelectedlistBox" VerticalAlignment="Top" Width="100" SelectionMode="Single" />
+            <ComboBox Height="24" HorizontalAlignment="Left" Margin="196,5,0,0" Name="DateNameComboBox" VerticalAlignment="Top" Width="98" IsEditable="True" DropDownClosed="DateNameComboBox_DropDownClosed" />
+            <Button Content="Save" Height="29" HorizontalAlignment="Left" Margin="249,180,0,0" Name="SaveButton" VerticalAlignment="Top" Width="60" FontSize="12" Click="SaveButton_Click" />
+            <Button Content="Add" Height="29" HorizontalAlignment="Left" Margin="121,50,0,0" Name="AddButton" VerticalAlignment="Top" Width="70" FontSize="12" Click="AddButton_Click" />
+            <DatePicker Height="35" HorizontalAlignment="Left" Margin="16,6,0,0" Name="startDatePicker" VerticalAlignment="Top" Width="100"  />
+            <Button Content="Remove" Height="28" HorizontalAlignment="Left" Margin="121,85,0,0" Name="Removebutton" VerticalAlignment="Top" Width="70" Click="Removebutton_Click" />
+            <Button Content="Remove All" Height="28" HorizontalAlignment="Left" Margin="121,119,0,0" Name="Removeallbutton" VerticalAlignment="Top" Width="70" Click="RemoveAllbutton_Click" />
+            <Button Content="Refresh" Height="29" HorizontalAlignment="Right" Margin="0,3,344,0" Name="Refreshbutton" VerticalAlignment="Top" Width="60" Click="Refreshbutton_Click" RenderTransformOrigin="-2.761,5.033" />
+            <ListBox Height="143" HorizontalAlignment="Left" Margin="16,34,0,0" Name="DatelistBox" VerticalAlignment="Top" Width="100" ItemsSource="{Binding}" IsHitTestVisible="True" SelectionMode="Multiple"></ListBox>
+            <Button Content="+" FontSize="12" Height="27" HorizontalAlignment="Left" Margin="121,6,0,0" Name="AddDateButton" VerticalAlignment="Top" Width="25" Click="AddDateButton_Click" />
+            <Button Content="Clear" Height="28" HorizontalAlignment="Left" Margin="32,181,0,0" Name="Clearbutton" VerticalAlignment="Top" Width="60" Click="Clearbutton_Click" />
+            <Button Content="Delete" FontSize="12" Height="29" HorizontalAlignment="Left" Margin="184,180,0,0" Name="DeleteButton" VerticalAlignment="Top" Width="60" Click="DeleteButton_Click" />
+            <GroupBox Header="Filters" Height="198" Margin="364,0,-73,0" Name="groupBox3" VerticalAlignment="Top" BorderBrush="#FF1D1C1C">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="152*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="79*" />
+                    </Grid.ColumnDefinitions>
+                    <DataGrid AutoGenerateColumns="False" Margin="108,47,6,0" Name="filterDataGrid" CanUserReorderColumns="False" CanUserSortColumns="False"
+                          SelectedValue="{Binding Path=FilterDataSelected}" SelectionMode="Single" CanUserAddRows="False" IsReadOnly="True" CanUserResizeRows="False"
+                          ItemsSource="{Binding FilterList, Mode=TwoWay}" Grid.Column="1" Grid.RowSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn  Binding="{Binding Product}" CanUserReorder="False" Header="Product"/>
+                            <DataGridTextColumn  Binding="{Binding Type}" CanUserReorder="False" Header="Type"/>
+                            <DataGridTextColumn  Binding="{Binding Period}" CanUserReorder="False" Header="Period"/>
+                            <DataGridTextColumn  Binding="{Binding Min}" CanUserReorder="False" Header="Min" />
+                            <DataGridTextColumn  Binding="{Binding Max}" CanUserReorder="False" Header="Max" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Add" HorizontalAlignment="Left" Margin="22,50,0,0" Width="66" Command="{Binding AddFilterCommand}" Height="25" VerticalAlignment="Top" />
+                    <Button Content="Remove" HorizontalAlignment="Left" Margin="22,110,0,0" Name="removeButton" Width="66" Command="{Binding RemoveFilterCommand}" Height="25" VerticalAlignment="Top" />
+                    <Button Content="Remove All" Height="25" HorizontalAlignment="Left" Margin="22,141,0,0" Name="removeAllButton" VerticalAlignment="Top" Width="66" Command="{Binding RemoveAllFilterCommand}" />
+                    <ComboBox HorizontalAlignment="Left" Margin="22,10,0,0" VerticalAlignment="Top" Width="66" ItemsSource="{Binding ProductList}" SelectedValue="{Binding Path=ProductComboSelectedValue, Mode=TwoWay}"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="108,11,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Path=TypeComboSelectedValue, Mode=TwoWay}"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="255,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="60" Text="{Binding MinText}"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="325,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="60" Text="{Binding MaxText}"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>

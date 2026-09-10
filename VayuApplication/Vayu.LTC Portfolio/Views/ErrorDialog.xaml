@@ -1,0 +1,27 @@
+﻿<Window    x:Class="Vayu.LTC_Portfolio.Views.ErrorDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"  
+        Title="Vayu-Message" Height="Auto" Width="Auto"
+                 xmlns:err="clr-namespace:Vayu.LTC_Portfolio.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="False">
+    <Window.Resources>
+        <err:ErrorDialogViewModel x:Key="errorViewModel"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="0">
+            <Border Visibility="Visible" BorderThickness="20">
+                <TextBlock Height="Auto" Width="Auto" Text="{Binding DisplayText}" />
+            </Border>
+        </ScrollViewer>
+        <StackPanel Grid.Row="1">
+            <Button  Content="Close" Height="30" Width="60" Click="Button_Click_Close">
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

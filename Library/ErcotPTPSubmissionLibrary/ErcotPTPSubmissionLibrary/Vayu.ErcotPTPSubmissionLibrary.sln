@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33423.256
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.ErcotPTPSubmissionLibrary", "Vayu.ErcotPTPSubmissionLibrary.csproj", "{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F62FEAEB-EAA5-435B-935C-2F57B52EF64A}
+	EndGlobalSection
+EndGlobal

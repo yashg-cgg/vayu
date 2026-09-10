@@ -1,0 +1,74 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build Folders
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# Visual Studio Code
+.vscode/
+
+# Rider IDE
+.idea/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+packages/
+# If using PackageReference, the packages folder is not needed
+# If using packages.config, you may want to include it
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# DotCover
+*.dotCover
+
+# MSTest Test Results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Visual Studio temporary files
+*.tmp
+*.log
+*.vspscc
+*.vssscc
+
+# WPF specific
+*.g.cs
+*.g.i.cs
+*.pdb
+*.cache
+*.resources
+
+# WCF specific
+# Generated service files
+Reference.cs
+*.svcinfo
+*.svcmap
+*.xsd
+
+# Others
+*.dbmdl
+*.bak
+*.backup
+*.swp
+
+# OS Files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store

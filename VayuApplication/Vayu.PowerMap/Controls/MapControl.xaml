@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Vayu.PowerMap.Controls.MapControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Vayu.PowerMap.Controls"
+              xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="800">
+    <Grid DataContext="{Binding ElementName=mpCtl}">
+        <m:Map x:Name="myMap" CredentialsProvider="AiNuiCLvcznKfTUSjWoygnL1mArN5y-kquVndVduuGYtnznAP-Y0cy5fw213OUOO" 
+                            Mode="Road" Center="{Binding InternalMapCenter, Mode=TwoWay,FallbackValue='39.3683,-95.2734,0.0000'}"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" 
+                            AnimationLevel="None" ModeCrossFadeDuration="0" MouseLeftButtonUp="myMap_MouseLeftButtonUp" ZoomLevel="{Binding InternalZoomLevel,Mode=TwoWay}">
+            <m:MapLayer ></m:MapLayer>
+        </m:Map>
+        <TextBlock Height="100" Margin="15,0,0,0" Name="BoundingtextBlock" Text="" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="300" Foreground="Red" Visibility="Hidden"/>
+        <Expander HorizontalAlignment="Right" Margin="0,0,18,0" Name="expander1" VerticalAlignment="Top" Width="90" Header="Map Type" FontWeight="Bold" AllowDrop="False" IsExpanded="True">
+            <Grid Height="140">
+                <Button Content="Road" Height="23" HorizontalAlignment="Left" Margin="6,16,0,0" Name="buttonRoad" VerticalAlignment="Top" Width="75" Opacity="0.7" />
+                <Button Content="Aerial" Height="23" HorizontalAlignment="Left" Margin="6,45,0,0" Name="buttonAerial" VerticalAlignment="Top" Width="75" Opacity="0.7" />
+                <Button Content="Aerial Label" Height="23" HorizontalAlignment="Left" Margin="6,74,0,0" Name="buttonAerialWithLabels" VerticalAlignment="Top" Width="75" Opacity="0.7" />
+                <Button Content="-" Name="ZoomInbutton" Height="23" Margin="46,107,15,10" Opacity="0.7"/>
+                <Button Content="+" Name="ZoomOutbutton" Height="23" Margin="15,107,48,10" Opacity="0.7"/>
+            </Grid>
+            <Expander.BorderBrush>
+                <SolidColorBrush />
+            </Expander.BorderBrush>
+            <Expander.Background>
+                <SolidColorBrush />
+            </Expander.Background>
+        </Expander>
+        <TextBlock Height="Auto" Margin="0,0,6,58" Name="LocationtextBlock" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Foreground="Red"/>
+    </Grid>
+</UserControl>

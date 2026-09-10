@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sigma.CRRNodalServiceLibrary</RootNamespace>
+    <AssemblyName>Sigma.CRRNodalServiceLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Services3">
+      <HintPath>..\..\..\..\DLL\Microsoft.Web.Services3.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Vayu.CRRSubmissionLibrary">
+      <HintPath>..\..\..\Libraries\Vayu.CRRSubmissionLibrary\Sigma.CRRSubmissionLibrary\bin\Debug\Vayu.CRRSubmissionLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AsymmetricCustomBinding.cs" />
+    <Compile Include="ErcotCRR.cs" />
+    <Compile Include="ErcotNodalClient.cs" />
+    <Compile Include="Service References\ERCOTNodalService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlUtil.cs" />
+    <Compile Include="xsd_ews_2007_06\ErcotTransactionTypes.designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Service References\ERCOTNodalService\Message.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ERCOTNodalService\Nodal.wsdl" />
+    <None Include="Service References\ERCOTNodalService\Sigma.ErcotPTPSubmissionLibrary.ERCOTNodalService.MarketTransactionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ERCOTNodalService\Sigma.ErcotPTPSubmissionLibrary.ERCOTNodalService.ResponseMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ERCOTNodalService\WSS200401wssecurity-secext-10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ERCOTNodalService\WSS200401wssecurity-utility-10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ERCOTNodalService\xml.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ERCOTNodalService\xmldsig-core-schema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotAwards.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotAwardTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotCommonTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotDisputes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotDisputesTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotEvents.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotEventTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotForecast.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotGetNotifications.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotInformation.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotInformation2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotInformation2Types.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotInformationTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotOutages.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotOutageTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotReport.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotReportTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotTextReason.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotTextReasonTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotTransactions.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\ErcotTransactionTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\Message.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\Nodal.wsdl" />
+    <None Include="xsd_ews_2007_06\NodalAbstract.wsdl" />
+    <None Include="xsd_ews_2007_06\Notification.wsdl" />
+    <None Include="xsd_ews_2007_06\Notification.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\NotificationAbstract.wsdl" />
+    <None Include="xsd_ews_2007_06\WSS200401wssecurity-secext-10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\WSS200401wssecurity-utility-10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd_ews_2007_06\xmldsig-core-schema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ERCOTNodalService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ERCOTNodalService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ERCOTNodalService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ERCOTNodalService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

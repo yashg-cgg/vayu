@@ -1,0 +1,177 @@
+﻿<Window  x:Class="Vayu.CRRPeriods.Views.MainWindow"
+                     
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+     Width="800"
+        Height="Auto"
+        Title="LTC Period"  >
+    <Grid x:Name="LayoutRoot">
+       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Margin="5,6,0,0"
+			           HorizontalAlignment="Center"
+			           Text="Market:" />
+            <ComboBox Width="75"
+			          Height="25"
+			          Margin="15,2,0,0"
+			          ItemsSource="{Binding MarketList,
+			                                Mode=TwoWay}"
+			          SelectedItem="{Binding MarketSelectedItem}" SelectionChanged="ComboBox_SelectionChanged"  />
+        </StackPanel>
+        <DataGrid Grid.Row="1" Name="periodlist"
+		          Margin="5,10,0,0"
+		          AlternatingRowBackground="LightGray"
+		          AutoGenerateColumns="False"
+		          CanUserAddRows="False"
+		          IsReadOnly="True"
+		          ItemsSource="{Binding PeriodList}" Sorting="DataGrid_Sorting">
+            <DataGrid.Columns>
+                <!--
+					<DataGridTextColumn Width="40*"
+					Binding="{Binding PeriodCode}"
+					Header="Period Code" />
+				-->
+                <DataGridTextColumn Width="30*" Foreground="Black"
+				                    Binding="{Binding PeriodKey}"
+				                    Header="Period Key">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="50*" Foreground="Black"
+				                    Binding="{Binding PeriodName}"
+				                    Header="Period Name">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="25*" Foreground="Black"
+				                    Binding="{Binding PeriodType}"
+				                    Header="Period Type">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="30*" Foreground="Black"
+				                    Binding="{Binding StartDate,
+				                                      StringFormat=d}"
+				                    Header="Start Date">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="30*" Foreground="Black"
+				                    Binding="{Binding EndDate,
+				                                      StringFormat=d}"
+				                    Header="End Date">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="15*" Foreground="Black"
+				                    Binding="{Binding PeakHours}"
+				                    Header="Peak Hrs">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="15*" Foreground="Black"
+				                    Binding="{Binding OffPeakHrs}"
+				                    Header="Off Peak Hrs">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="15*" Foreground="Black"
+				                    Binding="{Binding Hours24}"
+				                    Header="24 Hrs">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="15*" Foreground="Black"
+				                    Binding="{Binding PeakWE}"
+				                    Header="PeakWE">
+
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <!--
+					<DataGridTextColumn Width="40*"
+					Binding="{Binding CreditDate}"
+					Header="Credit Date" />
+				-->
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

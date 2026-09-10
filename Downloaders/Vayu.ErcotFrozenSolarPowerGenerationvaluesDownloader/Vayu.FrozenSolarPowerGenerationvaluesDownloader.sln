@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.FrozenSolarPowerGenerationvaluesDownloader", "ErcotSolarPowerGenerationvaluesDownloader\Vayu.FrozenSolarPowerGenerationvaluesDownloader.csproj", "{B01B65A9-9C52-499B-84ED-90D7E7DFFEE4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B01B65A9-9C52-499B-84ED-90D7E7DFFEE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B01B65A9-9C52-499B-84ED-90D7E7DFFEE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B01B65A9-9C52-499B-84ED-90D7E7DFFEE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B01B65A9-9C52-499B-84ED-90D7E7DFFEE4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C63DF00-4537-485C-B5D3-791A973C4424}
+	EndGlobalSection
+EndGlobal

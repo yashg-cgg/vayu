@@ -1,0 +1,2100 @@
+﻿<Window   
+                 x:Class="Vayu.PowerMap.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:Usercontrol="clr-namespace:Vayu.PowerMap.Model"
+        xmlns:prism="http://prismlibrary.com/"
+      xmlns:my1="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+    xmlns:local="clr-namespace:Vayu.PowerMap.Views" 
+                 xmlns:xm="clr-namespace:Vayu.PowerMap.ViewModels"
+    xmlns:uc="clr-namespace:Vayu;assembly=Vayu.CommonControls" xmlns:uc1="clr-namespace:Vayu.PowerMap.Controls"
+                 prism:ViewModelLocator.AutoWireViewModel="True"
+                  DataContext="{Binding RelativeSource={RelativeSource Self}}"  
+        Title="Power Map" Height="900" Width="1600" WindowState="Maximized"  WindowStyle="SingleBorderWindow">
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:ComparisonConverter x:Key="ComparisonConverter"/>
+            <SolidColorBrush x:Key="textFourground" Color="Black"/>
+            <ContextMenu x:Key="outage_contextMenu"
+			             Background="Lavender"
+			             FontWeight="DemiBold">
+                <MenuItem Click="navigateMenuItem_Click" Header="Navigate" />
+                <MenuItem Click="history_MenuItem_Click" Header="Show History" />
+                <MenuItem Click="Constraints_MenuItem_Click" Header= "Historical Constraints" />
+                <MenuItem Click="congestion_MenuItem_Click" Header="Congestion" />
+            </ContextMenu>
+            <ContextMenu x:Key="contextMenu"
+			             Background="Lavender"
+			             FontWeight="DemiBold">
+                <MenuItem Click="navigateMenuItem_Click" Header="Navigate" />
+                <MenuItem Click="PlaceMarkClear_MenuItem_Click" Header="ClearMarks" />
+                <!--<MenuItem Header="Node Spread Analysis" Click="NodeSpreadAnalysis_MenuItem_Click" />-->
+            </ContextMenu>
+            <ContextMenu x:Key="iirOutage_contextMenu"
+                         Background="Lavender"
+                         FontWeight="DemiBold">
+                <MenuItem Click="navigateMenuItem_Click" Header="Navigate"/>
+                <MenuItem Click="iirHistory_MenuItem_Click" Header="Show History"/>
+            </ContextMenu>
+            <xm:MainWindowViewModel x:Key="mMakert" />
+
+
+            <Style TargetType="TabItem" x:Key="TabItemHeaderStyle">
+                <Setter Property="Background" Value="LightBlue"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontWeight" Value="Medium" />
+                <Setter Property="FontSize" Value="11.5px" />
+
+                <!-- Add more setters for other properties as needed -->
+            </Style>
+
+
+            <Style TargetType="TabItem" x:Key="TabItemHeaderStyle1">
+                <Setter Property="Background" Value="LightBlue"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontWeight" Value="Medium" />
+                <Setter Property="FontSize" Value="12px" />
+
+                <!-- Add more setters for other properties as needed -->
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="LayoutRoot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3.5*" />
+            <RowDefinition Height="5*" />
+        </Grid.RowDefinitions>
+        <Expander Grid.Row="0" IsExpanded="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.15*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row="0" Grid.Column="0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.8*"/>
+                        <RowDefinition Height="0.8*"/>
+                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="0.1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Markets" HorizontalAlignment="Left" VerticalAlignment="Center"  Width="83px"/>
+                    <ComboBox Grid.Column="1" x:Name="MarketlistBox" SelectionChanged="MarketlistBox_SelectionChanged"
+                                           ItemsSource="{Binding Markets.Keys}" Width="89px"   HorizontalAlignment="Left" Margin="-15 0 0 0">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightGreen</SolidColorBrush>
+                        </ComboBox.Resources>
+                        <ComboBox.DataContext>
+                            <StaticResource ResourceKey="mMakert"/>
+                        </ComboBox.DataContext>
+                    </ComboBox>
+                    <Button x:Name="Refreshbutton"  Grid.Column="2" Click="Refreshbutton_Click" Content="Refresh" FontWeight="Bold"  Width="80px" 
+                            HorizontalAlignment="Left" Margin="-25 0 0 0"/>
+                    <Button Name="PlayButton" Content="Play"  Grid.Column="0" Grid.Row="1" Click="Play" Width="83px" HorizontalAlignment="Left" Margin="2 0 0 -1"/>
+
+                    <Button Name="PauseButton" Content="Pause"   Grid.Column="1" Grid.Row="1" Click="Pause"  Width="89px" HorizontalAlignment="Left" Margin="-15 1 0 -1"/>
+                    <Button Name="StopButton" Content="Stop" Grid.Column="2" Grid.Row="1"  Click="Stop"  Width="80px" HorizontalAlignment="Left" Margin="-25 1 0 0"/>
+                    <uc:CalendarSlider Grid.Row="2" Grid.ColumnSpan="3" Background="Azure" x:Name="MainCalendarSilder"
+						PropertyChanged="MainCalendarSilderPropertyChanged" Height="120px"  Margin="0 1 0 1"/>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <GroupBox Name="groupBox1" 
+					          BorderBrush="#FF030303"
+					          Header="Zone"
+                              Margin="-50 0 0 0 ">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="4*"/>
+                                <RowDefinition Height="0.8*"/>
+                                <RowDefinition Height="0.8*"/>
+                            </Grid.RowDefinitions>
+                            <ListBox Name="ZoneListBox" Background="Azure"
+							         VerticalAlignment="Stretch"
+							         ItemsSource="{Binding ZoneList}"
+							         SelectionChanged="ZoneListBox_SelectionChanged"
+							         SelectionMode="Multiple">
+                                <ListBox.Resources>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightGreen</SolidColorBrush>
+                                </ListBox.Resources>
+                            </ListBox>
+                            <Button Name="ZoneSelectAllButton"   Grid.Row="1" Margin="0 0 0 2"
+								        Click="ZoneSelectAllButton_Click"
+								        Content="Select All" />
+                            <Button Name="ZoneUnSelectAllButton" Grid.Row="2" Margin="0 0 0 2"
+								        Click="ZoneUnSelectAllButton_Click"
+								        Content="UnSelect All" />
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+                <Grid Grid.Column="2" Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0.39*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Header="LMP Prices">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Header="Type">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <ListBox x:Name="LMPEquipmentTypeListBox" 
+                                                 ItemsSource="{Binding LmpEquipmentList}"
+										         SelectionChanged="LMPEquipmentTypeListBox_SelectionChanged"
+										         SelectionMode="Multiple">
+                                            <ListBox.Resources>
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightGreen</SolidColorBrush>
+                                            </ListBox.Resources>
+                                        </ListBox>
+                                        <Grid Grid.Row="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button  Grid.Column="0" Margin="2 0 2 0 "
+											        Click="LMPEquipmentTypeSelectAllButton_Click"
+											        Content="Select All" />
+                                            <Button  Grid.Column="1" Margin="0 0 0 -1"
+											        Click="LMPEquipmentTypeUnSelectAllButton_Click"
+											        Content="UnSelect All" />
+                                        </Grid>
+                                    </Grid>
+
+                                </GroupBox>
+                                <Grid Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <RadioButton x:Name="LMP_RT_radioButton"
+								             Grid.Column="0" Grid.Row="1"
+								             Content="RT" Margin="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+								             IsChecked="{Binding SelectedLMPPriceType,
+								                                 ConverterParameter={x:Static Usercontrol:LMPPriceType.RT},
+								                                 Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								             Style="{StaticResource {x:Type ToggleButton}}"  />
+                                    <RadioButton x:Name="LMP_DA_radioButton"  Grid.Column="1" Grid.Row="1"
+								             Content="DA" Margin="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+								             IsChecked="{Binding SelectedLMPPriceType,
+								                                 ConverterParameter={x:Static Usercontrol:LMPPriceType.DA},
+								                                 Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								             Style="{StaticResource {x:Type ToggleButton}}"   />
+                                    <RadioButton x:Name="LMP_DART_radioButton"  Grid.Column="2" Grid.Row="1"
+								             Content="DART" Margin="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+								             IsChecked="{Binding SelectedLMPPriceType,
+								                                 ConverterParameter={x:Static Usercontrol:LMPPriceType.DART},
+								                                 Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								             Style="{StaticResource {x:Type ToggleButton}}" />
+                                    <CheckBox x:Name="RT5Latest" Margin="1.5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+								          Grid.Column="0" Grid.Row="2"
+								          Content="RT-5 Latest"
+								          IsChecked="{Binding SelectedLMPPriceType,
+								                              ConverterParameter={x:Static Usercontrol:LMPPriceType.RT5},
+								                              Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                                    <CheckBox x:Name="RT5Max"  Grid.Column="1" Grid.Row="2"
+								          Content="RT-5 Max" Margin="2 2 2 2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+								          IsChecked="{Binding SelectedLMPPriceType,
+								                              ConverterParameter={x:Static Usercontrol:LMPPriceType.RT5Max},
+								                              Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								          Style="{StaticResource {x:Type ToggleButton}}"   />
+                                    <CheckBox x:Name="RT5Min"  Grid.Column="2" Grid.Row="2"
+								          Content="RT-5 Min" Margin=" 0 0 0 2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+								          IsChecked="{Binding SelectedLMPPriceType,
+								                              ConverterParameter={x:Static Usercontrol:LMPPriceType.RT5Min},
+								                              Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								          Style="{StaticResource {x:Type ToggleButton}}"   />
+
+                                    <CheckBox x:Name="LiveCheckBox"  Grid.Row="0" Grid.Column="2" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+								          Checked="LiveCheckBox_Checked" Content="Live"/>
+                                    <CheckBox x:Name="UptoCheckBox"   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+									 Grid.Row="0" Grid.ColumnSpan="2"	 Margin=" 0 0 0 -1"						         
+									Content="{Binding LMPFilterToggle}"
+									IsChecked="{Binding LMPPJMUpTo}"
+									Style="{StaticResource {x:Type ToggleButton}}" />
+                                </Grid>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Column="1" Header="Temp Range">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <RadioButton x:Name="Temp_Avg_radioButton"   Content="Avg" Margin="3" HorizontalContentAlignment="Center"
+ VerticalContentAlignment="Center"                                                Style="{StaticResource {x:Type ToggleButton}}" Checked="Temp_radioButton_Checked"/>
+                                <RadioButton x:Name="Temp_Max_radioButton"  Grid.Row="1" IsEnabled="False"  Checked="Temp_radioButton_Checked" Content="Max"  Margin="3" HorizontalContentAlignment="Center"
+ VerticalContentAlignment="Center"  
+                                               Style="{StaticResource {x:Type ToggleButton}}"/>
+                                <RadioButton x:Name="Temp_Min_radioButton"  Grid.Row="2"  IsEnabled="False" Checked="Temp_radioButton_Checked" Content="Min"  Margin="3" HorizontalContentAlignment="Center"
+ VerticalContentAlignment="Center"    Style="{StaticResource {x:Type ToggleButton}}"/>
+
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Constraints" Grid.Column="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Header="Type">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <ListBox x:Name="ConstraintEquipmentTypeListBox"
+										         ItemsSource="{Binding ConstraintEquipmentTypeList}"
+										         
+										         SelectionChanged="ConstraintEquipmentTypeListBox_SelectionChanged"
+										         SelectionMode="Multiple">
+                                            <ListBox.Resources>
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightGreen</SolidColorBrush>
+                                            </ListBox.Resources>
+                                        </ListBox>
+                                        <Grid Grid.Row="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button  		 Margin="0 0 2 0"									        Click="ConstraintEquipmentTypeSelectAllButton_Click"
+											        Content="Select All" />
+                                            <Button  Grid.Column="1" Margin="0 0 2 0"
+											        Click="ConstraintEquipmentTypeUnSelectAllButton_Click"
+											        Content="UnSelect All" />
+                                        </Grid>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Header="Price" Grid.Column="2">
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                          
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="Constraint_MinPrice_textBox" Grid.Row="0"  Grid.Column="0"  Width="45px" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Margin="0 0 2 1"  Text="Min" />
+                                        <TextBox x:Name="Constraint_MaxPrice_textBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1"  Margin="0 0 2 1" Text="Max" />
+                                        <RadioButton x:Name="Constraint_5M_radioButton"  Grid.Column="0" Grid.Row="1"
+								                 Content="RT-5" Margin="1.5"
+								                 IsChecked="{Binding SelectedConstraintPriceType,
+								                                     ConverterParameter={x:Static Usercontrol:ConstraintPriceType.RT5Min},
+								                                     Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								                 IsEnabled="False"
+								                 Style="{StaticResource {x:Type ToggleButton}}"  Width="39px" HorizontalAlignment="Left"/>
+                                        <RadioButton x:Name="Constraint_RT_radioButton"  Grid.Column="1" Grid.Row="1"
+								                 Content="RT" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Margin="1.5"
+								                 IsChecked="{Binding SelectedConstraintPriceType,
+								                                     ConverterParameter={x:Static Usercontrol:ConstraintPriceType.RT},
+								                                     Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								                 Style="{StaticResource {x:Type ToggleButton}}"  Width="39px"/>
+                                        <RadioButton x:Name="Constraint_DA_radioButton"  Grid.Column="2" Grid.Row="1"
+								                 Content="DA"  Margin="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+								                 IsChecked="{Binding SelectedConstraintPriceType,
+								                                     ConverterParameter={x:Static Usercontrol:ConstraintPriceType.DA},
+								                                     Converter={StaticResource ResourceKey=ComparisonConverter}}"
+								                 Style="{StaticResource {x:Type ToggleButton}}"  Width="39px" />
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox HorizontalAlignment="Left" Grid.Column="3"
+						          VerticalAlignment="Stretch"
+						          BorderBrush="#FF030303"
+						          Header="Transmission">
+                            <Grid VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="AUTO" />
+                                    <RowDefinition Height="40" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                    <TextBox x:Name="Transmisson_MaxKV_Textbox"
+									                       Width="44"
+									                       Height="23"
+									                       Margin="0,0,0,0"
+									                       HorizontalAlignment="Left"
+									                       VerticalAlignment="Top"
+									                       Text="765kv" />
+                                    <Label x:Name="label17"
+									       Width="15"
+									       Height="24"
+									       Margin="0,0,0,0"
+									       HorizontalAlignment="Center"
+									       VerticalAlignment="Center"
+									       Content="-" />
+                                    <TextBox x:Name="Transmisson_MinKV_Textbox"
+									                       Width="42"
+									                       Height="23"
+									                       Margin="0,0,0,0"
+									                       HorizontalAlignment="Left"
+									                       VerticalAlignment="Top"
+									                       Text="69kv" />
+                                </StackPanel>
+                                <CheckBox x:Name="checkBox1"
+								          Grid.Row="1"
+								          Margin="1,0,0,0"
+								          HorizontalAlignment="Center"
+								          VerticalAlignment="Center"
+								          Content="Show Stations"
+								          IsChecked="{Binding Transmissionshowstation}"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox BorderBrush="#FF030303"
+						          Header="Outages">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <GroupBox Header="Type" BorderBrush="#FF030303">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <ListBox x:Name="OutageEquipmentTypeListBox" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+										           ItemsSource="{Binding OutageEquipmentList}"
+										         SelectionChanged="OutageEquipmentTypeListBox_SelectionChanged"
+										         SelectionMode="Multiple">
+                                            <ListBox.Resources>
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" >LightGreen</SolidColorBrush>
+                                            </ListBox.Resources>
+                                        </ListBox>
+
+                                        <Button  Click="OutageEquipmentTypeSelectAllButton_Click"
+											        Content="Select All"  Grid.Row="0" Grid.Column="1" />
+                                        <Button Grid.Row="1" Grid.Column="1"  Margin="0 0 0 2"
+											        Click="OutageEquipmentTypeUnSelectAllButton_Click"
+											        Content="UnSelect All" />
+                                        
+                                        <!--<Grid Grid.Row="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button  Grid.Column="0" Margin="0 0 2 2"
+											        Click="OutageEquipmentTypeSelectAllButton_Click"
+											        Content="Select All" />
+                                            <Button  Grid.Column="1"  Margin="0 0 0 2"
+											        Click="OutageEquipmentTypeUnSelectAllButton_Click"
+											        Content="UnSelect All" />
+                                        </Grid>-->
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Header="" Grid.Column="1" BorderBrush="#FF030303">
+
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            
+                                        </Grid.RowDefinitions>
+
+                                        <Label x:Name="label9" Grid.Column="0" Grid.Row="0"  Content="Volt" HorizontalAlignment="Center" />
+                                        <TextBox x:Name="OutageMinKVTextBox"  Grid.Column="1" Grid.Row="0"  Text="{Binding MinVoltText, Mode=TwoWay}"  BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="0" MinWidth="0" Width="32px" />
+
+                                        <Label x:Name="label8" Grid.Column="2" Grid.Row="0" Content="-"  HorizontalAlignment="Center"/>
+
+                                        <TextBox x:Name="OutageMaxKVTextBox"  Grid.Column="3" Grid.Row="0"   Text="{Binding MaxVoltText, Mode=TwoWay}"  BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="0" MinWidth="0" Width="32px" />
+
+                                        <Label x:Name="label2" Grid.Row="1" Grid.Column="0"  Content="Dur" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="0" MinWidth="0" />
+
+                                        <TextBox x:Name="OutageDurationMinWatermarkTextBox"  Grid.Row="1" Grid.Column="1"    Text="{Binding MinText,Mode=TwoWay}"  BorderBrush="Black"  HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="0" MinWidth="0" Width="32px"/>
+
+                                        <Label x:Name="label1"  Grid.Row="1" Grid.Column="2" Content="-"  HorizontalAlignment="Center"/>
+
+                                        <TextBox x:Name="OutageDurationMaxWatermarkTextBox"  Grid.Row="1" Grid.Column="3"  Text="{Binding MaxText,Mode=TwoWay}"    BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="0" MinWidth="0" Width="32px">
+
+                                            <TextBox.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform />
+                                                    <SkewTransform />
+                                                    <RotateTransform Angle="0.333" />
+                                                    <TranslateTransform />
+                                                </TransformGroup>
+                                            </TextBox.RenderTransform>
+                                        </TextBox>
+
+                                        <!--<Label x:Name="label12" Grid.Row="2" Grid.Column="0"   Content="Status"  HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="0" MinWidth="0"/>
+                                        <Label x:Name="label11"  Grid.Row="2" Grid.Column="1" Content=""  HorizontalAlignment="Center"/>
+                                        <CheckBox x:Name="Outage_Excludecomplete_checkBox"
+									              Content="Completed"
+									              IsChecked="{Binding OutagesIncludeComplete,
+									                                  Mode=TwoWay}"  Grid.Row="2" Grid.Column="2"   Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" MinHeight="0" MinWidth="0"/>-->
+                                    </Grid>
+
+                                </GroupBox>
+
+                                <GroupBox BorderBrush="#FF030303" Header="Type" Grid.Row="0" Grid.Column="2" Margin="10,1,10,1">
+                                    <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                   
+                                        
+                                            <CheckBox x:Name="Outage_Forced_checkBox"
+										              
+										              Content="Forced"
+										              IsChecked="{Binding OutagesStatusForced,
+										                                  Mode=TwoWay}" 
+                                                      Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"/>
+                                            
+                                            
+                                            <CheckBox x:Name="Outage_Planned_checkBox"
+										              Content="Planned"    
+										              IsChecked="{Binding OutagesStatusPlanned,
+										                                  Mode=TwoWay}"   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+
+                                        <Label x:Name="label12" Grid.Row="2"  Grid.Column="0"  Content="Status"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin=" -8 -1 0 -4"/>
+                                        <CheckBox x:Name="Outage_Excludecomplete_checkBox"    Grid.Row="2"  Grid.Column="1" Content="Completed" IsChecked="{Binding OutagesIncludeComplete,
+									                                  Mode=TwoWay}"  HorizontalAlignment="Left" Margin="-8" Grid.ColumnSpan="2"/>
+
+                                   
+                                    </Grid>
+                                </GroupBox>
+
+
+                                <GroupBox    BorderBrush="#FF030303"   Header="Planned Open/Close" Grid.Column="3">
+                                    <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                   
+                                        
+                                        
+                                            <CheckBox x:Name="Outage_Open_checkBox"
+                                                      Grid.Row="0"
+										              Height="22"
+										              HorizontalAlignment="Left"
+										              Content="Open"
+										              IsChecked="{Binding OutageOpen,
+										                                  Mode=TwoWay}" />
+                                            <CheckBox x:Name="Outage_Close_checkBox"
+                                                       Grid.Row="1"
+										              Height="22"
+										              
+										              HorizontalAlignment="Left"
+										              Content="Close"
+										              IsChecked="{Binding OutageClose,
+										                                  Mode=TwoWay}" />
+                                       
+                                  
+                                   
+                                </Grid>
+                                </GroupBox>
+                                <GroupBox   Grid.Column="4" Header="Type"
+								              BorderBrush="#FF030303" >
+                                    <Grid>
+                                        <!--<Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>-->
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <RadioButton x:Name="Outage_Actual_radioButton"
+										                  Grid.Row="0"
+										                 Checked="Outage_Actual_radioButton_Checked"
+										                 Content="Actual"
+										                 GroupName="OutageActualPlanned"
+										                 IsChecked="{Binding SelectedOutagesSourceType,
+										                                     ConverterParameter={x:Static Usercontrol:OutagesSourceType.Actual},
+										                                     Converter={StaticResource ResourceKey=ComparisonConverter}}"
+										                 Style="{StaticResource {x:Type RadioButton}}" />
+                                        <RadioButton x:Name="Outage_Planned_radioButton"
+										                 Grid.Row="1"
+										                 Click="Outage_Planned_radioButton_Click"
+										                 Content="Planned"
+										                 GroupName="OutageActualPlanned"
+										                 IsChecked="{Binding SelectedOutagesSourceType,
+										                                     ConverterParameter={x:Static Usercontrol:OutagesSourceType.Planned},
+										                                     Converter={StaticResource ResourceKey=ComparisonConverter}}"
+										                 Style="{StaticResource {x:Type RadioButton}}" />
+                                        <CheckBox x:Name="Outage_Start_radioButton"
+										              Grid.Row="2"
+										              Click="Outage_Start_radioButton_Click"
+										              Content="Start"
+										              IsChecked="{Binding SelectedOutagesScheduleType,
+										                                  ConverterParameter={x:Static Usercontrol:OutagesScheduleType.StartDate},
+										                                  Converter={StaticResource ResourceKey=ComparisonConverter}}"
+										              IsEnabled="False" />
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Map Controller" Grid.Column="1" BorderBrush="#FF030303">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" >
+                                    <Label Content="Center Point: " VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding ElementName=MapControl, Path=StringLocation}" VerticalAlignment="Center" Width="120"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Margin=" 0 0 0 5">
+                                   
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Label Content="Select Zoom Level:" VerticalAlignment="Center"/>
+                                        <TextBox Width="50" Text="{Binding ElementName=czoomLevel, Path=Value, Mode=TwoWay, StringFormat=N3}" />
+                                        <Button Content="Go" Margin="5,0,0,0" Width="50" Click="ZoomToLevel_Click" />
+                                    </StackPanel>
+                                   
+                                    <Slider x:Name="czoomLevel" Value="{Binding CustomZoomLevel , FallbackValue=6}" Minimum="4" Maximum="10" LargeChange="0.5"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Expander>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300*"/>
+                <ColumnDefinition Width="693*"/>
+            </Grid.ColumnDefinitions>
+            <Expander x:Name="ItemGrid"
+			          Grid.Column="0"
+			          ExpandDirection="Right"
+			          IsExpanded="True">
+                <TabControl Name="Side_tabControl"   Foreground="Blue"
+				            VerticalAlignment="Stretch"
+				            SelectedIndex="{Binding ElementName=HeadertabControl,
+				                                    Path=SelectedIndex}"
+				            TabStripPlacement="Top" >
+                    <TabItem Name="TabLMP"   Header="LMP" Style="{StaticResource TabItemHeaderStyle}" >
+                        <Grid>
+                            <TextBlock Width="58"
+							           Height="23"
+							           Margin="14,15,168,0"
+							           VerticalAlignment="Top"
+							           FontSize="14"
+							           Text="Search: " />
+                            <my1:AutoCompleteBox x:Name="LMP_AutoCompleteBox"
+							                     Width="150"
+							                     Height="23"
+							                     Margin="82,15,5,0"
+							                     VerticalAlignment="Top"
+							                     FilterMode="Contains"
+							                     ItemsSource="{Binding}"
+							                     MaxDropDownHeight="80"
+							                     SelectionChanged="LMP_AutoCompleteBox_SelectionChanged" />
+                            <DataGrid x:Name="LMPSideDatagrid" Background="Bisque"
+							          Margin="0,50,0,0" CanUserAddRows="False" CanUserDeleteRows="False"
+							          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+							          AutoGenerateColumns="False"
+							          ContextMenu="{StaticResource contextMenu}"
+							          ItemsSource="{Binding LMPList}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="60*"
+									                    Binding="{Binding NodeName}"
+									                    CanUserReorder="True"
+									                    Header="Node"  Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Width="40*"
+									                    Binding="{Binding LMP}"
+									                    CanUserReorder="True"
+									                    Header="LMP"  Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Width="50*"
+									                    Binding="{Binding Type}"
+									                    CanUserReorder="True"
+									                    Header="Type"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Width="50*" Binding="{Binding FuelType}"
+														CanUserReorder="True"
+														Header="Fuel Type"  Foreground="Black"
+														IsReadOnly="True" />
+                                    <DataGridTextColumn Width="50*"
+									                    Binding="{Binding Zone}"
+									                    CanUserReorder="True"
+									                    Header="Zone"  Foreground="Black"
+									                    IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Name="TabConstraint" Header="Constraints" Style="{StaticResource TabItemHeaderStyle}" >
+                        <Grid >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="7*" />
+                                <ColumnDefinition Width="27*" />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid Name="ConstraintGeoGrid" MouseDoubleClick="Constraint_Side_DataGrid2_MouseDoubleClick"
+							          Grid.ColumnSpan="2" CanUserAddRows="False" CanUserDeleteRows="False"
+							          Margin="0,50,0,265"
+							          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+							          AutoGenerateColumns="False"
+							          ContextMenu="{StaticResource contextMenu}"
+							          ItemsSource="{Binding GeoConstraintList}"
+							          SelectedItem="{Binding ElementName=Constraint_autoCompleteBox,
+							                                 Path=Text,
+							                                 Mode=OneWay}"
+							          SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="200"
+									                    Binding="{Binding constraint}"
+									                    CanUserReorder="True"
+									                    Header="Constraint Text"
+									                    IsReadOnly="True">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="ToolTip" Value="{Binding constraint}" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding constraint_stationFrom}"
+									                    CanUserReorder="True"
+									                    Header="Constraint Bus Name From"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding constraint_stationTo}"
+									                    CanUserReorder="True"
+									                    Header="Constraint Bus Name To"
+									                    IsReadOnly="True" />
+                                    <!--  <DataGridTextColumn Header="Shadow Price" Binding="{Binding shadowprice}" CanUserReorder="True" IsReadOnly="True"/>  -->
+                                    <DataGridTextColumn Binding="{Binding constraint_KV}"
+									                    CanUserReorder="True"
+									                    Header="Constraint KV"
+									                    IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid Name="ConstraintNonGeoGrid" MouseDoubleClick="Constraint_Side_DataGrid2_MouseDoubleClick"
+							          Grid.ColumnSpan="2" CanUserAddRows="False" CanUserDeleteRows="False"
+							          Height="220"
+							          Margin="0,0,0,0"
+							          VerticalAlignment="Bottom"
+							          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+							          AutoGenerateColumns="False"
+							          ItemsSource="{Binding NonGeoConstraintList}"
+							          SelectedItem="{Binding ElementName=Constraint_autoCompleteBox,
+							                                 Path=Text,
+							                                 Mode=OneWay}"
+							          SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="200"
+									                    Binding="{Binding constraint}"
+									                    CanUserReorder="True"
+									                    Header="Constraint Text"
+									                    IsReadOnly="True">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="ToolTip" Value="{Binding constraint}" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding constraint_stationFrom}"
+									                    CanUserReorder="True"
+									                    Header="Constraint Bus Name From"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding constraint_stationTo}"
+									                    CanUserReorder="True"
+									                    Header="Constraint Bus Name To"
+									                    IsReadOnly="True" />
+                                    <!--  <DataGridTextColumn Header="Shadow Price" Binding="{Binding shadowprice}" CanUserReorder="True" IsReadOnly="True"/>  -->
+                                    <DataGridTextColumn Binding="{Binding constraint_KV}"
+									                    CanUserReorder="True"
+									                    Header="Constraint KV"
+									                    IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock Grid.ColumnSpan="2"
+							           Width="58"
+							           Height="23"
+							           Margin="64,15,218,0"
+							           VerticalAlignment="Top"
+							           FontSize="14"
+							           Text="Search: " />
+                            <my1:AutoCompleteBox Name="Constraint_autoCompleteBox"
+							                     Grid.Column="1"
+							                     Width="150"
+							                     Height="23"
+							                     Margin="64,15,56,0"
+							                     VerticalAlignment="Top"
+							                     FilterMode="Contains"
+							                     ItemsSource="{Binding ElementName=Constraint_listBox1,
+							                                           Path=Items}"
+							                     MaxDropDownHeight="110"
+							                     SelectionChanged="Constraint_autoCompleteBox_SelectionChanged" />
+                            <Label Name="label14"
+							       Grid.ColumnSpan="2"
+							       Height="28"
+							       Margin="14,0,0,221"
+							       HorizontalAlignment="Left"
+							       VerticalAlignment="Bottom"
+							       Content="Objects not in the map" />
+                            <!--  <TreeView Background="#FFDFEDFF" ItemsSource="{Binding}" Margin="10,6,6,0" Name="ConstrainttreeView" Height="181" VerticalAlignment="Top" />  -->
+                        </Grid>
+                    </TabItem>
+                    <TabItem Name="TabOutage"
+					         BorderBrush="LightSteelBlue"
+					         Header="Outages" Style="{StaticResource TabItemHeaderStyle}">
+                        <Grid >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="29*" />
+                                <ColumnDefinition Width="18*" />
+                                <ColumnDefinition Width="293*" />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid Name="OutageSideDataGrid1" MouseDoubleClick="Outage_Side_DataGrid2_MouseDoubleClick"
+							          Grid.ColumnSpan="3" CanUserAddRows="False" CanUserDeleteRows="False"
+							          Margin="0,50,0,265"
+							          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+							          AutoGenerateColumns="False"
+							          ContextMenu="{StaticResource outage_contextMenu}"
+							          ItemsSource="{Binding GeoOutageList}"
+							          SelectedItem="{Binding ElementName=Outage_AutoCompleteBox,
+							                                 Path=Text,
+							                                 Mode=OneWay}"
+							          SelectionMode="Extended">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding equipment}"
+									                    CanUserReorder="True"
+									                    Header="Equipment" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding voltage}"
+									                    CanUserReorder="True"
+									                    Header="Voltage" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding equipmentType}"
+									                    CanUserReorder="True"
+									                    Header="Type" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding branch}"
+									                    CanUserReorder="True"
+									                    Header="FromSub" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding tobranch}"
+									                    CanUserReorder="True"
+									                    Header="ToSub" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding zone}"
+									                    CanUserReorder="True"
+									                    Header="Zone" Foreground="Black"
+									                    IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid Name="OutageSideDataGrid2" MouseDoubleClick="Outage_Side_DataGrid2_MouseDoubleClick"
+							          Grid.ColumnSpan="3" ItemsSource="{Binding NonGeoOutageList}"
+							          Height="220" CanUserAddRows="False" CanUserDeleteRows="False"
+							          Margin="0,0,0,0"
+							          VerticalAlignment="Bottom"
+							          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+							          AutoGenerateColumns="False"
+							          SelectionMode="Extended">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding equipment}"
+									                    CanUserReorder="True"
+									                    Header="Equipment" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding voltage}"
+									                    CanUserReorder="True"
+									                    Header="Voltage" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding equipmentType}"
+									                    CanUserReorder="True"
+									                    Header="Type" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding branch}"
+									                    CanUserReorder="True"
+									                    Header="FromSub" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding tobranch}"
+									                    CanUserReorder="True"
+									                    Header="ToSub" Foreground="Black"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding zone}"
+									                    CanUserReorder="True"
+									                    Header="Zone" Foreground="Black"
+									                    IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--  <TreeView Background="#FFDFEDFF"  Margin="12,10,6,0"  VerticalAlignment="Top" Height="140" ItemsSource="{Binding}" Name="OutagetreeView" Width="222" Visibility="Hidden" />  -->
+                            <TextBlock Grid.Column="2"
+							           Width="58"
+							           Height="23"
+							           Margin="17.388,15,218,0"
+							           VerticalAlignment="Top"
+							           FontSize="14"
+							           Text="Search: " />
+                            <my1:AutoCompleteBox Name="Outage_AutoCompleteBox"
+							                     Grid.Column="2"
+							                     Width="150"
+							                     Height="23"
+							                     Margin="87.388,15,56,0"
+							                     VerticalAlignment="Top"
+							                     FilterMode="Contains"
+							                     ItemsSource="{Binding}"
+							                     MaxDropDownHeight="110"
+							                     SelectionChanged="Outage_AutoCompleteBox_SelectionChanged" />
+                            <Label Name="label13"
+							       Grid.ColumnSpan="3"
+							       Height="28"
+							       Margin="14,0,0,222"
+							       HorizontalAlignment="Left"
+							       VerticalAlignment="Bottom"
+							       Content="Objects not in the map" />
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Name="TabTransmission" Header="Transmission" Style="{StaticResource TabItemHeaderStyle}">
+                        <Grid >
+                            <DataGrid Name="Transmission_Side_datagrid"
+							          Margin="0,50,0,0" ItemsSource="{Binding TransmissionList}"
+							          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+							          ContextMenu="{StaticResource contextMenu}"
+							          SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="200"
+									                    Binding="{Binding branchname}"
+									                    CanUserReorder="True"
+									                    Header="Name"
+									                    IsReadOnly="True">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="ToolTip" Value="{Binding branchname}" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding branch}"
+									                    CanUserReorder="True"
+									                    Header="FromSub"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding tobranch}"
+									                    CanUserReorder="True"
+									                    Header="ToSub"
+									                    IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock Width="58"
+							           Height="23"
+							           Margin="14,15,168,0"
+							           VerticalAlignment="Top"
+							           FontSize="14"
+							           Text="Search: " />
+                            <my1:AutoCompleteBox Name="TransmissionAutoCompleteBox"
+							                     Width="150"
+							                     Height="23"
+							                     Margin="82,15,5,0"
+							                     VerticalAlignment="Top"
+							                     FilterMode="Contains"
+							                     ItemsSource="{Binding}"
+							                     MaxDropDownHeight="110"
+							                     SelectionChanged="Transmission_autoCompleteBox_SelectionChanged" />
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="TabPortfolio"
+					         Margin="0,0,0,0"
+					         Header="Portfolio" Style="{StaticResource TabItemHeaderStyle}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="10*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="0*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="UptosCheckBox"
+							          HorizontalAlignment="Center" VerticalAlignment="Center"
+							          Click="UptosCheckBox_Click"
+							          Content="Uptos"
+							          IsChecked="true" />
+                                <ComboBox x:Name="traderPortfolioComboBox"
+							         Grid.Column="1"
+							           Margin="2"
+							          HorizontalContentAlignment="Center"
+							          IsEditable="True"
+							          IsTextSearchEnabled="True"
+							          ItemsSource="{Binding TraderPortfolioComboList}"
+							          SelectedValue="{Binding TraderPortfolioComboSelectedItem}"
+							          SelectionChanged="Portfolio_Auto_changes" />
+                                <DatePicker x:Name="StartDatePicker"
+							            Grid.Column="2" Margin="1"
+							            SelectedDate="{Binding StartDate}"
+							            SelectedDateChanged="StartDatePicker_ValueChanged"
+							            SelectedDateFormat="Short" />
+                                <Button x:Name="Clearbutton"
+							        Grid.Column="3" Margin="2"
+							        Click="Clearbutton_Click"
+							        Content="Clear" />
+                            </Grid>
+                            <GroupBox Grid.Row="1" Margin=" 0 5 0 0"  x:Name="groupBox4"
+							         BorderBrush="#FF1D1C1C"
+							          Header="Hours">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/> 
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="HE1"  Margin="3"
+									           Grid.Row="0" Grid.Column="0" 
+									          Click="HE_Click"
+									          Content="1"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE2"
+									          Grid.Row="0" Grid.Column="1"
+									           Margin="3"
+									          Click="HE_Click"
+									          Content="2"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE3"
+									        Margin="3"
+									           Grid.Row="0" Grid.Column="2" 
+									          Click="HE_Click"
+									          Content="3"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE4"
+									          Grid.Row="0" Grid.Column="3"
+									          Margin="3"
+									          Click="HE_Click"
+									          Content="4"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE5"
+									           Grid.Row="0" Grid.Column="4" Margin="3"
+									          Click="HE_Click"
+									          Content="5"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE6"
+									           Grid.Row="0" Grid.Column="5" Margin="3"
+									          Click="HE_Click"
+									          Content="6"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE7"
+									           Grid.Row="0" Grid.Column="6" Margin="3"
+									          Click="HE_Click"
+									          Content="7"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE8"
+									           Grid.Row="0" Grid.Column="7" Margin="3"
+									          Click="HE_Click"
+									          Content="8"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE9"
+									            Grid.Row="1" Grid.Column="0"
+									          Click="HE_Click" Margin="3"
+									          Content="9"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE10" Margin="3"
+									          Grid.Row="1" Grid.Column="1"
+									          Click="HE_Click"
+									          Content="10"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE11" Margin="3"
+									           Grid.Row="1" Grid.Column="2"
+									          Click="HE_Click"
+									          Content="11"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE12" Margin="3"
+									           Grid.Row="1" Grid.Column="3"
+									          Click="HE_Click"
+									          Content="12"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE13" Margin="3"
+									           Grid.Row="1" Grid.Column="4"
+									          Click="HE_Click"
+									          Content="13"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE14" Margin="3"
+									           Grid.Row="1" Grid.Column="5"
+									          Click="HE_Click"
+									          Content="14"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE15" Margin="3"
+									           Grid.Row="1" Grid.Column="6"
+									          Click="HE_Click"
+									          Content="15"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE16" Margin="3"
+									           Grid.Row="1" Grid.Column="7"
+									          Click="HE_Click"
+									          Content="16"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE17" Margin="3"
+									         Grid.Row="2" Grid.Column="0"
+									          Click="HE_Click"
+									          Content="17"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE18" Margin="3"
+									          Grid.Row="2" Grid.Column="1"
+									          Click="HE_Click"
+									          Content="18"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE19" Margin="3"
+									            Grid.Row="2" Grid.Column="2"
+									          Click="HE_Click"
+									          Content="19"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE20" Margin="3"
+									          Grid.Row="2" Grid.Column="3" 
+									          Click="HE_Click"
+									          Content="20"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE21" Margin="3"
+									          Grid.Row="2" Grid.Column="4"
+									          Click="HE_Click"
+									          Content="21"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE22" Grid.Row="2" Grid.Column="5"
+									          Click="HE_Click" Margin="3"
+									          Content="22"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE23" Margin="3"
+									          Grid.Row="2" Grid.Column="6"
+									          Click="HE_Click"
+									          Content="23"
+									          IsChecked="true" />
+                                    <CheckBox x:Name="HE24" Margin="3"
+									          Grid.Row="2" Grid.Column="7"
+									          Click="HE_Click"
+									          Content="24"
+									          IsChecked="true" />
+                                    <Grid Grid.Column="8" Grid.RowSpan="3">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Button x:Name="AllButton" 
+									        Click="AllButton_Click"
+									        Content="All" />
+                                        <Button x:Name="btnHoursNone"
+									         Grid.Row="1"
+									         Margin="1"
+									        Click="btnHoursNone_Click"
+									        Content="None" />
+                                        <Button x:Name="PeakButton"
+									         Grid.Row="2"
+									         Margin="1" 
+									        Click="PeakButton_Click"
+									        Content="Peak" />
+                                        <Button x:Name="OffPeakButton"
+									         Grid.Row="3"
+									         Margin=".5"
+									        Click="OffPeakButton_Click"
+									        Content="OffPeak" />
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+                            <DataGrid x:Name="dgPortfolio" ItemsSource="{Binding PortfolioBidList}"
+							         Grid.Row="2"
+							          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+							          AutoGenerateColumns="False"
+							          CanUserAddRows="False"
+							          CanUserDeleteRows="False"
+							          CanUserReorderColumns="False"
+							          CanUserResizeColumns="True"
+							          CanUserResizeRows="False"
+							          EnableRowVirtualization="True"
+							          SelectionMode="Single">
+                                <DataGrid.ItemBindingGroup>
+                                    <BindingGroup ValidatesOnNotifyDataError="False" />
+                                </DataGrid.ItemBindingGroup>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="Auto" 
+									                    Binding="{Binding Source}"
+									                    CanUserReorder="True"
+									                    Header="Source"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Width="Auto"
+									                    Binding="{Binding Sink}"
+									                    CanUserReorder="True"
+									                    Header="Sink"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Width="Auto"
+									                    Binding="{Binding Nodename}"
+									                    CanUserReorder="True"
+									                    Header="Nodename"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Width="auto"
+									                    Binding="{Binding MW}"
+									                    CanUserReorder="True"
+									                    Header="MW"
+									                    IsReadOnly="True" />
+                                    <DataGridTextColumn Width="Auto"
+									                    Binding="{Binding Price}"
+									                    CanUserReorder="True"
+									                    Header="Price"
+									                    IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Temperature" Style="{StaticResource TabItemHeaderStyle}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1.5*" />
+                                <RowDefinition Height="8*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox x:Name="Temperature" Header="Temperature"  BorderBrush="#FF030303"  >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition  Width="*" />
+                                            <ColumnDefinition  Width="*" />
+                                        </Grid.ColumnDefinitions> 
+                                            <RadioButton x:Name="CheckFaherenheit" Content="°F" GroupName="Temperature" Grid.Column="0" IsChecked="{Binding IsFahrenheit}"/>
+                                        <RadioButton x:Name="CheckCelsius" Content="°C" GroupName="Temperature"  Grid.Column="1" IsChecked="{Binding IsCelsius}"/>
+                                    
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox   Header="WindSpeed" x:Name="WindSpeed" Grid.Column="1" BorderBrush="#FF030303">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <RadioButton Name="Checkmph" Content="mph"  Grid.Column="0" IsChecked="{Binding Ismph}"/>
+                                        <RadioButton Name="Checkkmph" Content="kmph"  Grid.Column="1" IsChecked="{Binding IsKmph}"/>
+                                        <RadioButton Name="Checkknots" Content="knots"  Grid.Column="2" IsChecked="{Binding Isknots}"/>
+                                    </Grid>
+                                </GroupBox>
+                                <Button Content="ExportToCSV"
+                                    Grid.Column="2" Margin="18"
+                                    Click="ExportToCSV" />
+                            </Grid>
+                            <DataGrid x:Name="TemperatureListMinMax" Grid.Row="1" ScrollViewer.CanContentScroll="True" 
+      ScrollViewer.VerticalScrollBarVisibility="Auto"
+      ScrollViewer.HorizontalScrollBarVisibility="Auto" AlternatingRowBackground="LightSteelBlue"
+						          AutoGenerateColumns="False"                                 
+						          CanUserAddRows="False" BorderBrush="Black" BorderThickness="1"
+						          ColumnWidth="auto"                                 Margin=" 0 2 0 0"
+						          IsReadOnly="True"
+						          ItemsSource="{Binding TemperatureList}" 
+                                      ContextMenu="{StaticResource contextMenu}" Grid.ColumnSpan="3">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding City}" Foreground="Black" Header="City" Width="65"/>
+                                    <DataGridTextColumn Binding="{Binding TempVal}"  Foreground="Black" Header="Temp" Width="40" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding ClimateDate}"  Foreground="Black" Header="Date" Width="80"/>
+                                    <!--<DataGridTextColumn Binding="{Binding ClimateDate}" Header="Date" />-->
+                                    <DataGridTextColumn Binding="{Binding Humidity}"  Foreground="Black" Header="Humidity" Width="58" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding Rain, StringFormat=N2}"   Foreground="Black" Header="Rain" Width="37" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding Clouds}" Header="Cloud"  Foreground="Black"  Width="41" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding Description}"  Foreground="Black"  Header="Description" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding WindGust}"  Foreground="Black"  Header="WindGust" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding WindSpeed}"  Foreground="Black"  Header="WindSpeed" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding MinTemp}"   Foreground="Black" Header="MinTemp" TextBlock.TextAlignment="Center"/>
+                                    <DataGridTextColumn Binding="{Binding MaxTemp}"  Foreground="Black"  Header="MaxTemp" TextBlock.TextAlignment="Center"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                           
+                            
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem Name="TabIIROutage" Background="LightSteelBlue" BorderBrush="Gainsboro"
+                             Header="IIR Outages" Visibility="Hidden" Style="{StaticResource TabItemHeaderStyle}">
+                        <Grid Background="LightSteelBlue">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="29*"/>
+                                <ColumnDefinition Width="18*"/>
+                                <ColumnDefinition Width="293*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid Name="IIROutageSideDataGrid1" MouseDoubleClick="IIROutage_SideDataGrid1_MouseDoubleClick"
+                                      Grid.ColumnSpan="3" CanUserAddRows="False" CanUserDeleteRows="False"
+                                      Margin="0,50,0,265" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                                      AutoGenerateColumns="False"
+                                      ContextMenu="{StaticResource iirOutage_contextMenu}"
+                                      ItemsSource="{Binding GeoIIROutageList}"
+                                      SelectedItem="{Binding ElementName=IIROutage_AutoCompleteBox,
+                                                                   Path=Text,
+                                                                    Mode=OneWay}"
+                                                                    
+                                      SelectionMode="Extended">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding PlantUnitName}"
+                                                      CanUserReorder="True" Header="PlantName-UnitName"
+                                                      IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding CapOffline}"
+                                                      CanUserReorder="True" Header="CapOffline"
+                                                      IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding StartDate,StringFormat=d}"
+                                                      CanUserReorder="True" Header="StartDate"
+                                                      IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding EndDate,StringFormat=d}"
+                                                      CanUserReorder="True" Header="EndDate"
+                                                      IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding PrimaryFuel}"
+                                                      CanUserReorder="True" Header="Primary Fuel"
+                                                      IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding PowerUsage}"
+                                                      CanUserReorder="True" Header="Power Usage"
+                                                      IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding Type}"
+                                                      CanUserReorder="True" Header="Type"
+                                                      IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid Name="IIROutageDataGrid2" MouseDoubleClick="Outage_Side_DataGrid2_MouseDoubleClick" 
+                                        Grid.ColumnSpan="3" ItemsSource="{Binding NonGeoIIROutageList}"
+                                        Height="220" CanUserAddRows="False" CanUserDeleteRows="False"
+                                        VerticalAlignment="Bottom" 
+                                        AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                                        AutoGenerateColumns="False" SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding PlantName}"
+                                                        CanUserReorder="True"
+                                                        Header="PlantName-UnitName"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding CapOffline}"
+                                                        CanUserReorder="True"
+                                                        Header="CapOffline"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding StartDate}"
+                                                        CanUserReorder="True"
+                                                        Header="StartDate"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding EndDate}"
+                                                        CanUserReorder="True"
+                                                        Header="EndDate"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding PrimaryFuel}"
+                                                        CanUserReorder="True"
+                                                        Header="Primary Fuel"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding PowerUsage}"
+                                                        CanUserReorder="True"
+                                                        Header="Power Usage"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding Type}"
+                                                        CanUserReorder="True"
+                                                        Header="Type"
+                                                        IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock Grid.Column="2" Width="58"
+                                       Height="23" Margin="17.388,15,218,0"
+                                       VerticalAlignment="Top"
+                                       FontSize="14" Text="Search: "/>
+                            <my1:AutoCompleteBox Name="IIROutage_AutoCompleteBox" 
+                                                 Grid.Column="2" Width="150"
+                                                 Height="23" Margin="87.388,15,56,0"
+                                                 VerticalAlignment="Top" FilterMode="Contains"
+                                                 ItemsSource="{Binding}"
+                                                 MaxDropDownHeight="110"
+                                                 SelectionChanged="IIROutage_AutoCompleteBox_SelectionChanged"/>
+                            <Label Name="label18" Grid.ColumnSpan="3"
+                                   Height="28" Margin="14,0,0,222"
+                                   HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                                   Content="Objects not in the map"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Expander>
+            <TabControl Name="ContenttabControl"
+			            Grid.Column="1"   
+			            HorizontalAlignment="Stretch"
+			            TabStripPlacement="Top">
+                <TabItem Name="Maptab" Header="Map" Style="{StaticResource TabItemHeaderStyle1}">
+                    <Grid x:Name="MapGrid" Grid.Column="1" Margin="0">
+                        <uc1:MapControl x:Name="MapControl" 
+						                        HorizontalAlignment="Stretch" 
+						                        VerticalAlignment="Stretch" Margin="0,0,0,0.2" />
+
+                        <Expander Name="expander2"
+						          Width="100"
+						          Height="330"
+						          Margin="0,177,0,0"
+						          HorizontalAlignment="Left"
+						          VerticalAlignment="Top"
+						          HorizontalContentAlignment="Stretch"
+						          ExpandDirection="Right"
+						          FontWeight="Bold"
+						          Header="Legend">
+                            <Grid Width="60">
+                                <Rectangle x:Name="Legendrec1"
+								           Width="35"
+								           Margin="6,22,0,55"
+								           HorizontalAlignment="Left">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Offset="0.0" Color="Red" />
+                                            <GradientStop Offset="0.20" Color="Yellow" />
+                                            <GradientStop Offset="0.60" Color="LimeGreen" />
+                                            <GradientStop Offset="0.80" Color="Blue" />
+                                            <GradientStop Offset="1.00" Color="Purple" />
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <TextBlock Name="Max_Legend_textBlock"
+								           Height="19"
+								           Margin="2,1,0,0"
+								           HorizontalAlignment="Left"
+								           VerticalAlignment="Top"
+								           Text="{Binding legend_max,
+								                          StringFormat=C2}" />
+                                <TextBlock Name="Min_Legend_textBlock"
+								           Height="19"
+								           Margin="2,275,0,0"
+								           HorizontalAlignment="Left"
+								           VerticalAlignment="Top"
+								           Text="{Binding legend_min,
+								                          StringFormat=C2}" />
+                                <CheckBox Name="Static"
+								          Height="25"
+								          Margin="2,299,0,0"
+								          HorizontalAlignment="Left"
+								          VerticalAlignment="Top"
+								          Content="NormSL"
+								          IsChecked="{Binding Path=LMPNormColorScaleType}"
+								          Opacity="0.7"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                            </Grid>
+                        </Expander>
+                        <Expander Name="Layers"
+						          Grid.Column="1"
+						          Width="130"
+						          Height="160"
+						          Margin="0,10,0,0"
+						          HorizontalAlignment="Left"
+						          VerticalAlignment="Top"
+						          ExpandDirection="Right"
+						          FontWeight="Bold"
+						          Header="Layers"
+						          IsExpanded="True">
+                            <Grid Margin="0,0,0,-17" Opacity="1">
+                                <CheckBox Name="LMPCheckBox" Click="CheckBox_Checked"
+								          Width="80"
+								          Margin="6,3,0,0"
+								          HorizontalAlignment="Left"
+								          VerticalAlignment="Top"
+								          Content="LMP Prices"
+								          IsChecked="{Binding isLMPCheck}"
+								          IsEnabled="True"
+								          Opacity="0.7"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                                <CheckBox Name="ConstraintCheckBox" Click="CheckBox_Checked"
+								          Width="80"
+								          Margin="6,25,0,0"
+								          HorizontalAlignment="Left"
+								          VerticalAlignment="Top"
+								          Content="Constraints"
+								          IsChecked="{Binding isConstraintCheck}"
+								          Opacity="0.7"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                                <CheckBox Name="TransmissionCheckBox" Click="CheckBox_Checked"
+								          Margin="6,47,0,0"
+								          HorizontalAlignment="Left"
+								          VerticalAlignment="Top"
+								          Content="Transmission"
+								          IsChecked="{Binding isTransmissionCheck}"
+								          Opacity="0.7"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                                <CheckBox Name="OutageCheckBox" Click="CheckBox_Checked"
+								          Width="80"
+								          Margin="6,69,0,0"
+								          HorizontalAlignment="Left"
+								          VerticalAlignment="Top"
+								          Content="Outages"
+								          IsChecked="{Binding isOutageCheck}"
+								          Opacity="0.7"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                                <CheckBox Name="TemperatureCheckBox" Click="CheckBox_Checked"
+								          Width="80"
+								          Margin="6,90,0,0"
+								          HorizontalAlignment="Left"
+								          VerticalAlignment="Top"
+								          Content="Temperature"
+								          IsChecked="{Binding isWeatherCheck}"
+								          Opacity="0.7"
+								          Style="{StaticResource {x:Type ToggleButton}}" />
+                                <!--<CheckBox Name="IIROutageCheckBox" Click="CheckBox_Checked"
+                                          Width="80" Margin="6,112,0,0"
+                                          HorizontalAlignment="Left" 
+                                          VerticalAlignment="Top"
+                                          Content="IIR Outage"
+                                          IsChecked="{Binding isIIROutageCheck}"
+                                          Opacity="0.7"
+                                          Style="{StaticResource {x:Type ToggleButton}}"/>-->
+                                <CheckBox Name="ZoneCheckBox" Click="CheckBox_Checked"
+                                          Width="80" Margin="6,112,0,0"
+                                          HorizontalAlignment="Left" 
+                                          VerticalAlignment="Top"
+                                          Content="Zones"
+                                          IsChecked="{Binding isZoneCheck}"
+                                          Opacity="0.7"
+                                          Style="{StaticResource {x:Type ToggleButton}}"/>
+                            </Grid>
+                        </Expander>
+                        <Expander Name="zones"
+						          Width="240"
+						          Margin="0,177,0,0"
+						          HorizontalAlignment="Right"
+						          VerticalAlignment="Top"
+						          ExpandDirection="Left"
+						          FontWeight="Bold"
+						          Header="Zones">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition MinHeight="400" Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel>
+                                    <DataGrid x:Name="ZoneData" ItemsSource="{Binding MapZoneList}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True">
+                                        <DataGrid.Resources>
+                                            <local:StringColorConverter x:Key="stringConverter"/>
+                                            <Style TargetType="DataGridCell" x:Key="stringColorConv">
+                                                <Setter Property="Background" Value="{Binding StringColor, Converter={StaticResource  stringConverter}}"/>
+                                            </Style>
+                                        </DataGrid.Resources>
+                                        <DataGrid.Columns>
+                                            <DataGridTemplateColumn>
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" Checked="ShowUnShow" Unchecked="ShowUnShow"
+                                                                  IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                                <DataGridTemplateColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox Unchecked="AllChecked" Checked="AllChecked"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.HeaderTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                                            <DataGridTextColumn IsReadOnly="True" Header="Color">
+                                                <DataGridTextColumn.CellStyle>
+                                                    <Style TargetType="DataGridCell">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                <Setter Property="Background" Value="{Binding RelativeSource=
+                                                                    {RelativeSource Mode=FindAncestor,AncestorType=DataGridRow},
+                                                                    Converter={StaticResource stringConverter},Path=DataContext.StringColor }"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                                                                <Setter Property="Background" Value="White"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                        <!--<Setter Property="Background" Value="AliceBlue"/>-->
+                                                        <!--{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow},
+                                                            Converter={DynamicResource stringColorConv}}"/>-->
+                                                    </Style>
+                                                </DataGridTextColumn.CellStyle>
+                                            </DataGridTextColumn>
+                                            <!--CellStyle="{DynamicResource stringColorConv}"/>-->
+                                        </DataGrid.Columns>
+
+                                    </DataGrid>
+                                </StackPanel>
+                            </Grid>
+                        </Expander>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="Detailstab" Header="Details" Style="{StaticResource TabItemHeaderStyle1}">
+                    <TabControl Name="DatagridtabControl"
+					            SelectedIndex="{Binding ElementName=Side_tabControl,
+					                                    Path=SelectedIndex}"
+					            TabStripPlacement="Top">
+                        <TabItem Header="LMP"    Visibility="Visible">
+                            <Grid>
+                                <DataGrid Name="LMPdataGrid" 
+								          HorizontalAlignment="Stretch"
+								          VerticalAlignment="Stretch"
+								          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+								          CanUserAddRows="False"
+								          ItemsSource="{Binding}"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Constraint" Visibility="Hidden">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <RadioButton Name="Outage_Grid_radioButton1" Click="Outage_Grid_radioButton_Click"
+									             Height="16"
+									             Margin="28,8,0,0"
+									             HorizontalAlignment="Left"
+									             VerticalAlignment="Top"
+									             Content="5 Min"
+									             IsChecked="True" />
+                                    <RadioButton Name="Outage_Grid_radioButton2"  Click="Outage_Grid_radioButton_Click"
+									             Height="16"
+									             Margin="124,8,0,0"
+									             HorizontalAlignment="Left"
+									             VerticalAlignment="Top"
+									             Content="Hourly" />
+                                </Grid>
+                                <DataGrid Name="Constraint_dataGrid"
+								          Grid.Row="1"
+								          Margin="0,0,0,0"
+								          HorizontalAlignment="Stretch"
+								          VerticalAlignment="Stretch"
+								          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+								          AutoGenerateColumns="True"
+								          CanUserAddRows="False"
+								          ContextMenu="{StaticResource contextMenu}"
+								          ItemsSource="{Binding ConstraintDetailList}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding marketdatetime,
+										                                      StringFormat=MM/dd/yy HH:mm:ss}"
+										                    CanUserReorder="True"
+										                    Header="MarketDateTime"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Width="200"
+										                    Binding="{Binding contingency}"
+										                    CanUserReorder="True"
+										                    Header="Contingency"
+										                    IsReadOnly="True">
+                                            <DataGridTextColumn.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="ToolTip" Value="{Binding contingency}" />
+                                                </Style>
+                                            </DataGridTextColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Width="200"
+										                    Binding="{Binding constraint}"
+										                    CanUserReorder="True"
+										                    Header="Constraint"
+										                    IsReadOnly="True">
+                                            <DataGridTextColumn.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="ToolTip" Value="{Binding constraint}" />
+                                                </Style>
+                                            </DataGridTextColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Binding="{Binding shadowprice}"
+										                    CanUserReorder="True"
+										                    Header="ShadowPrice"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding constraint_stationFrom}"
+										                    CanUserReorder="True"
+										                    Header="FromSub"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding constraint_stationTo}"
+										                    CanUserReorder="True"
+										                    Header="ToSub"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding constraint_KV}"
+										                    CanUserReorder="True"
+										                    Header="Voltage"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding type}"
+										                    CanUserReorder="True"
+										                    Header="Type"
+										                    IsReadOnly="True" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Visibility="Hidden">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Button Name="Correlation"
+									        Margin="28,5,0,0"
+									        HorizontalAlignment="Left"
+									        VerticalAlignment="Top"
+									        Click="Correlation_Click"
+									        Content="Correlation AllItems" />
+                                    <Button Name="CorrelationSelecteditem"
+									        Margin="165,5,0,0"
+									        HorizontalAlignment="Left"
+									        VerticalAlignment="Top"
+									        Click="CorrelationSelecteditem_Click"
+									        Content="Correlation SelectedItems" />
+                                    <Button Name="ExportData"
+								        Width="80"
+								        Height="20"
+								        HorizontalAlignment="Right"
+								        VerticalAlignment="Top"
+                                        Margin="0,4,140,0"
+                                        Content="Export"
+                                        Click="Export_Click"/>
+                                    <TextBox Name="textBox1"
+									         Width="50"
+									         Height="23"
+									         Margin="0,2,10,0"
+									         HorizontalAlignment="Right"
+									         VerticalAlignment="Top"
+									         Text="{Binding Path=OutageGridCount}" />
+                                    <Label Name="label4"
+									       Height="28"
+									       Margin="0,2,67,0"
+									       HorizontalAlignment="Right"
+									       VerticalAlignment="Top"
+									       Content="Count" />
+                                </Grid>
+                                <DataGrid Name="Outage_dataGrid"
+								          Grid.Row="1"
+								          Margin="0"
+								          HorizontalAlignment="Stretch"
+								          VerticalAlignment="Stretch"
+								          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+								          CanUserAddRows="False"
+								          CanUserResizeColumns="True"
+								          ContextMenu="{StaticResource outage_contextMenu}"
+								          IsReadOnly="True"
+								          ItemsSource="{Binding}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding ticketId}"
+										                    CanUserReorder="True"
+										                    Header="TicketID"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Width="200"
+										                    Binding="{Binding branch}"
+										                    CanUserReorder="True"
+										                    Header="FromSub"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Width="200"
+										                    Binding="{Binding tobranch}"
+										                    CanUserReorder="True"
+										                    Header="ToSub"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding zone}"
+										                    CanUserReorder="True"
+										                    Header="Zone"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding equipmentType}"
+										                    CanUserReorder="True"
+										                    Header="EquipmentType"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding voltage}"
+										                    CanUserReorder="True"
+										                    Header="Voltage"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding status}"
+										                    CanUserReorder="True"
+										                    Header="Status"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding equipment}"
+										                    CanUserReorder="True"
+										                    Header="Equipment"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding startdate,
+										                                      StringFormat=MM/dd/yy HH:mm:ss}"
+										                    CanUserReorder="True"
+										                    Header="ActualStart"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding enddate,
+										                                      StringFormat=MM/dd/yy HH:mm:ss}"
+										                    CanUserReorder="True"
+										                    Header="ActualEnd"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding plannedstart,
+										                                      StringFormat=MM/dd/yy HH:mm:ss}"
+										                    CanUserReorder="True"
+										                    Header="PlannedStart"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding plannedend,
+										                                      StringFormat=MM/dd/yy HH:mm:ss}"
+										                    CanUserReorder="True"
+										                    Header="PlannedEnd"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding plannedduration}"
+										                    CanUserReorder="True"
+										                    Header="PlanDuration"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding type}"
+										                    CanUserReorder="True"
+										                    Header="Type"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding openclose}"
+										                    CanUserReorder="True"
+										                    Header="OpenClose"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding outagestatus}"
+										                    CanUserReorder="True"
+										                    Header="OutageStatus"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding outageType}"
+										                    CanUserReorder="True"
+										                    Header="OutageType"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding causes}"
+										                    CanUserReorder="True"
+										                    Header="Causes"
+										                    IsReadOnly="True" />
+                                        <DataGridTextColumn Binding="{Binding lastrevised}"
+										                    CanUserReorder="True"
+										                    Header="LastRevisd"
+										                    IsReadOnly="True" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Visibility="Hidden">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Button Name="IIRReportBtn"
+									        Margin="20,5,0,0" Width="72"
+									        HorizontalAlignment="Left"
+									        VerticalAlignment="Top"
+									        Click="IIRReportBtn_Click"
+									        Content="IIR Report" />
+                                    <TextBox Name="textBox2"
+									         Width="50"
+									         Height="23"
+									         Margin="0,2,10,0"
+									         HorizontalAlignment="Right"
+									         VerticalAlignment="Top"
+									         Text="{Binding Path=IIROutageGridCount}" />
+                                    <Label Name="label5"
+									       Height="28"
+									       Margin="0,2,67,0"
+									       HorizontalAlignment="Right"
+									       VerticalAlignment="Top"
+									       Content="Count" />
+                                </Grid>
+                                <DataGrid Name="IIROutage_DataGrid" Grid.Row="1"
+                                          Margin="0" HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                                          CanUserAddRows="False" CanUserResizeColumns="True"
+                                          IsReadOnly="True" ItemsSource="{Binding}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding OutageID}"
+                                                            CanUserReorder="True" Header="Outage ID"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding UnitName}"
+                                                            CanUserReorder="True" Header="Unit Name"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding UnitID}"
+                                                            CanUserReorder="True" Header="Unit ID"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding OwnerName}"
+                                                            CanUserReorder="True" Header="Owner Name"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding PlantID}"
+                                                            CanUserReorder="True" Header="Plant ID"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding PlantName}"
+                                                            CanUserReorder="True" Header="Plant Name"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding NERCRRegion}"
+                                                            CanUserReorder="True" Header="NERCR Region"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding PrimaryFuel}"
+                                                            CanUserReorder="True" Header="Primary Fuel"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding SecondaryFuel}"
+                                                            CanUserReorder="True" Header="Secondary Fuel"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding FuelGroup}"
+                                                            CanUserReorder="True" Header="Fuel Group"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding OutputCapacity}"
+                                                            CanUserReorder="True" Header="Output Capacity"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding PowerUsage}"
+                                                            CanUserReorder="True" Header="Power Usage"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding StartDate,StringFormat=d}"
+                                                            CanUserReorder="True" Header="Start Date"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding EndDate,StringFormat=d}"
+                                                            CanUserReorder="True" Header="End Date"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding ODuration}"
+                                                            CanUserReorder="True" Header="O Duration"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Precision}"
+                                                            CanUserReorder="True" Header="Precision"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Type}"
+                                                            CanUserReorder="True" Header="Type"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Status}"
+                                                            CanUserReorder="True" Header="Status"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding DeliveryDate,StringFormat=d}"
+                                                            CanUserReorder="True" Header="Delivery Date"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding NERCSubRegion}"
+                                                            CanUserReorder="True" Header="NERC SubRegion"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding UnitType}"
+                                                            CanUserReorder="True" Header="Unit Type"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding HeatRate}"
+                                                            CanUserReorder="True" Header="Heat Rate"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding UltimateOwnerID}"
+                                                            CanUserReorder="True" Header="Ultimate Owner ID"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding UltimateOwner}"
+                                                            CanUserReorder="True" Header="Ultimate Owner"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding ElectricConnection}"
+                                                            CanUserReorder="True" Header="Electric Connection"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding CapOffline}"
+                                                            CanUserReorder="True" Header="Cap Offline"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding TradeRegion}"
+                                                            CanUserReorder="True" Header="Trade Region"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding OutageCause}"
+                                                            CanUserReorder="True" Header="Outage Cause"
+                                                            IsReadOnly="True"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Visibility="Hidden">
+                            <Grid>
+                                <DataGrid Name="TransmissiondataGrid"
+								          Margin="0"
+								          HorizontalAlignment="Stretch"
+								          VerticalAlignment="Stretch"
+								          CanUserAddRows="False"
+								          ItemsSource="{Binding}" />
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Name="Historytab" Header="Historical Outages" Style="{StaticResource TabItemHeaderStyle1}">
+                    <Grid>
+                        <DataGrid Name="HistorydataGrid"
+						          Margin="0"
+						          HorizontalAlignment="Stretch"
+						          VerticalAlignment="Stretch"
+						          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+						          ItemsSource="{Binding}" />
+                    </Grid>
+                </TabItem>
+                <TabItem Name="Correlationtab" Header="Outage Correlation" Style="{StaticResource TabItemHeaderStyle1}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="4*" />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <TextBox Name="Outage_Correlation_Mile_textBox"
+							                       Width="42"
+							                       Height="23"
+							                       Margin="85,2,0,0"
+							                       HorizontalAlignment="Left"
+							                       VerticalAlignment="Top"
+							                       Text="Text"/>
+                            <Label Name="label3"
+							       Height="28"
+							       Margin="45,2,0,0"
+							       HorizontalAlignment="Left"
+							       VerticalAlignment="Top"
+							       Content="Miles" />
+                            <TextBox Name="Outage_Correlation_Bus_textBox"
+							                       Width="42"
+							                       Height="23"
+							                       Margin="194,2,0,0"
+							                       HorizontalAlignment="Left"
+							                       VerticalAlignment="Top"
+							                       Text="Miles"/>
+                            <Label Name="label19"
+							       Height="28"
+							       Margin="154,2,0,0"
+							       HorizontalAlignment="Left"
+							       VerticalAlignment="Top"
+							       Content="Bus" />
+                        </Grid>
+                        <DataGrid Name="Outage_Correlation_dataGrid"
+						          Grid.Row="1"
+						          Margin="0,0,0,0"
+						          HorizontalAlignment="Stretch"
+						          VerticalAlignment="Stretch"
+						          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+						          AutoGenerateColumns="True"
+						          CanUserAddRows="False"
+						          ContextMenu="{StaticResource outage_contextMenu}"
+						          ItemsSource="{Binding}"
+						          SelectionChanged="Outage_Correlation_dataGrid_SelectionChanged"
+						          SelectionMode="Single"
+						          ToolTipService.ShowDuration="120000">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding equipment}"
+								                    CanUserReorder="True"
+								                    Header="Equipment"
+								                    IsReadOnly="True">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="ToolTip" Value="{Binding timestring}" />
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Binding="{Binding branch}"
+								                    CanUserReorder="True"
+								                    Header="FromSub"
+								                    IsReadOnly="True" />
+                                <DataGridTextColumn Binding="{Binding tobranch}"
+								                    CanUserReorder="True"
+								                    Header="ToSub"
+								                    IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <DataGrid Name="Constraint_Correlation_dataGrid"
+						          Grid.Row="2"
+						          Margin="0,0,0,0"
+						          HorizontalAlignment="Stretch"
+						          VerticalAlignment="Stretch"
+						          AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+						          AutoGenerateColumns="True"
+						          CanUserAddRows="False"
+						          ContextMenu="{StaticResource contextMenu}"
+						          ItemsSource="{Binding}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="400"
+								                    Binding="{Binding contingency}"
+								                    CanUserReorder="True"
+								                    Header="Contingency"
+								                    IsReadOnly="True">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="ToolTip" Value="{Binding contingency}" />
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="400"
+								                    Binding="{Binding constraint}"
+								                    CanUserReorder="True"
+								                    Header="Constraint"
+								                    IsReadOnly="True">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="ToolTip" Value="{Binding constraint}" />
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Binding="{Binding ConstraintOccurrences}"
+								                    CanUserReorder="True"
+								                    Header="5MinOurrences"
+								                    IsReadOnly="True" />
+                                <DataGridTextColumn Binding="{Binding distancemiles,
+								                                      StringFormat=f1}"
+								                    CanUserReorder="True"
+								                    Header="Miles"
+								                    IsReadOnly="True" />
+                                <DataGridTextColumn Binding="{Binding busaway,
+								                                      StringFormat=f1}"
+								                    CanUserReorder="True"
+								                    Header="BusAway"
+								                    IsReadOnly="True" />
+                                <DataGridTextColumn Binding="{Binding shadowprice,
+								                                      StringFormat=c2}"
+								                    CanUserReorder="True"
+								                    Header="AvgShadowPrice"
+								                    IsReadOnly="True" />
+                                <DataGridTextColumn Binding="{Binding constraint_stationFrom,
+								                                      StringFormat=c2}"
+								                    CanUserReorder="True"
+								                    Header="FromSub"
+								                    IsReadOnly="True" />
+                                <DataGridTextColumn Binding="{Binding constraint_stationTo,
+								                                      StringFormat=c2}"
+								                    CanUserReorder="True"
+								                    Header="ToSub"
+								                    IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>

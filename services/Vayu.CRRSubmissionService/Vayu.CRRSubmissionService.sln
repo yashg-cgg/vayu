@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33423.256
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CRRNodalServiceLibrary", "ErcotPTPSubmissionLibrary\Vayu.CRRNodalServiceLibrary.csproj", "{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CRRSubmissionService", "Vayu.CRRSubmissionService\Vayu.CRRSubmissionService.csproj", "{425709B3-481A-4008-A263-702469F16DEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA8D6BF-BA75-471C-99D1-CF43D9A1525B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{425709B3-481A-4008-A263-702469F16DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{425709B3-481A-4008-A263-702469F16DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{425709B3-481A-4008-A263-702469F16DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{425709B3-481A-4008-A263-702469F16DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9B7C1B5-F44F-49CD-ABF3-FF32DC451362}
+	EndGlobalSection
+EndGlobal

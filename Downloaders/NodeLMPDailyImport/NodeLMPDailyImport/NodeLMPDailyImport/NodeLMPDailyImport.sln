@@ -1,0 +1,133 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeLMPDailyImport", "NodeLMPDailyImport\NodeLMPDailyImport.csproj", "{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigma.AppConfigHelper", "..\..\..\Sigma.AppConfigHelper\Sigma.AppConfigHelper\Sigma.AppConfigHelper.csproj", "{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigma.CommonAccessLibrary", "..\..\..\Sigma.CommonAccessLibrary\Sigma.CommonAccessLibrary\Sigma.CommonAccessLibrary.csproj", "{A57E3C4D-796C-4754-A27B-8420339BF967}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigma.DBLibrary", "..\..\..\Sigma.DBLibrary\Sigma.DBLibrary\Sigma.DBLibrary.csproj", "{2B26809B-190E-4BF4-B876-81B2B0814620}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigma.NodeLMPLibrary", "..\..\..\Sigma.NodeLMPLibrary\Sigma.NodeLMPLibrary\NodeLMPLibrary\Sigma.NodeLMPLibrary.csproj", "{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigma.NodePriceLibrary", "..\..\..\Sigma.NodePriceLibrary\Sigma.NodePriceLibrary\Sigma.NodePriceLibrary.csproj", "{AD2587F4-1906-4128-A873-13FC173D6D3E}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 7
+		SccProjectName0 = \u0022$/NodeLMPDailyImport/NodeLMPDailyImport\u0022,\u0020VUWAAAAA
+		SccLocalPath0 = ..\\..
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		SccProjectFilePathRelativizedFromConnection0 = NodeLMPDailyImport\\NodeLMPDailyImport\\
+		SccProjectUniqueName1 = NodeLMPDailyImport\\NodeLMPDailyImport.csproj
+		SccLocalPath1 = ..\\..
+		SccProjectFilePathRelativizedFromConnection1 = NodeLMPDailyImport\\NodeLMPDailyImport\\NodeLMPDailyImport\\
+		SccProjectUniqueName2 = ..\\..\\..\\Sigma.AppConfigHelper\\Sigma.AppConfigHelper\\Sigma.AppConfigHelper.csproj
+		SccProjectName2 = \u0022$/Sigma.AppConfigHelper/Sigma.AppConfigHelper\u0022,\u0020CRGAAAAA
+		SccLocalPath2 = ..\\..\\..\\Sigma.AppConfigHelper\\Sigma.AppConfigHelper
+		SccProjectUniqueName3 = ..\\..\\..\\Sigma.CommonAccessLibrary\\Sigma.CommonAccessLibrary\\Sigma.CommonAccessLibrary.csproj
+		SccProjectName3 = \u0022$/Sigma.CommonAccessLibrary/Sigma.CommonAccessLibrary\u0022,\u0020DUEAAAAA
+		SccLocalPath3 = ..\\..\\..\\Sigma.CommonAccessLibrary\\Sigma.CommonAccessLibrary
+		SccProjectUniqueName4 = ..\\..\\..\\Sigma.DBLibrary\\Sigma.DBLibrary\\Sigma.DBLibrary.csproj
+		SccProjectName4 = \u0022$/Sigma.DBLibrary/Sigma.DBLibrary\u0022,\u0020NUFAAAAA
+		SccLocalPath4 = ..\\..\\..\\Sigma.DBLibrary\\Sigma.DBLibrary
+		SccProjectUniqueName5 = ..\\..\\..\\Sigma.NodeLMPLibrary\\Sigma.NodeLMPLibrary\\NodeLMPLibrary\\Sigma.NodeLMPLibrary.csproj
+		SccProjectName5 = \u0022$/Sigma.NodeLMPLibrary/Sigma.NodeLMPLibrary/NodeLMPLibrary\u0022,\u0020NHFAAAAA
+		SccLocalPath5 = ..\\..\\..\\Sigma.NodeLMPLibrary\\Sigma.NodeLMPLibrary\\NodeLMPLibrary
+		SccProjectUniqueName6 = ..\\..\\..\\Sigma.NodePriceLibrary\\Sigma.NodePriceLibrary\\Sigma.NodePriceLibrary.csproj
+		SccProjectName6 = \u0022$/Sigma.NodePriceLibrary/Sigma.NodePriceLibrary\u0022,\u0020WHFAAAAA
+		SccLocalPath6 = ..\\..\\..\\Sigma.NodePriceLibrary\\Sigma.NodePriceLibrary
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Debug|x64.Build.0 = Debug|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Release|x64.ActiveCfg = Release|x64
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Release|x64.Build.0 = Release|x64
+		{C5EF1B78-0FD4-45A8-A7F2-89F3026A6DFA}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{E8704D4F-C8E6-4BB0-BAC4-BFA4E2B635F5}.Release|x86.ActiveCfg = Release|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Release|x64.ActiveCfg = Release|Any CPU
+		{A57E3C4D-796C-4754-A27B-8420339BF967}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Release|x64.ActiveCfg = Release|Any CPU
+		{2B26809B-190E-4BF4-B876-81B2B0814620}.Release|x86.ActiveCfg = Release|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Release|x64.ActiveCfg = Release|Any CPU
+		{63604BEA-852A-4F0D-A3EA-4E7D9B4E11D9}.Release|x86.ActiveCfg = Release|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Release|x64.ActiveCfg = Release|Any CPU
+		{AD2587F4-1906-4128-A873-13FC173D6D3E}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

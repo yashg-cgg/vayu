@@ -1,0 +1,134 @@
+﻿<Window  
+        x:Class="Vayu.NodePriceGraph.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:sg="clr-namespace:Vayu.CommonControls;assembly=Vayu.CommonControls"
+        prism:ViewModelLocator.AutoWireViewModel="false"
+        Title="Node Price Grapth" Height="774" Width="1269">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="9*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Layout" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="grid1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/> 
+                    <RowDefinition Height="2*"/> 
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions> 
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/> 
+                </Grid.ColumnDefinitions>
+                <Label Content="Days" Grid.Row="0" HorizontalAlignment="Center"  Margin="2" VerticalContentAlignment="Bottom" Grid.Column="0"/>
+                <DatePicker  Name="fromDatePicker" Width="Auto" Height="auto" Grid.Column="1"  Margin="2"  Grid.Row="0" SelectedDate="{Binding FromDate}" SelectedDateFormat="Short"/>
+                <TextBox x:Name="daystxtbx"  Margin="2 5 50 2" BorderBrush="Black" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center"  BorderThickness="1"   Grid.Row="1" Grid.Column="0" Text="{Binding DaysSelectedTxtValue,Mode=TwoWay}"/>
+                <ComboBox x:Name="marketComboBox" IsEditable="True"  Margin="2" OverridesDefaultStyle="True" Grid.Row="1" Grid.Column="2" Text="Select Makert" ItemsSource="{Binding ISOMarketList}" SelectedValue="{Binding MarketComboSelectedValue, Mode=TwoWay}"/>
+                <ComboBox ItemsSource="{Binding LMPTypeList}"  Margin="2" Name="lmpTypeComboBox" SelectedValue="{Binding Path=LMPTypeSelectedValue, Mode=TwoWay}"  IsEditable="True" Text="LMP Type" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" />
+                <ComboBox Name="lmpComboBox"   Margin="2"  ItemsSource="{Binding LMPComponentList}" SelectedValue="{Binding Path=LMPComponentSelectedValue, Mode=TwoWay}" Text="LMP Compnents" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3"                      IsEditable="True"  />
+                <CheckBox Content="Uptos/PTP" IsChecked="{Binding UptosChecked, Mode=TwoWay}" Name="UptosCheckBox" IsEnabled="{Binding IsUptosEnabled}" Grid.Column="0" Grid.Row="2" Margin="3 0 0 0" />
+                <Button Content="Refresh" Name="refreshButton" Command="{Binding RunFetchDataAndUpdateChartCommand}" Grid.Row="4" Grid.Column="1" Width="Auto"/>
+            </Grid>
+            <GroupBox Header="Source/Sink" Grid.Column="1" BorderBrush="Black" BorderThickness="1" >
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox  Name="sourceComboBox" IsEditable="True" IsTextSearchEnabled="True"                        ItemsSource="{Binding SourceNodeList}" DisplayMemberPath="NodeName"   SelectedValue="{Binding SourceComboSelectedItem}" GotFocus="sourceComboBox_GotFocus"/>
+                    <ComboBox   Name="sinkComboBox"  Grid.Column="1"  IsEditable="True" IsTextSearchEnabled="True"
+                          ItemsSource="{Binding SinkNodeList}" DisplayMemberPath="NodeName" SelectedValue="{Binding SinkComboSelectedItem}" 
+                              GotFocus="sinkComboBox_GotFocus"   IsEnabled="{Binding IsSinkEnabled}" >
+                    </ComboBox>
+                    <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Add"  Margin=" 0 2 2 2" Name="addSourceSinkButton" Command="{Binding AddSourceSinkCommand}" FontWeight="Bold" />
+                        <Button Content="Remove" Grid.Column="1"  Margin="2"  Name="removeSourceSinkButton"  Command="{Binding RemoveSourceSinkCommand}" />
+                        <Button Content="Remove All"  Grid.Column="2"  Margin="2"  Name="removeAllSourceSinkButton"  Command="{Binding RemoveAllSourceSinkCommand}" />
+                        <Button Content="Swap"   Grid.Column="3"  Margin="2"   Name="SwapButton"  Command="{Binding SwapCommand}"/>
+                        <Button Content="Anyl."  Grid.Column="4"   Margin="2"  Name="LMPButton"   Command="{Binding LmpCommand}"/>
+                    </Grid>
+                    <DataGrid AutoGenerateColumns="False"  AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch"  Name="sourceSinkDataGrid" VerticalAlignment="Stretch"  
+                          SelectedValue="{Binding Path=SourceSinkDataSelected}" ItemsSource="{Binding SourceSinkList, Mode=TwoWay}" CanUserReorderColumns="False" CanUserAddRows="False" SelectionMode="Single" CanUserResizeRows="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Source" Binding="{Binding Source}" CanUserReorder="False" Width="Auto"/>
+                            <DataGridTextColumn Header="Sink" Binding="{Binding Sink}" CanUserReorder="False" Width="Auto" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                </Grid>
+            </GroupBox>
+            <Grid Grid.Column="2" Grid.ColumnSpan="2" Margin="2 0 0 0" >
+                <DataGrid AutoGenerateColumns="False" BorderBrush="Black" BorderThickness="1"  Margin=" 0 0 0 0" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" 
+                      HorizontalAlignment="Stretch" ItemsSource="{Binding LMPList, Mode=TwoWay}" Name="lmpDataGrid"
+                      CanUserReorderColumns="False" CanUserAddRows="False" SelectionMode="Single" CanUserResizeRows="False" IsReadOnly="True" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" CanUserReorder="False" Width="Auto"/>
+                        <DataGridTextColumn Header="Min" Binding="{Binding Min}" CanUserReorder="False" Width="Auto" />
+                        <DataGridTextColumn Header="Avg" Binding="{Binding Avg}" CanUserReorder="False" Width="Auto"/>
+                        <DataGridTextColumn Header="Max" Binding="{Binding Max}" CanUserReorder="False" Width="Auto" />
+                        <DataGridTextColumn Header="OnPkAvg" Binding="{Binding OnPkAvg}" CanUserReorder="False" Width="Auto" />
+                        <DataGridTextColumn Header="OffPkAvg" Binding="{Binding OffPkAvg}" CanUserReorder="False" Width="Auto" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+        <TabControl Grid.Row="2">
+            <TabItem Header="Graph">
+                <oxy:PlotView Model="{Binding LmpPlotModel}"  BorderThickness="1" Background="BlanchedAlmond" BorderBrush="Gray">
+                    <oxy:PlotView.DefaultTrackerTemplate>
+                        <ControlTemplate>
+                            <oxy:TrackerControl Position="{Binding Position}" LineExtents="{Binding PlotModel.PlotArea}">
+                                <oxy:TrackerControl.Content>
+                                    <TextBlock Text="{Binding}" Margin="7" />
+                                </oxy:TrackerControl.Content>
+                            </oxy:TrackerControl>
+                        </ControlTemplate>
+                    </oxy:PlotView.DefaultTrackerTemplate>
+                </oxy:PlotView>
+            </TabItem>
+            <TabItem Header="Details" >
+                <DataGrid ItemsSource="{Binding DetailList}" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" CanUserAddRows="False"
+                             AlternatingRowBackground="LightGray" AlternationCount="2" >
+                    <DataGrid.RowHeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=DataContext.RowHead, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGrid.RowHeaderTemplate>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader" >
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                       
+                    </DataGrid.Resources>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

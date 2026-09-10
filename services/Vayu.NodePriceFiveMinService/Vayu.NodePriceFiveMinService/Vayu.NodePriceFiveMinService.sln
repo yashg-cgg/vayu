@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.NodePriceFiveMinService", "Vayu.NodePriceFiveMinService.csproj", "{0B3F48A2-A509-4C8E-9A9E-9924B5FC0A83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.NodePriceLibrary", "..\..\..\Library\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary\Vayu.NodePriceLibrary.csproj", "{8B3D3471-5340-48AE-89EE-012557063EEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.NodePriceFiveMinLibrary", "..\..\..\Library\Vayu.NodePriceFiveMinLibrary\Vayu.NodePriceFiveMinLibrary.csproj", "{55E481EA-C54B-4CD0-B455-7DDDB9EEBA12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CommonAccessLibrary", "..\..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj", "{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B3F48A2-A509-4C8E-9A9E-9924B5FC0A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B3F48A2-A509-4C8E-9A9E-9924B5FC0A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B3F48A2-A509-4C8E-9A9E-9924B5FC0A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B3F48A2-A509-4C8E-9A9E-9924B5FC0A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B3D3471-5340-48AE-89EE-012557063EEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B3D3471-5340-48AE-89EE-012557063EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B3D3471-5340-48AE-89EE-012557063EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B3D3471-5340-48AE-89EE-012557063EEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55E481EA-C54B-4CD0-B455-7DDDB9EEBA12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E481EA-C54B-4CD0-B455-7DDDB9EEBA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E481EA-C54B-4CD0-B455-7DDDB9EEBA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E481EA-C54B-4CD0-B455-7DDDB9EEBA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {038B5F88-66B6-4019-A39B-DAB5F024DC11}
+	EndGlobalSection
+EndGlobal

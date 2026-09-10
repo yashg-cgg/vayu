@@ -1,0 +1,64 @@
+﻿<Window    x:Class="Vayu.ErcotShiftFactor.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:pc ="clr-namespace:Vayu.ErcotShiftFactor.ViewModels"
+                 xmlns:my11="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Shift Factor" Height="650" Width="750">
+    <Window.Resources>
+
+        <pc:FontColorConvertor x:Key="FontColorConvertor"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="ConstraintSearch" Grid.Column="0">
+                
+                <my11:AutoCompleteBox x:Name="ConstraintSearchBox" Width="Auto" Height="Auto"  IsEnabled="True" IsDropDownOpen="True" VerticalAlignment="Top" SelectionChanged="SelectionChanged_Con" SelectedItem="{Binding SelectedConstraintItem}"  Text="{Binding SearchTypedText, Mode=TwoWay}" FilterMode="Contains"  ItemsSource="{Binding ConstraintSearchList}" MaxDropDownHeight="150"  />
+            </GroupBox>
+            <GroupBox Header="ContingencySearch" Grid.Column="1">
+                
+                <ComboBox x:Name="ContingencySearchBox" Width="Auto" Height="Auto" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" ItemsSource="{Binding ContingencySearchList}" SelectedValue="{Binding SelectedContengencyItem}" />
+            </GroupBox>
+            <StackPanel Grid.Column="2">
+                <Button x:Name="RefreshButton"
+				        Width="65"
+				        Height="30"
+				        Margin="0,2,0,0"
+				        Command="{Binding RefreshCommand}"
+				        Content="Refresh"
+				        IsEnabled="{Binding IsRefreshEnabled}" Click="RefreshButton_Click" />
+                <Button x:Name="CLearButton"
+				        Width="65"
+				        Height="30"
+				         Margin="2,12,2,2"
+				        Command="{Binding ClearCommand}"
+				        Content="Clear" />
+            </StackPanel>
+            
+            
+
+
+        </Grid>
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True" SelectionMode="Extended" SelectedItem="{Binding SelectedNode , Mode=TwoWay}"  ItemsSource="{Binding SensitivityList }"
+                  AlternatingRowBackground="LightGray" Margin="0,20,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="NodeName"  Binding="{ Binding NodeName}" Width="*" Foreground="Black" />
+                <DataGridTextColumn Header="Zone"  Binding="{ Binding Zone}" Width="*" Foreground="Black" />
+                <DataGridTextColumn Header="Sensitivity"  Binding="{ Binding Sensitivity , Converter={StaticResource FontColorConvertor}}" Width="*" IsReadOnly="{Binding isSensitivityUpdatable , Mode=TwoWay}" Foreground="Black" />
+                <DataGridTextColumn Header="Source"  Binding="{ Binding Source}" Width="*" Foreground="Black" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

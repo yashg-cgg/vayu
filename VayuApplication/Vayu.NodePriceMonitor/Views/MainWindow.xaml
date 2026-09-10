@@ -1,0 +1,247 @@
+﻿<Window  
+      
+    x:Class="Vayu.NodePriceMonitor.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+    xmlns:cmd="clr-namespace:Prism.Commands;assembly=Prism"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:Vayu.NodePriceMonitor.Views"
+    xmlns:vm="clr-namespace:Vayu.NodePriceMonitor.ViewModels"
+    prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="VAYU-Node Price Monitor" Height="auto" Width="920"  SizeToContent="Height">
+    <Window.Resources>
+        <ResourceDictionary>  
+            <vm:ComparisonConverter x:Key="ComparisonConverter" />
+            <local:DataGridCellBackColorConverter x:Key="myBGColor"/>
+
+            <Style x:Key="CenterCellStyle" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource myBGColor}">
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="." />
+                            <Binding RelativeSource="{RelativeSource Self}" Path="Content.Text"  />
+                            <!--Path="Content.Text"-->
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" Path="DataContext.MarketComboSelectedValue.MarketKey" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <!--<cmd:EventToCommand Command="{Binding CloseCommand, Mode=OneWay}" />-->
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!--<Label Content="Strategy"/>
+            <ComboBox  Grid.Row="0" Grid.Column="1" IsEditable="True" IsTextSearchEnabled="True" ItemsSource="{Binding UserStrategyList, Mode=TwoWay}" DisplayMemberPath="StrategyName"  SelectedValue="{Binding SelectedStrategy, Mode=TwoWay}" Text="{Binding StrategyText, UpdateSourceTrigger=LostFocus}" />-->
+            <Label Content="Market" FontWeight="Bold" />
+            <ComboBox  Name="Market" Margin="2" BorderBrush="Black" Grid.Column="1"  ItemsSource="{Binding ISOMarketList}" DisplayMemberPath="MarketName" 
+                      SelectedValue="{Binding Path=MarketComboSelectedValue, Mode=TwoWay}" />
+            <Button Grid.Column="2" Margin="2"  BorderBrush="Black"  Command="{Binding SaveStrategyCommand}" Content="save" ToolTip="Save Strategy"/>
+
+            <Button Grid.Column="3" Margin="2"  BorderBrush="Black" Command="{Binding DeleteStrategyCommand}" Content="Delete" ToolTip="Delete Strategy"/>
+
+
+            <Label Content="Node"   FontWeight="Bold" Margin="2" Grid.Column="4"/>
+            <ComboBox  Grid.Column="5" BorderBrush="Black" Margin="2" ItemsSource="{Binding MarketNodeList}" DisplayMemberPath="NodeName" 
+                      SelectedValue="{Binding Path=MarketNodeComboSelectedValue, Mode=TwoWay}" /> 
+            <DatePicker Name="StartDate" Margin="2" BorderBrush="Black"  Grid.Column="6" SelectedDate="{Binding StartDate, Mode=TwoWay}" SelectedDateFormat="Short" /> 
+            <DatePicker Name="ComparisonDate"  Margin="2" BorderBrush="Black" Grid.Column="7" SelectedDate="{Binding CompareDate, Mode=TwoWay}" SelectedDateFormat="Short" />
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Hour Type" Grid.Column="0" Grid.Row="1"  BorderBrush="#FF1D1C1C">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <RadioButton Content="All" 
+                        IsChecked="{Binding Path=SelectedHourType, Converter={StaticResource ResourceKey=ComparisonConverter}, ConverterParameter={x:Static vm:HourType.All}}"/>
+                    <RadioButton Content="Off Peak" Margin="6,0,0,0" 
+                        IsChecked="{Binding Path=SelectedHourType, Converter={StaticResource ResourceKey=ComparisonConverter}, ConverterParameter={x:Static vm:HourType.OffPeak}}"/>
+                    <RadioButton Content="On Peak" Margin="6,0,0,0" 
+                        IsChecked="{Binding Path=SelectedHourType, Converter={StaticResource ResourceKey=ComparisonConverter}, ConverterParameter={x:Static vm:HourType.OnPeak}}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Peak" Grid.Column="1" BorderBrush="#FF1D1C1C">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="RT" Padding="0,5" />
+                    <Label Content="{Binding RTPeak, Mode=OneWay}" Width="47" FontWeight="Bold"  />
+                    <Label Content="DA" Padding="0,5" />
+                    <Label Content="{Binding DAPeak, Mode=OneWay}" Width="45" FontWeight="Bold" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Off Peak" Grid.Column="2" BorderBrush="#FF1D1C1C">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="RT" Padding="0,5"/>
+                    <Label Content="{Binding RTOffPeak, Mode=OneWay}" Width="46" FontWeight="Bold" />
+                    <Label Content="DA" Padding="0,5"/>
+                    <Label Content="{Binding DAOffPeak, Mode=OneWay}" Width="42" FontWeight="Bold" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Total" BorderBrush="#FF1D1C1C" Grid.Column="3">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="RT" Padding="0,5"/>
+                    <Label Content="{Binding RTTotal, Mode=OneWay}" Width="46" FontWeight="Bold" />
+                    <Label Content="DA" Padding="0,5"/>
+                    <Label Content="{Binding DATotal, Mode=OneWay}" Width="42" FontWeight="Bold" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Difference" BorderBrush="#FF1D1C1C" Grid.Column="5">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Peak" Padding="0,5"/>
+                    <Label Content="{Binding PeakDiff, Mode=OneWay}" Width="45" FontWeight="Bold" />
+                    <Label Content="Off Peak" Padding="0,5"/>
+                    <Label Content="{Binding OffPeakDiff, Mode=OneWay}" Width="45" FontWeight="Bold" />
+                    <Label Content="Total" Padding="0,5" />
+                    <Label Content="{Binding TotalDiff, Mode=OneWay}" Width="45" FontWeight="Bold" />
+                </StackPanel>
+            </GroupBox>
+            
+        </Grid>
+        <Grid  Grid.Row="2" Grid.ColumnSpan="2">
+            <DataGrid Name="lmpDataGrid" ItemsSource="{Binding NodePricePriceList, Mode=TwoWay}" 
+                      AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" 
+                      CanUserReorderColumns="False" CanUserResizeColumns="False" SelectionUnit="Cell" HorizontalGridLinesBrush="#FF746868" 
+                      VerticalGridLinesBrush="#FF746868" CellEditEnding="lmpDataGrid_CellEditEnding" IsSynchronizedWithCurrentItem="True" 
+                      KeyDown="lmpDataGrid_KeyDown" Padding="0" KeyUp="lmpDataGrid_KeyUp" MouseUp="lmpDataGrid_MouseUp" SelectedCellsChanged="lmpDataGrid_SelectedCellsChanged" 
+                     >
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPeakHour}" Value="False">
+                                <Setter Property="Background" Value="LightSteelBlue" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsPeakHour}" Value="True">
+                                <Setter Property="Background" Value="White" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Header="Hour" Binding="{Binding HourShow}" Width="50" />
+                    <DataGridTextColumn Binding="{Binding Min0, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header0}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min5, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header5}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min10, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header10}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min15, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header15}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min20, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header20}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min25, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header25}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min30, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header30}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min35, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header35}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min40, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header40}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min45, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header45}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min50, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header50}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Min55, StringFormat={}\{0:N\}, Mode=TwoWay}" Width="45*" CellStyle="{StaticResource CenterCellStyle}" >
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.Header55}" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="RT" Binding="{Binding RT, StringFormat={}\{0:N\}, Mode=TwoWay}" IsReadOnly="False" Foreground="Red" Width="45*" />
+                    <DataGridTextColumn Header="DA" Binding="{Binding DA, StringFormat={}\{0:N\}, Mode=TwoWay}" IsReadOnly="True" Foreground="Green" Width="45*" />
+                    <DataGridTextColumn Header="Combo" Binding="{Binding Combo, StringFormat={}\{0:N\}, Mode=TwoWay}" IsReadOnly="True" Foreground="Green" Width="45*" />
+                    <DataGridTextColumn Header="RT/DA" Binding="{Binding Diff, StringFormat={}\{0:N\}}" IsReadOnly="True" Foreground="Blue" Width="50*" />
+                    <DataGridTextColumn Header="CD DA" Binding="{Binding CompareDA, StringFormat={}\{0:N\}}" IsReadOnly="True" Foreground="Green" Width="50*" />
+                    <DataGridTextColumn Header="CD RT" Binding="{Binding CompareRT, StringFormat={}\{0:N\}}" IsReadOnly="True" Foreground="Red" Width="50*" />
+                    <!--<DataGridTextColumn Header="Manual" Binding="{Binding Manual, StringFormat={}\{0:N\}, Mode=TwoWay}" Foreground="IndianRed" FontWeight="Bold" Width="55*" />-->
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

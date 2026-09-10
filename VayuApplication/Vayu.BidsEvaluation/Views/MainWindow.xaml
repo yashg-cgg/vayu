@@ -1,0 +1,349 @@
+﻿<Window  
+    x:Class="Vayu.BidsEvaluation.Views.MainWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:ip="clr-namespace:Vayu.BidsEvaluation.ViewModels"
+        xmlns:local="clr-namespace:Vayu.BidsEvaluation.ViewModels"
+                  xmlns:local1="clr-namespace:Vayu.BidsEvaluation.ViewModels"
+        xmlns:local2="clr-namespace:Vayu.BidsEvaluation.ViewModels"
+                      xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+    
+        prism:ViewModelLocator.AutoWireViewModel="False"
+  Background="#B9CDF7"  
+        Title="Ercot - BidsEvaluation" Height="600" Width="900">
+    <!--Icon="\Images\accountingApp.ico"-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ip:ValueToForegroundColorConverter x:Key="ValueToForeground" />
+            <local:CellBackgroundColorConverter x:Key="CellBg" />
+            <local2:CellBackgroundColorConverter2 x:Key="CellBg2"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200" MinHeight="80"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="193">
+
+            <StackPanel Orientation="Horizontal" Margin="2,2" Height="260"  Width="900" >
+                <GroupBox Header=" Dates " Margin="2,8,2,90" >
+                    <StackPanel Orientation="Vertical" Margin="2,2,2,15">
+                        <StackPanel Orientation="Horizontal">
+                            <!--<ComboBox x:Name="marketListBox" Width="80"  Height="25"  Margin="5" ItemsSource="{Binding MarketList, Mode=TwoWay}" SelectedItem="{Binding SelectedMarket}" />
+                            <ComboBox Width="80"  Height="25" Margin="5" ItemsSource="{Binding ProductList}" SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" />-->
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="5" Width="62" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Start Date"/>
+                            <DatePicker x:Name="startDatePicker" Margin="5"  HorizontalAlignment="Left" VerticalAlignment="Center"
+                    				SelectedDate="{Binding StartDate}" SelectedDateFormat="Short" Width="92" />
+
+
+
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="5" Width="62" HorizontalAlignment="Left" VerticalAlignment="Top" Content="End Date" />
+                            <DatePicker x:Name="endDatePicker" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                    				SelectedDate="{Binding EndDate}" SelectedDateFormat="Short" Width="92" />
+                        </StackPanel>
+                        <StackPanel Margin="0" >
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <Button Width="80"  Height="25" Content="Refresh" Margin="2"  Command="{Binding RunRefreshommand}"  />
+                                <Button x:Name="ExportToCSVButton" Width="90" Height="25" Content="ExportToCSV" Margin="10,2,0,0" 
+                                Command="{Binding RunExportCSVCommand}" />
+                            </StackPanel>
+
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="BidsCount" Height="162" VerticalAlignment="Bottom" Margin="2,0,0,90">
+                    <StackPanel Width="100" Height="118" VerticalAlignment="Top" >
+                        <Label Grid.Row="0" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Submitted"/>
+                        <TextBox x:Name="TotalSubmittedTextBox" Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                     Foreground="{Binding TotalSubmitted, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalSubmitted, StringFormat=\{0:N0\}}" TextWrapping="Wrap"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Cleared"/>
+                        <TextBox x:Name="TotalClearedTextBox" Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                             Foreground="{Binding TotalCleared, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalCleared, StringFormat=\{0:N0\}}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="MWsCount" Height="162" VerticalAlignment="Bottom" Margin="2,0,0,90">
+                    <StackPanel Width="100" Height="114" VerticalAlignment="Top" >
+                        <Label Grid.Row="0" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Submitted"/>
+                        <TextBox x:Name="TotalSubmittedTextBox1" Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                     Foreground="{Binding TotalSubmittedMW, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalSubmittedMW, StringFormat=\{0:N0\}}" TextWrapping="Wrap"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Cleared"/>
+                        <TextBox x:Name="TotalClearedTextBox1" Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                             Foreground="{Binding TotalClearedMW, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalClearedMW, StringFormat=\{0:N0\}}" TextWrapping="Wrap"/>
+
+                    </StackPanel>
+
+                </GroupBox>
+                <GroupBox Header="PercentageMWs" Height="162" VerticalAlignment="Bottom" Margin="2,0,0,90">
+                    <StackPanel Width="100" Height="74" VerticalAlignment="Top" >
+                        <Label Grid.Row="0" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="ClearedMws"/>
+                        <TextBox x:Name="PercentageMWs" Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                     Foreground="{Binding PercentageMWs, Converter={StaticResource ValueToForeground}}" Text="{Binding PercentageMWs, StringFormat=\{0:N2\}%}" TextWrapping="Wrap" />
+                    </StackPanel>
+
+                </GroupBox>
+                <GroupBox Header="Daily/Monthly" Height="161"  Margin="5,9,0,90" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Width="100" Height="55" VerticalAlignment="Top" >
+                        <RadioButton Name="rbDaily"
+							             Height="16"
+							             Margin="0"  Background="#B9CDF7" 
+							             HorizontalAlignment="Left"
+							             Content="Daily"
+							             GroupName="DailyDaily"
+							             IsChecked="{Binding DailyChecked,
+							                                 Mode=TwoWay}" />
+                        <RadioButton Name="rbMonthly"
+							             Height="16"  Background="#B9CDF7" 
+							             Margin="0,12,0,0"
+							             Content="Monthly"
+							             GroupName="MonthlyMonthly"
+							             IsChecked="{Binding MonthlyChecked,
+							                                 Mode=TwoWay}" />
+                    </StackPanel>
+
+                </GroupBox>
+
+
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Expander FlowDirection="LeftToRight" IsExpanded="True" Header="Daily\Monthly">
+                <TabControl  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+                    <TabItem  Header="Daily"  >
+                        <DataGrid x:Name="pnlDataGridD" Grid.Row="1" HorizontalAlignment="Left" AlternatingRowBackground="#B9CDF7" 
+				          AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding PNLDailyList, NotifyOnTargetUpdated=True}"  VerticalAlignment="Top">
+                            <DataGrid.Resources>
+
+
+                            </DataGrid.Resources>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <Binding Converter="{StaticResource CellBg2}"
+												         ConverterParameter="PercentageMWCleared"
+												         Path="." />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding MarketDate, StringFormat='{}{0:dd/MM/yyyy}'}"					                    
+						                    Header="MarketDate" />
+                                <DataGridTextColumn Width="60*"
+						                    Binding="{Binding PortfolioName}"					                    
+						                    Header="PortfolioName" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding SubmittedCount, StringFormat='{}{0:N0}'}"					                    
+						                    Header="SubmittedCount" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ClearedCount, StringFormat='{}{0:N0}'}"					                    
+						                    Header="ClearedCount" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TotalUnclearedBids, StringFormat='{}{0:N0}'}"					                    
+						                    Header="TotalUnclearedBids">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding RequestedMW, StringFormat='{}{0:N2}'}"					                    
+						                    Header="RequestedMW" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ClearedMW, StringFormat='{}{0:N2}'}"					                    
+						                    Header="ClearedMW" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TotalUnclearedMW, StringFormat='{}{0:N2}'}"					                    
+						                    Header="TotalUnclearedMW" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding PercentageMWCleared, StringFormat='{}{0:N2}%'}"					                    
+						                    Header="PercentageMWCleared"
+                                                Foreground="{Binding PercentageMWCleared, Converter={StaticResource CellBg2}}" 
+                                                >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+
+                                </DataGridTextColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                    </TabItem>
+                    <TabItem  Header="Monthly"   >
+                        <DataGrid x:Name="pnlDataGridDm" Grid.Row="1" HorizontalAlignment="Left" 
+				          AutoGenerateColumns="False" CanUserAddRows="False"  AlternatingRowBackground="#B9CDF7" IsReadOnly="True" ItemsSource="{Binding PNLDailyListMonthly, NotifyOnTargetUpdated=True}"  VerticalAlignment="Top">
+                            <DataGrid.Resources>
+                            </DataGrid.Resources>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <Binding Converter="{StaticResource CellBg2}"
+												         ConverterParameter="PercentageMWCleared"
+												         Path="." />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding MarketDate, StringFormat='MMM-yyy'}"					                    
+						                    Header="MarketDate" />
+                                <DataGridTextColumn Width="60*"
+						                    Binding="{Binding PortfolioName}"					                    
+						                    Header="PortfolioName" />
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding SubmittedCount, StringFormat='{}{0:N0}'}"					                    
+						                    Header="SubmittedCount" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ClearedCount, StringFormat='{}{0:N0}'}"					                    
+						                    Header="ClearedCount" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TotalUnclearedBids, StringFormat='{}{0:N0}'}"					                    
+						                    Header="TotalUnclearedBids">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding RequestedMW, StringFormat='{}{0:N2}'}"					                    
+						                    Header="RequestedMW" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding ClearedMW, StringFormat='{}{0:N2}'}"					                    
+						                    Header="ClearedMW" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding TotalUnclearedMW, StringFormat='{}{0:N2}'}"					                    
+						                    Header="TotalUnclearedMW" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding PercentageMWCleared, StringFormat='{}{0:N2}%'}"					                    
+						                    Header="PercentageMWCleared"
+                                                Foreground="{Binding PercentageMWCleared, Converter={StaticResource CellBg2}}" 
+                                                >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+
+                                </DataGridTextColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                    </TabItem>
+
+                </TabControl>
+            </Expander>
+
+        </Grid>
+        <Grid  Grid.Row="2" Margin="2" >
+            <Expander Header="Daily\Monthly Graph" IsExpanded="True" >
+                <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                    <StackPanel  HorizontalAlignment="Stretch">
+                        <CheckBox Name="SubmittedBidsBtn" Content="SubmittedBids" IsChecked="{Binding isDAChecked , Mode=TwoWay}" Width="106" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                        <CheckBox Name="ClearedBidsBtn" Content="ClearedBids" IsChecked="{Binding isRTChecked , Mode=TwoWay}" Width="91" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="106,-30,0,0" />
+                        <CheckBox Name="RequestedMWBtn" Content="RequestedMW" IsChecked="{Binding isRTCongChecked , Mode=TwoWay}" Width="101" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="197,-30,0,0" />
+                        <CheckBox Name="SubmittedMWBtn" Content="SubmittedMW" IsChecked="{Binding isDACongChecked , Mode=TwoWay}" Width="104" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="303,-30,0,0" />
+                        <StackPanel>
+                            <Grid>
+                                <StackPanel >
+                                    <oxy:PlotView  Model="{Binding PlotDataFirst}" Height="128" ></oxy:PlotView>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+               
+            </Expander>
+        </Grid>
+    </Grid>
+</Window>

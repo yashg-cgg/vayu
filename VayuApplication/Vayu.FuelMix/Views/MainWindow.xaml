@@ -1,0 +1,89 @@
+﻿<Window    x:Class="Vayu.FuelMix.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="VAYU - Fuel Mix"  Height="Auto" 
+        Width="997">
+    <Window.Resources>
+        <ResourceDictionary>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="461*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="109*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5,12,5,8"
+					           VerticalAlignment="Center"
+					           Text="From" Height="16" />
+                <DatePicker Grid.Row="0" Grid.Column="1" Margin="10,4,10,4" SelectedDate="{Binding FromSelectedDate, Mode=TwoWay}" />
+                <Button Grid.Row="0" Grid.Column="2"
+				        Margin="10,4,10,4"
+				        Command="{Binding RefreshCommand}"
+				        Content="Refresh" />
+                <CheckBox Grid.Row="0" Grid.Column="3" Content="Solar" IsChecked="{Binding SolarChecked, Mode=TwoWay}" />
+                <CheckBox Grid.Row="0" Grid.Column="4" Content="Wind" IsChecked="{Binding WindChecked, Mode=TwoWay}" />
+                <CheckBox  Grid.Row="0" Grid.Column="5" Content="Hydro" IsChecked="{Binding HydroChecked, Mode=TwoWay}" />
+                <CheckBox  Grid.Row="0" Grid.Column="6" Content="Power Storage" IsChecked="{Binding PowerStorageChecked, Mode=TwoWay}" />
+                <CheckBox  Grid.Row="0" Grid.Column="7" Content="Natural Gas" IsChecked="{Binding NaturalGasChecked, Mode=TwoWay}" />
+
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="109*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5,12,5,8"
+					           VerticalAlignment="Center"
+					           Text="Thro'" />
+                <DatePicker Grid.Row="1" Grid.Column="1" Margin="10,4,10,4" SelectedDate="{Binding EndSelectedDate, Mode=TwoWay}" />
+
+
+
+                <!--<CheckBox  Grid.Row="0" Grid.Column="3" Content="Natural Gas" IsChecked="{Binding NaturalGasChecked, Mode=TwoWay}" />-->
+                <CheckBox  Grid.Row="0" Grid.Column="3"  Content="Coal and Lignite" IsChecked="{Binding CoalandLigniteChecked, Mode=TwoWay}" />
+                <CheckBox  Grid.Row="0" Grid.Column="4"  Content="Nuclear" IsChecked="{Binding NuclearChecked, Mode=TwoWay}" />
+                <CheckBox   Grid.Row="0" Grid.Column="5" Content="Other" IsChecked="{Binding OtherChecked, Mode=TwoWay}" />
+                <CheckBox Grid.Row="0" Grid.Column="6" Content="Total" IsChecked="{Binding TotalChecked, Mode=TwoWay}" />
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <oxy:PlotView Grid.Row="1"
+		          Height="Auto"
+		          Margin="0,2,10,4"
+		          VerticalContentAlignment="Stretch"
+		          Background="Black"
+		          BorderBrush="Gray"
+		          BorderThickness="1"
+		          Model="{Binding PlotDataModel}" />
+        </Grid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

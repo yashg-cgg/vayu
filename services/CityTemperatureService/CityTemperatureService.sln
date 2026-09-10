@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityTemperatureService", "CityTemperatureService.csproj", "{CA15C4CC-F7DF-4F96-8B69-40B1A1D44E5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CommonAccessLibrary", "..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj", "{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CityTemperatureServiceLibrary", "..\..\Library\CityTemperatureServiceLibrary\Vayu.CityTemperatureServiceLibrary.csproj", "{ACAE0BF5-E173-48AB-ACBB-9F5D5428CD69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA15C4CC-F7DF-4F96-8B69-40B1A1D44E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA15C4CC-F7DF-4F96-8B69-40B1A1D44E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA15C4CC-F7DF-4F96-8B69-40B1A1D44E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA15C4CC-F7DF-4F96-8B69-40B1A1D44E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACAE0BF5-E173-48AB-ACBB-9F5D5428CD69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACAE0BF5-E173-48AB-ACBB-9F5D5428CD69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACAE0BF5-E173-48AB-ACBB-9F5D5428CD69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACAE0BF5-E173-48AB-ACBB-9F5D5428CD69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DBD62312-93F2-4C30-970C-45C357AD51A4}
+	EndGlobalSection
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 1
+		SccProjectUniqueName0 = CityTemperatureService.csproj
+		SccProjectName0 = \u0022$/CityTemperatureService/CityTemperatureService/CityTemperatureService/CityTemperatureService/CityTemperatureService\u0022,\u0020MQDAAAAA
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+	EndGlobalSection
+EndGlobal

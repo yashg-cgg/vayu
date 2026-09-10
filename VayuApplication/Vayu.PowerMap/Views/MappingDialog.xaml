@@ -1,0 +1,44 @@
+﻿<Window x:Class="Vayu.PowerMap.Views.MappingDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/" xmlns:my1="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit" xmlns:Usercontrol="clr-namespace:Vayu.PowerMap.Controls"
+        Height="586" Width="1000"
+        prism:ViewModelLocator.AutoWireViewModel="False">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="380" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <!--<ListBox Margin="15,135,0,20" Name="Souce_listBox" HorizontalAlignment="Left" Width="135" SelectionMode="Single" ItemsSource="{Binding Path=KeyList}"  SelectedItem="{Binding ElementName=Source_AutoCompleteBox, Path=Text, Mode=TwoWay}"/>-->
+            <ListBox Margin="32,92,0,176" Name="Sink_listBox" HorizontalAlignment="Left" Width="154" SelectionMode="Single" ItemsSource="{Binding Path=KeyList}"  SelectedItem="{Binding ElementName=Sink_AutoCompleteBox, Path=Text, Mode=TwoWay}"/>
+            <ListBox HorizontalAlignment="Left" Margin="199,92,0,176" Name="Zone_listBox" Width="79" ItemsSource="{Binding Path=ZoneList}" SelectedItem="{Binding ElementName=Zone_AutoCompleteBox, Path=Text, Mode=TwoWay}"/>
+            <!--<Label Content="Source" Height="28" HorizontalAlignment="Left" Margin="49,70,0,0" Name="label1" VerticalAlignment="Top" />-->
+            <Label Content="To Station" Height="28" Margin="0,27,232,0" Name="label2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" />
+            <!--<my1:AutoCompleteBox FilterMode="Contains" Height="23" Margin="15,98,0,0" MaxDropDownHeight="55" Name="Source_AutoCompleteBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="135" ItemsSource="{Binding Path=KeyList}"/>-->
+            <my1:AutoCompleteBox FilterMode="Contains" Height="23" Margin="32,55,0,0" MaxDropDownHeight="55" Name="Sink_AutoCompleteBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="154" ItemsSource="{Binding Path=KeyList}"/>
+            <my1:AutoCompleteBox FilterMode="Contains" Height="23" HorizontalAlignment="Right" Margin="0,55,102,0" MaxDropDownHeight="55" Name="Zone_AutoCompleteBox" VerticalAlignment="Top" Width="79" ItemsSource="{Binding Path=ZoneList}"/>
+            <Label Content="Zone" Height="28" HorizontalAlignment="Left" Margin="220,27,0,0" Name="label3" VerticalAlignment="Top" />
+            <Button Content="Comfirm" Height="29" HorizontalAlignment="Left" Margin="296,0,0,58" Name="button1" VerticalAlignment="Bottom" Width="66" Click="button1_Click" />
+
+            <TextBox HorizontalAlignment="Left" Margin="32,0,0,58" Name="textBlock1" Width="246" Height="98" VerticalAlignment="Bottom" Background="White" TextWrapping="Wrap" SpellCheck.IsEnabled="True" Text="{Binding Path=Comment}"/>
+        </Grid>
+        <Grid Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Usercontrol:MapControl x:Name="MapControl" />
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False" Height="Auto" HorizontalAlignment="Left" Margin="9,15,0,0" Name="Outage_DataGrid" VerticalAlignment="Top" Width="563" CanUserAddRows="False" Background="White" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="FromSub" Binding="{Binding branch}" CanUserReorder="False" FontWeight="Bold"  IsReadOnly="True" />
+                    <DataGridTextColumn Header="ToSub" Binding="{Binding tobranch}" CanUserReorder="False" FontWeight="Bold"  IsReadOnly="True" />
+                    <DataGridTextColumn Header="Zone" Binding="{Binding zone}" CanUserReorder="False" FontWeight="Bold"  IsReadOnly="True" />
+                    <DataGridTextColumn Header="Voltage" Binding="{Binding voltage}" CanUserReorder="False" FontWeight="Bold"  IsReadOnly="True" />
+                    <DataGridTextColumn Header="Type" Binding="{Binding equipmentType}" CanUserReorder="False" FontWeight="Bold"  IsReadOnly="True" />
+                    <DataGridTextColumn Header="Equipment" Binding="{Binding equipment}" CanUserReorder="False" FontWeight="Bold"  IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

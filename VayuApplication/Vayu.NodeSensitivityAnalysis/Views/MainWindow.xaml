@@ -1,0 +1,166 @@
+﻿<Window    x:Class="Vayu.NodeSensitivityAnalysis.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/" xmlns:local="clr-namespace:Vayu.NodeSensitivityAnalysis.Views" xmlns:pc="clr-namespace:Vayu.NodeSensitivityAnalysis.ViewModels"
+                  prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Vayu -  Node Sensitivity Analysis" Height="570" Width="1600">
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:CurrencyColorConverter x:Key="c2c" />
+            <pc:InverseBooleanToVisibilityConverter x:Key="InvertBoolConverter" />
+            <BooleanToVisibilityConverter x:Key="b2v" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/> 
+                <ColumnDefinition Width="250"/> 
+                <ColumnDefinition Width="200"/> 
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Market"   BorderBrush="#FF1D1C1C" >
+                <ComboBox x:Name="marketname"  ItemsSource="{Binding MarketList}" SelectedItem="{Binding MarketSelected, Mode=TwoWay}" />
+            </GroupBox>
+            <GroupBox  Grid.Row="0" Grid.Column="1"
+			          BorderBrush="#FF1D1C1C"
+			          Header="MarketType">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton x:Name="RtRadioButton" Grid.Row="0" Grid.Column="0"
+					             Content="RT"
+					             IsChecked="{Binding RTChecked, Mode=TwoWay}" />
+                    <RadioButton x:Name="DaRadioButton" Grid.Row="0" Grid.Column="1"
+					             Content="DA"
+					             IsChecked="{Binding DAChecked, Mode=TwoWay}" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Virtual"  Grid.Column="2" BorderBrush="#FF1D1C1C">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton x:Name="rbPath" Content="Node" Grid.Column="0"  GroupName="Virtual"  Unchecked="NodeCheckBox_Unchecked" IsChecked="{Binding SelectedNode, Mode=TwoWay}" />
+                    <RadioButton x:Name="Path" Content="Path" Grid.Column="1" GroupName="Virtual" IsChecked="{Binding SelectedPath, Mode=TwoWay}" Unchecked="PathUnchecked"/>
+                </Grid>
+
+
+            </GroupBox>
+            <GroupBox  Grid.Column="3" 
+			          BorderBrush="#FF1D1C1C"
+			          Header="Date">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox x:Name="DateRangeCheckBox"   Grid.Row="0" Grid.Column="0" Content="Range?"  IsChecked="{Binding DateRangeCheckBoxChecked, Mode=TwoWay}" />
+                    <DatePicker  Grid.Column="1" SelectedDate="{Binding FromDate, Mode=TwoWay}" />
+                    <DatePicker  Grid.Column="2" SelectedDate="{Binding ThroDate, Mode=TwoWay}" IsEnabled="{Binding ThroDateEnable}" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Source/Sink" Grid.Column="4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox  x:Name="SourceSearchBox" IsEditable="True" IsTextSearchEnabled="True"
+    	        	            ItemsSource="{Binding SourceSearchList}" DisplayMemberPath="NodeName"  SelectedValue="{Binding SelectedSourceItem}"  IsEnabled="True" Margin="2"
+                                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.Column="0" />
+                    <ComboBox    x:Name="SinkSearchBox" IsEditable="True" IsTextSearchEnabled="True" IsEnabled="False"
+    	        	            ItemsSource="{Binding SinkSearchList}" DisplayMemberPath="NodeName" SelectedValue="{Binding SelectedSinkItem}" Margin="2"
+                                 VirtualizingStackPanel.IsVirtualizing="True"  VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.Column="1"/>
+                </Grid>
+            </GroupBox>
+            <DataGrid Name="sourceSinkDataGrid"   BorderBrush="Black"  
+ BorderThickness="1"                               AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                               AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"
+                               CanUserResizeRows="False" IsReadOnly="True" ItemsSource="{Binding SourceSinkList,Mode=TwoWay}"
+                               SelectedValue="{Binding SourceSinkDataSelected}" SelectionMode="Single"      Grid.Column="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Source}"
+                                                 CanUserReorder="False" Header="Source"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Sink}"
+                                                 CanUserReorder="False" Header="Sink"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Column="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button x:Name="RefreshButton"  Grid.Column="0"   Margin="1" Command="{Binding RefreshCommand}" Content="Add" IsEnabled="{Binding IsRefreshEnabled}" Click="RefreshButton_Click" />
+                <Button x:Name="PasteButton" Grid.Column="0" Grid.Row="1"  Margin="1"
+				        Command="{Binding RunPasteCommand}"
+				        Content="Paste"/>
+                <Button x:Name="ExportButton"
+				         Grid.Column="1"  Margin="1"
+                            Click="EXpostToExcel"
+				        Command="{Binding RunExportCSVCommand}"
+				        Content="ExportToCSV" />
+                <Button x:Name="CLearButton"
+				         Grid.Column="1" Grid.Row="1" Margin="1"
+				        Command="{Binding ClearCommand}"
+				        Content="Remove" Click="Clear_Button"/>
+            </Grid>
+        </Grid>
+        <DataGrid x:Name="constraintDataGrid"
+		           Grid.Row="1" Margin="0 2 0 0"
+		          HorizontalAlignment="Stretch"
+		          VerticalAlignment="Stretch"
+		          AlternatingRowBackground="AliceBlue"
+		          AreRowDetailsFrozen="True"
+		          AutoGenerateColumns="False"
+		          CanUserAddRows="False"
+		          FontFamily="Microsoft Sans Serif, 8.25pt"
+		          FontWeight="ExtraLight"
+		          ItemsSource="{Binding ConstraintList}"
+                  SelectedCellsChanged="constraintDataGrid_SelectedCellsChanged"
+		          SelectedItem="{Binding SelectedConstraint , Mode=TwoWay}" 
+		          SelectionMode="Single"
+		          SelectionUnit="Cell"
+		          VirtualizingStackPanel.IsVirtualizing="True"
+		          VirtualizingStackPanel.VirtualizationMode="Recycling"   >
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="130*"
+				                    Binding="{Binding ConstraintText}"
+				                    CanUserReorder="False"
+				                    Header="Constraint"
+				                    IsReadOnly="True" 
+                                    Visibility="{Binding isConstraintChecked, Converter= {StaticResource InvertBoolConverter}}" />
+
+                <DataGridTextColumn Width="120*"
+				                    Binding="{Binding ContingencyText}"
+				                    CanUserReorder="False"
+				                    Header="Contingency"
+				                    IsReadOnly="True"
+                                    Visibility="{Binding isConstraintChecked}"/>
+                <DataGridTextColumn Width="80*"
+				                    Binding="{Binding Sensitivity}"
+				                    CanUserReorder="False"
+				                    Header="Sensitivity"
+				                    IsReadOnly="True"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

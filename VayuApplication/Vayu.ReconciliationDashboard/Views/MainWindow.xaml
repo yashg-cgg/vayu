@@ -1,0 +1,944 @@
+﻿<Window   
+                  x:Class="Vayu.ReconciliationDashboard.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+                  
+        xmlns:ip="clr-namespace:Vayu.ReconciliationDashboard.ViewModels"
+        xmlns:local="clr-namespace:Vayu.ReconciliationDashboard.ViewModels"
+        xmlns:local1="clr-namespace:Vayu.ReconciliationDashboard.ViewModels"
+        xmlns:local2="clr-namespace:Vayu.ReconciliationDashboard.ViewModels"
+        Height="600"
+        Width="900"  Background="#B9CDF7"
+        Title="Ercot - Reconciliation">
+    <!-- Icon="\Images\accountingApp.ico"-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+            </ResourceDictionary.MergedDictionaries>
+            <ip:ValueToForegroundColorConverter x:Key="ValueToForeground" />
+            <local:CellBackgroundColorConverter x:Key="CellBg" />
+            <local1:CellBackgroundColorConverter1 x:Key="CellBg1" />
+            <local2:CellBackgroundColorConverter2 x:Key="CellBg2"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid >
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="250" MinHeight="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+            <StackPanel Orientation="Horizontal" Margin="2,2" Height="240"  Width="900" >
+
+                <GroupBox Header=" Dates " Margin="2,2,2,-30" BorderBrush="#FF1D1C1C" >
+                    <StackPanel Orientation="Vertical" Margin="2">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox x:Name="marketListBox" Width="80"  Height="25"  Margin="5" ItemsSource="{Binding MarketList, Mode=TwoWay}" SelectedItem="{Binding SelectedMarket}" />
+                            <ComboBox Width="80"  Height="25" Margin="5" ItemsSource="{Binding ProductList}" SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="2,2,2,2" Width="62" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Start Date"/>
+                            <DatePicker x:Name="startDatePicker" Margin="2,2,2,2"  HorizontalAlignment="Left" VerticalAlignment="Center"
+                    				SelectedDate="{Binding StartDate}" SelectedDateFormat="Short" Width="92" />
+
+                            <Label Margin="2,2,2,2" Width="62" HorizontalAlignment="Left" VerticalAlignment="Top" Content="End Date" />
+                            <DatePicker x:Name="endDatePicker" Margin="2,2,2,2" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                    				SelectedDate="{Binding EndDate}" SelectedDateFormat="Short" Width="92" />
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <GroupBox>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="324">
+                                    <Button x:Name="prevButtonNew" Width="71" Height="24" Margin="2,15" Content="Yesterday" Command="{Binding yesterdayDateCommand}"/>
+                                    <Button x:Name="todayButtonNew" Width="55" Height="24" Margin="2,2,2,2" Content="Today" Command="{Binding TodaysDateCommand}" />
+                                    <Button x:Name="mTD" Width="55" Height="24"  Margin="2,2,2,2" Content="MTD" Command="{Binding MtdDateCommand}"  />
+                                    <Button x:Name="uTD" Width="55" Height="24" Margin="2,2,2,2" Content="YTD" Command="{Binding YtdDateCommand}"/>
+                                    <Button x:Name="iTD" Width="70" Height="24" Margin="2,2,2,2" Content="Inception"  Command="{Binding incdDateCommand}"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+
+                <GroupBox Header="CurrentDate" Height="272" VerticalAlignment="Bottom" Margin="2,-2,2,-30">
+                    <StackPanel Width="100" Height="240" Margin="5"  >
+                        <Label Grid.Row="0" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Gross PNL"/>
+                        <TextBox x:Name="totalPNLTextBox1" Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                     Foreground="{Binding CurrentTotalPNL, Converter={StaticResource ValueToForeground}}" Text="{Binding CurrentTotalPNL, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Fees"/>
+                        <TextBox x:Name="totalFeeTextBox1" Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                             Foreground="{Binding CurrentTotalFee, Converter={StaticResource ValueToForeground}}" Text="{Binding CurrentTotalFee, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <!--<Label Grid.Row="2" Grid.Column="0" Width="90" HorizontalAlignment="Left" VerticalAlignment="Top" Content="ISO MISC"/>
+                            <TextBox x:Name="totalNetProfitBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="27" IsReadOnly="True"
+                                    Foreground="{Binding CurrentTotalNetPNL, Converter={StaticResource ValueToForeground}}" Text="{Binding CurrentTotalNetPNL, StringFormat={}\{0:C\}}" TextWrapping="Wrap" RenderTransformOrigin="0.49,0.48" />-->
+                        <Label Content="NET PNL" HorizontalAlignment="Left" Height="25" Width="70"/>
+                        <TextBox HorizontalAlignment="Left" Height="28" Width="100" IsReadOnly="True"
+                                    Foreground="{Binding CurrentTotalNetPNL, Converter={StaticResource ValueToForeground}}" Text="{Binding CurrentTotalNetPNL, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+                        <Label Content="MWs" HorizontalAlignment="Left" Height="25" Width="70"/>
+                        <TextBox HorizontalAlignment="Left" Height="28" Width="100" IsReadOnly="True"
+                                    Foreground="{Binding CurrentTotalMWs, Converter={StaticResource ValueToForeground}}" Text="{Binding CurrentTotalMWs}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="TimeRange" Height="270" VerticalAlignment="Bottom" Margin="2,0,0,-30">
+                    <StackPanel Width="100" Height="240" >
+                        <Label Grid.Row="0" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Gross PNL"/>
+                        <TextBox x:Name="totalPNLTextBox" Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                     Foreground="{Binding TotalPNL, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalPNL, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Fees"/>
+                        <TextBox x:Name="totalFeeTextBox" Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                             Foreground="{Binding TotalFee, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalFee, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <!--<Label Grid.Row="2" Grid.Column="0" Width="90" HorizontalAlignment="Left" VerticalAlignment="Top" Content="ISO MISC"/>
+                            <TextBox x:Name="totalNetProfitBox1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                    Foreground="{Binding TimeRangeISO, Converter={StaticResource ValueToForeground}}" Text="{Binding TimeRangeISO, StringFormat={}\{0:C\}}" TextWrapping="Wrap" />-->
+                        <Label Content="Net PNL" HorizontalAlignment="Left" Height="30" Width="70"/>
+                        <TextBox HorizontalAlignment="Left" Height="25" Width="100" IsReadOnly="True"
+                                    Foreground="{Binding TotalNetPNL, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalNetPNL, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+                        <Label Content="MWs" HorizontalAlignment="Left" Height="26" Width="70"/>
+                        <TextBox HorizontalAlignment="Left" Height="25" Width="100" IsReadOnly="True"
+                                    Foreground="{Binding TotalMWs, Converter={StaticResource ValueToForeground}}" Text="{Binding TotalMWs}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Inception" Margin="0,0,0,-50" Visibility="Collapsed">
+                    <StackPanel Width="100"  >
+                        <Label Grid.Row="0" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Gross PNL"/>
+                        <TextBox x:Name="itotalPNLTextBox" Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                     Foreground="{Binding iTotalPNL, Converter={StaticResource ValueToForeground}}" Text="{Binding iTotalPNL, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Fees"/>
+                        <TextBox x:Name="itotalFeeTextBox" Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                             Foreground="{Binding iTotalFee, Converter={StaticResource ValueToForeground}}" Text="{Binding iTotalFee, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Width="90" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Net PNL"/>
+                        <TextBox x:Name="itotalNetProfitBox1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                    Foreground="{Binding iTotalNetPNL, Converter={StaticResource ValueToForeground}}" Text="{Binding iTotalNetPNL, StringFormat={}\{0:C\}}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="YTD" Width="100" Margin="2,0,0,-30">
+                    <StackPanel Width="100" Height="240" Margin="2" >
+                        <Label Grid.Row="0" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Gross PNL"/>
+                        <TextBox x:Name="ytditotalPNLTextBox" Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                     Foreground="{Binding iTotalPNLYTD, Converter={StaticResource ValueToForeground}}" Text="{Binding iTotalPNLYTD, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Width="70"  HorizontalAlignment="Left" VerticalAlignment="Top" Content="Fees"/>
+                        <TextBox x:Name="ytditotalFeeTextBox" Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                             Foreground="{Binding iTotalFeeYTD, Converter={StaticResource ValueToForeground}}" Text="{Binding iTotalFeeYTD, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+
+                        <!--<Label Grid.Row="2" Grid.Column="0" Width="90" HorizontalAlignment="Left" VerticalAlignment="Top" Content="ISO MISC"/>
+                            <TextBox x:Name="ytditotalNetProfitBox1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" IsReadOnly="True"
+                                    Foreground="{Binding YTDISO, Converter={StaticResource ValueToForeground}}" Text="{Binding YTDISO, StringFormat={}\{0:C\}}" TextWrapping="Wrap" />-->
+                        <Label Content="Net PNL" HorizontalAlignment="Left" Height="26" Width="79"/>
+                        <TextBox HorizontalAlignment="Left" Height="26" Width="100" IsReadOnly="True"
+                                    Foreground="{Binding iTotalNetPNLYTD, Converter={StaticResource ValueToForeground}}" Text="{Binding iTotalNetPNLYTD, StringFormat={}\{0:C\}}" TextWrapping="Wrap"/>
+                        <Label Content="MWs" HorizontalAlignment="Left" Height="28" Width="79"/>
+                        <TextBox HorizontalAlignment="Left" Height="26" Width="100" IsReadOnly="True"
+                                    Foreground="{Binding iTotalMWsYTD, Converter={StaticResource ValueToForeground}}" Text="{Binding iTotalMWsYTD}" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                </GroupBox>
+                <StackPanel Margin="0" >
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <Button Width="80"  Height="25" Content="Refresh" Margin="3,3,3,3"  Command="{Binding RunRefreshommand}"  />
+                        <Button x:Name="ExportToCSVButton" Width="90" Height="25" Content="ExportToCSV" Margin="10,2,0,0" 
+                                Command="{Binding RunExportCSVCommand}" />
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+
+
+
+        </Grid>
+        <Grid Grid.Row="1" Margin="2,22">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TabControl ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <TabItem   Header="Monthly" Height="32" VerticalAlignment="Bottom" Margin="0,0,0,-10">
+                    <Border BorderBrush="Black" Grid.Row="1" Background="#CACDCE" BorderThickness="1,1,1,1" Margin="2,5,2,2" Grid.ColumnSpan="2">
+                        <DataGrid x:Name="pnlDataGrid" Grid.Row="1" Margin="-9,-1,-1,-1" HorizontalAlignment="Left" AlternatingRowBackground="LightGray"
+				          AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding PNLList}" Grid.ColumnSpan="6"  >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="50*"
+						                    Binding="{Binding Month}"						                    
+						                    Header="MONTH" />
+                                <!--<DataGridTextColumn Width="50*"
+						                   Foreground="{Binding Gross, Converter={StaticResource ValueToForeground}}" Binding="{Binding Gross, StringFormat={}\{0:C\}}" 
+						                    Header="MTH GROSS" />
+                            <DataGridTextColumn Width="100*"
+						                     Foreground="{Binding Fee, Converter={StaticResource ValueToForeground}}" Binding="{Binding Fee, StringFormat={}\{0:C\}}" 
+						                    Header="MTH FEE" />
+                            <DataGridTextColumn Width="100*"
+						                    Foreground="{Binding PNL, Converter={StaticResource ValueToForeground}}" Binding="{Binding PNL, StringFormat={}\{0:C\}}" 
+						                    ClipboardContentBinding="{x:Null}"
+						                    Header="MTH NET PNL" />
+                            <DataGridTextColumn Width="100*"
+						                     Foreground="{Binding MonthlyPNLFromStatement, Converter={StaticResource ValueToForeground}}" Binding="{Binding MonthlyPNLFromStatement, StringFormat={}\{0:C\}}" 
+						                    Header="MTH PNL ISO STMT"/>-->
+                                <!--<DataGridTextColumn Width="100*"
+						                   Foreground="{Binding Diffrences, Converter={StaticResource ValueToForeground}}" Binding="{Binding Diffrences, StringFormat={}\{0:C\}}" 
+						                    Header="Diffrences"/>-->
+                                <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="Gross">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="MTH GROSS" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding Gross, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="Gross"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Width="110*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="Gross">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="MTH REV ISO" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding MonthGrossISO, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="MonthGrossISO"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="Fee">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="MTH FEE" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding Fee, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="Fee"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="PNL">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="MTH EXP ISO" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding MonthFeeISO, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="MonthFeeISO"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="PNL">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="MTH PNL" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding PNL, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="PNL"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="110*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="RunningTotal">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="RUNNING TOTAL" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding MonthlyRunningTotal, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="MonthlyRunningTotal"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="FeePerMW">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="Fee/MW" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding FeePerMW, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="FeePerMW"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTemplateColumn Width="110*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="MWs">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="MWs" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding MWs}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="MWs"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="DollarsCleared">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="DollarsCleared" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding DollarsCleared, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DollarsCleared"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="RTM">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="RTM(stmt)" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding RTM, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="RTM"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="DAM">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="DAM(stmt)" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding DAM, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="DAM"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="Net">
+                                    
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="Net(stmt)" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding Net, StringFormat={}\{0:C\}}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground">
+                                                            <Setter.Value>
+                                                                <Binding Converter="{StaticResource CellBg1}"
+												         ConverterParameter="Net"
+												         Path="." />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                               
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </TabItem>
+
+                <TabItem    Header="Daily" Margin="0,10,0,0" >
+
+                    <DataGrid x:Name="pnlDataGridD" Grid.Row="1" HorizontalAlignment="Left" 
+				          AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding PNLDailyList, NotifyOnTargetUpdated=True}"  VerticalAlignment="Top">
+                        <DataGrid.Resources>
+
+
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <Binding Converter="{StaticResource CellBg2}"
+												         ConverterParameter="DailyFee"
+												         Path="." />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="50*"
+						                    Binding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"					                    
+						                    Header="Date" />
+                            <!--<DataGridTextColumn Width="50*"
+						                   Foreground="{Binding DailyGross, Converter={StaticResource ValueToForeground}}" Binding="{Binding DailyGross, StringFormat={}\{0:C0\}}" 
+						                    Header="DLY GROSS" />-->
+
+                            <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="DailyGross">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="DLY GROSS" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DailyGross, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DailyGross"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Width="110*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="DailyGross"
+                                                   >
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="DLY REV ISO" />
+
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DailyGrossISO, StringFormat={}\{0:C\} }">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DailyGrossISO"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="DailyFee">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="DLY Fee" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DailyFee, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DailyFee"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="PNL">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="DLY EXP ISO" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DailyFeeISO, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DailyFeeISO"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90*"
+				                        CanUserSort="True"
+				                        IsReadOnly="True"
+				                        SortMemberPath="DailyPNL">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="DLY NET PNL" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="Background" Value="BlanchedAlmond" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DailyPNL, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource
+                                                                CellBg}"
+												         ConverterParameter="DailyPNL"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="130*" CanUserSort="True" IsReadOnly="True"
+				                        SortMemberPath="PNL">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="RUNNING TOTAL" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DailyRunningTotal, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DailyRunningTotal"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                       >
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="Daily Fee/MW" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DailyFeePerMW, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DailyFeePerMW"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                           
+                            <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True" SortMemberPath="MWs">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="MWs" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding MWs}" >
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="MWs"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="DollarsCleared" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DollarsCleared, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DollarsCleared"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                        >
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="RTM(stmt)" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding RTM, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="RTM"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                       >
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="DAM(stmt)" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding DAM, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="DAM"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90*" CanUserSort="True" IsReadOnly="True"
+				                       >
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="Net(stmt)" />
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="Background" Value="BlanchedAlmond" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding Net, StringFormat={}\{0:C\}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <Binding Converter="{StaticResource CellBg}"
+												         ConverterParameter="Net"
+												         Path="." />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>

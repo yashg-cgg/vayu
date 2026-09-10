@@ -1,0 +1,80 @@
+﻿<Window    x:Class="Vayu.PowerMap.Views.IIRReprtWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:oxyplot="http://oxyplot.org/wpf"
+             xmlns:prism="http://prismlibrary.com/"  Width="Auto" Height="800"            
+             prism:ViewModelLocator.AutoWireViewModel="False">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="600*"/>
+        </Grid.RowDefinitions>
+        <DataGrid Name="IIRReport_DataGrid" Grid.Row="0" 
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                  AlternatingRowBackground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}"
+                  CanUserAddRows="False" CanUserResizeColumns="True"
+                  IsReadOnly="True" ItemsSource="{Binding ReportList}" AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <Style x:Key="DataGridBase" TargetType="Control">
+                    <Setter Property="LayoutTransform">
+                        <Setter.Value>
+                            <TransformGroup>
+                                <RotateTransform Angle="-90" />
+                                <ScaleTransform ScaleX="1" ScaleY="-1" />
+                            </TransformGroup>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                    <Setter Property="TextBlock.HorizontalAlignment" Value="Left" />
+                </Style>
+                <Style BasedOn="{StaticResource DataGridBase}" TargetType="DataGridCell">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                </Style>
+                <Style BasedOn="{StaticResource DataGridBase}" TargetType="DataGridColumnHeader" >
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                </Style>
+                <Style BasedOn="{StaticResource DataGridBase}" TargetType="DataGridRowHeader" />
+            </DataGrid.Resources>
+            <DataGrid.LayoutTransform>
+                <TransformGroup>
+                    <RotateTransform Angle="90" />
+                    <MatrixTransform Matrix="-1, 0, 0, 1, 0, 0" />
+                </TransformGroup>
+            </DataGrid.LayoutTransform>
+            <!--<DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=DataContext.ReportDate,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGridTextColumn}}}"/>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>-->
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ReportDate,StringFormat=d}"
+                                    CanUserReorder="True" Header="ReportDate"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Day}"
+                                    CanUserReorder="True" Header="Day"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Days}"
+                                    CanUserReorder="True" Header="Days"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding MWBase}"
+                                    CanUserReorder="True" Header="MW Base"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding MWIntermed}"
+                                    CanUserReorder="True" Header="	MW Intermed"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding MWPeak}"
+                                    CanUserReorder="True" Header="MW Peak"
+                                    IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <oxyplot:PlotView Grid.Row="1"
+                  Height="Auto" Margin="0,2,10,4"
+                  VerticalContentAlignment="Stretch"
+                  BorderBrush="Gray"
+                  BorderThickness="1"
+                  Background="Black"
+                  Model="{Binding PlotDataModel}">
+        </oxyplot:PlotView>
+    </Grid>
+</Window>

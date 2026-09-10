@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CRRCreditCalculationService", "FTRCreditCalculationService\Vayu.CRRCreditCalculationService.csproj", "{D19CC485-E6DD-476E-B410-BF48B14C0B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CancellationXmlLib", "CancellationXmlLib\Vayu.CancellationXmlLib.csproj", "{19BCB7EA-0835-49BD-AC36-00FE357715E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D19CC485-E6DD-476E-B410-BF48B14C0B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D19CC485-E6DD-476E-B410-BF48B14C0B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D19CC485-E6DD-476E-B410-BF48B14C0B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D19CC485-E6DD-476E-B410-BF48B14C0B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19BCB7EA-0835-49BD-AC36-00FE357715E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19BCB7EA-0835-49BD-AC36-00FE357715E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19BCB7EA-0835-49BD-AC36-00FE357715E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19BCB7EA-0835-49BD-AC36-00FE357715E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0897903-2E0B-4F23-AE37-DE7FCF3F996A}
+	EndGlobalSection
+EndGlobal

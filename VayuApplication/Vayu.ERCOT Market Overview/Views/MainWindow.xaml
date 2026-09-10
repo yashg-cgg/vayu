@@ -1,0 +1,390 @@
+﻿<Window  
+         x:Class="Vayu.ERCOT_Market_Overview.Views.MainWindow"
+          
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/" 
+        xmlns:pc="clr-namespace:Vayu.ERCOT_Market_Overview.Views" 
+    xmlns:cc="clr-namespace:Vayu.ERCOT_Market_Overview.Model"
+    prism:ViewModelLocator.AutoWireViewModel="False" Height="800" WindowState="Normal" 
+        Width="1080"
+        Title="VAYU™ - Ercot Market Overview">
+    <Window.Resources>
+        <ResourceDictionary>
+            <pc:ValueToForegroundColorConverter x:Key="ValueToForeground"/>
+            <cc:IsLesserConverter x:Key="lesserThanConverter" />
+            <Style x:Key="CenterCellStyleFGSimple" TargetType="{x:Type DataGridCell}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text, Converter={StaticResource lesserThanConverter}}" Value="true">
+                        <Setter Property="Foreground" Value="Red" />
+                    </DataTrigger>
+                </Style.Triggers>
+                <!--<Setter Property="Foreground"
+					Value="{Binding RelativeSource={RelativeSource Self},Path=Content.Text,
+					Converter={StaticResource myFGColorSimple}}" />-->
+                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+            <Style x:Key="CenterCellStyleFGSimpleR" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource CenterCellStyleFGSimple}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text, Converter={StaticResource lesserThanConverter}}" Value="true">
+                        <Setter Property="Foreground" Value="Red" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions> 
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Name="groupBox9"  BorderBrush="#FF1D1C1C"
+				          Header="Portfolio">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0"	x:Name="Label1" Content="Date" />
+                    <CheckBox Content="Date Range"  Grid.Column="1"
+                              x:Name="DateRangeCheckBox" 
+                              IsChecked="{Binding DateRangeCheckBoxChecked, Mode=TwoWay}" 
+                              Checked="DateRangeCheckBox_Checked" 
+                              Unchecked="DateRangeCheckBox_Unchecked"  />
+                    <DatePicker x:Name="startDatePicker"
+								            Grid.Column="1" Grid.Row="1"
+								            SelectedDate="{Binding StartDate}"
+								            SelectedDateFormat="Short" />
+                    <DatePicker x:Name="endDatePicker"
+								             Grid.Column="2" Grid.Row="1"
+								            SelectedDate="{Binding EndDate}"
+								            SelectedDateFormat="Short" />
+                    <Button x:Name="retrieveButton"
+						        Grid.Row="2" Grid.Column="1"  Margin="1"
+						        Command="{Binding RetrieveOldCommand}"
+						        Content="Retrieve" 
+                 />
+                    <Button 
+                        Grid.Column="2" Grid.Row="2"  Margin="1"
+                        Content="ExportToCSV"
+                        Command="{Binding RunExportCSVCommand}"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Name="SpecificConstraint" Header="STLPNT" Grid.Column="1" BorderBrush="#FF1D1C1C" IsEnabled="{Binding grpFamilyContraint}" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="75"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ComboBox  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                          x:Name="FamilyComboBox" 
+                          IsEditable="True" 
+                          IsTextSearchEnabled="True" 
+                          ItemsSource="{Binding FamilyList, Mode=TwoWay}" 
+                          SelectedValue="{Binding SelectedNodeList, Mode=TwoWay}" 
+                           SelectionChanged="FamilyComboBox_SelectionChanged"/>
+                    <Button x:Name="addNodeButton"
+				         Margin="1"
+				        Command="{Binding AddNodeCommand}"
+                                				        Content="Add"
+				        FontWeight="Bold"/>
+                    <Button Name="removeNodeButton"
+				        Grid.Column="0" Grid.Row="1"  Margin="1"
+ 				        Command="{Binding RemoveNodeCommand}"
+                               
+				        Content="Remove" />
+                    <Button Name="removeAllNodeButton"
+				        Grid.Row="2"   Margin="1"
+				        Command="{Binding RemoveAllNodeCommand}"
+                                 
+				        Content="Remove All" />
+                    <ListBox BorderBrush="Blue" BorderThickness="1" Margin="0.5"
+ 				          Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"	 Grid.RowSpan="2"	         
+				          ItemsSource="{Binding NodeList,
+				                                Mode=TwoWay}"
+				          SelectedValue="{Binding NodeDataSelected ,  Mode=TwoWay}"				         
+				          >
+                    </ListBox>
+                </Grid>
+            </GroupBox>
+            <Grid Grid.Column="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition  Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Content="TotalMW" Grid.Row="0" Grid.Column="0"/>
+                <Label Content="TotalDA" Grid.Row="0" Grid.Column="1"/>
+                <Label Content="TotalRT" Grid.Row="0" Grid.Column="2"/>
+                <Label Content="MarketPNL" Grid.Row="0" Grid.Column="3"/>
+                <Label Content="DA/MW" Grid.Row="2" Grid.Column="0"/>
+                <Label Content="RT/MW" Grid.Row="2" Grid.Column="1"/>
+                <Label Content="DART/MW" Grid.Row="2" Grid.Column="2"/>
+                <TextBox x:Name="totalmwTextBox" Grid.Row="1" Grid.Column="0"
+								         Foreground="{Binding TotalMW, Converter={StaticResource ValueToForeground}}"
+								         IsReadOnly="True"
+								         Text="{Binding TotalMW}"
+								         TextWrapping="Wrap" Margin="2" />
+                <TextBox x:Name="totalDATextBox"
+								          Grid.Row="1" Grid.Column="1"
+								         Foreground="{Binding TotalDA, Converter={StaticResource ValueToForeground}}"
+								         IsReadOnly="True"  Margin="2"
+								         Text="{Binding TotalDA, StringFormat=\{0:C\}}"
+								         TextWrapping="Wrap"  />
+                <TextBox x:Name="totalNetPnlTextBox"   Grid.Row="1" Grid.Column="2"
+								         Foreground="{Binding RT, Converter={StaticResource ValueToForeground}}"
+								         IsReadOnly="True"
+								         Text="{Binding TotalRT, StringFormat=\{0:C\}}"
+								         TextWrapping="Wrap" Margin="2" />
+                <TextBox x:Name="payCollectTextBox"
+								           Grid.Row="1" Grid.Column="3"
+								         Foreground="{Binding TotalDART, Converter={StaticResource ValueToForeground}}"
+								         IsReadOnly="True"
+								         Text="{Binding TotalDART, StringFormat=\{0:C\}}"
+								         TextWrapping="Wrap" Margin="2" />
+                <TextBox x:Name="payCollectTextBox1"
+								           Grid.Row="3" Grid.Column="0"
+								         Foreground="{Binding DAPerMW, Converter={StaticResource ValueToForeground}}"
+								         IsReadOnly="True"
+								         Text="{Binding DAPerMW}"
+								         TextWrapping="Wrap" Margin="2" />
+                <TextBox x:Name="payCollectTextBox2"
+								           Grid.Row="3" Grid.Column="1"
+								         Foreground="{Binding RTPerMW, Converter={StaticResource ValueToForeground}}"
+								         IsReadOnly="True"
+								         Text="{Binding RTPerMW}"
+								         TextWrapping="Wrap"  Margin="2"  />
+                <TextBox x:Name="payCollectTextBox3"
+								         Grid.Row="3" Grid.Column="2"
+								         Foreground="{Binding DARTPerMW, Converter={StaticResource ValueToForeground}}"
+								         IsReadOnly="True"
+								         Text="{Binding DARTPerMW}"
+								         TextWrapping="Wrap" Margin="2" />
+            </Grid>
+        </Grid>
+        <DataGrid Grid.Row="1" Name="PathDataGrid"
+					          Margin="4,10,0,10"
+					          HorizontalAlignment="Stretch"
+					          VerticalAlignment="Stretch"
+					          AutoGenerateColumns="False"
+					          CanUserAddRows="False"
+					          ItemsSource="{Binding PathList}"
+					          ScrollViewer.CanContentScroll="True">
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Width="35*"
+							                    MinWidth="35"
+							                    Binding="{Binding DeliveryYDate ,StringFormat={}{0:dd/MM/yyyy}}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DeliveryYDate"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="25*"
+							                    MinWidth="15"
+							                    Binding="{Binding HourEnding}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="HourEnding"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="20"
+							                    Binding="{Binding STLPNT}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="STLPNT"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding TOTAL_PTP_OBL_AWARDED_SOURCE}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="TOTAL_PTP_OBL_AWARDED_SOURCE"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding TOTAL_PTP_OBL_AWARDED_SINK}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimpleR}"
+							                    Header="TOTAL_PTP_OBL_AWARDED_SINK"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding NetVolume}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="NetVolume"
+							                    IsReadOnly="True" />
+
+                <DataGridTextColumn Width="10*"
+							                    MinWidth="40"
+							                    Binding="{Binding RT}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="RT"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="30*"
+							                    MinWidth="40"
+							                    Binding="{Binding DA}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DA"
+							                    IsReadOnly="True" />
+
+                <DataGridTextColumn Width="20*"
+							                    MinWidth="60"
+							                    Binding="{Binding DART}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DART"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*" Visibility="Collapsed"
+							                    MinWidth="60"
+							                    Binding="{Binding TotalDART}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="TotalDART"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"  Visibility="Collapsed"
+							                    MinWidth="60"
+							                    Binding="{Binding DARTSource}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DARTSource"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"  Visibility="Collapsed"
+							                    MinWidth="60"
+							                    Binding="{Binding DARTSink}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DARTSink"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"  Visibility="Collapsed"
+							                    MinWidth="60"
+							                    Binding="{Binding SUM}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="SUM"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="40*"
+							                    MinWidth="50"
+							                    Binding="{Binding RT_Node}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="RT_Node"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding DA_Node}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DA_Node"
+							                    IsReadOnly="True" />
+
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding DART_Node}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DART_Node"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding RT_Energy}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="RTEnergy"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding DA_Energy}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DAEnergy"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding RT_Cong}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="RT Cong"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding DA_Cong}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DA Cong"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding DART_Cong}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="DART Cong"
+							                    IsReadOnly="True" />
+
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding Zone}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="Zone"
+							                    IsReadOnly="True" />
+                <DataGridTextColumn Width="50*"
+							                    MinWidth="60"
+							                    Binding="{Binding Fuelsource}"
+							                    CanUserReorder="True"
+							                    CellStyle="{StaticResource CenterCellStyleFGSimple}"
+							                    Header="Fuelsource"
+							                    IsReadOnly="True" />
+
+
+
+
+
+
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

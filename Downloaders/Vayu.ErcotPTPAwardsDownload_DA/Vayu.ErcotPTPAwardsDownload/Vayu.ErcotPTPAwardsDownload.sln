@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.ErcotPTPAwardsDownload", "ErcotPTPAwardsDownload\Vayu.ErcotPTPAwardsDownload.csproj", "{A3013B01-7FF3-474C-B4CB-BEE683C560DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CertificateInfoLibrary", "..\..\..\Library\Vayu.CertificateInfoLibrary\Vayu.CertificateInfoLibrary.csproj", "{A6622166-2390-4CC0-B646-FCB3C54B6806}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.CommonAccessLibrary", "..\..\..\Library\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary\Vayu.CommonAccessLibrary.csproj", "{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vayu.MarketLibraryErcot", "..\..\..\Library\Vayu.MarketLibraryErcot\Vayu.MarketLibraryErcot.csproj", "{9A357C1F-ED38-4A68-BC79-C4BD61ED89D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Debug|x86.Build.0 = Debug|Any CPU
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{A3013B01-7FF3-474C-B4CB-BEE683C560DA}.Release|x86.Build.0 = Release|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Debug|x86.Build.0 = Debug|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6622166-2390-4CC0-B646-FCB3C54B6806}.Release|x86.Build.0 = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Debug|x86.Build.0 = Debug|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{66820DE1-00F5-48AA-ACB0-D1B1D22298BF}.Release|x86.Build.0 = Release|Any CPU
+		{9A357C1F-ED38-4A68-BC79-C4BD61ED89D4}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9A357C1F-ED38-4A68-BC79-C4BD61ED89D4}.Debug|x86.ActiveCfg = Debug|x86
+		{9A357C1F-ED38-4A68-BC79-C4BD61ED89D4}.Debug|x86.Build.0 = Debug|x86
+		{9A357C1F-ED38-4A68-BC79-C4BD61ED89D4}.Release|Any CPU.ActiveCfg = Release|x86
+		{9A357C1F-ED38-4A68-BC79-C4BD61ED89D4}.Release|x86.ActiveCfg = Release|x86
+		{9A357C1F-ED38-4A68-BC79-C4BD61ED89D4}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DBE190EF-7654-4326-9A0C-10A7C51E8EDE}
+	EndGlobalSection
+EndGlobal

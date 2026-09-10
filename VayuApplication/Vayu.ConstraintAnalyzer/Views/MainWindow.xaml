@@ -1,0 +1,105 @@
+﻿<Window x:Class="Vayu.ConstraintAnalyzer.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="False"
+        Title="Constraint Analyzer" Height="570" Width="1670">
+    <Grid Background="Teal">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <GroupBox Header="Market" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" BorderBrush="#FF1D1C1C" Height="60">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Name="cmbMarket" ItemsSource="{Binding Marketlist,Mode=OneWay}" SelectedItem="{Binding SelectedMarket}" Margin="10,0,0,0" Width="80"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Market Type" Width="110" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" BorderBrush="#FF1D1C1C">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="RT"  IsChecked="{Binding RtRadioButtonChecked, Mode=TwoWay}" x:Name="RtRadioButton" Checked="RtRadioButton_Checked" Margin="3,7,3,0"/>
+                    <RadioButton Content="DA"  IsChecked="{Binding DaRadioButtonChecked, Mode=TwoWay}" x:Name="DaRadioButton" Checked="DaRadioButton_Checked" Margin="3,7,3,0"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Value"  Width="260" Height="60" VerticalAlignment="Top" Margin="10,0,0,0" BorderBrush="#FF1D1C1C">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Impact"  VerticalAlignment="Top" IsChecked="{Binding ImpactRadioButtonChecked, Mode=TwoWay}" x:Name="ImpactRadioButton" />
+                    <RadioButton Content="Shifted SP"  VerticalAlignment="Top" IsChecked="{Binding ShiftedRadioButtonChecked, Mode=TwoWay}" x:Name="ShiftedRadioButton" />
+                    <RadioButton Content="Shadow Price"  VerticalAlignment="Top" IsChecked="{Binding ShadowRadioButtonChecked, Mode=TwoWay}" x:Name="ShadowRadioButton" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Date" Width="410" Height="60" VerticalAlignment="Top" Margin="10,0,0,0" BorderBrush="#FF1D1C1C">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Date Range" x:Name="DateRangeCheckBox" IsChecked="{Binding DateRangeCheckBoxChecked, Mode=TwoWay}" Checked="DateRangeCheckBox_Checked" Unchecked="DateRangeCheckBox_Unchecked" />
+                    <DatePicker x:Name="DatePicker1" SelectedDate="{Binding DatePicker1Selected}" />
+                    <Label Content="To" Width="39" x:Name="Label1"/>
+                    <DatePicker  x:Name="DatePicker2" SelectedDate="{Binding DatePicker2Selected}" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Name="SpecificConstraint" Header="Specific Constraint Display" Height="60" Width="296" VerticalAlignment="Top" Margin="10,0,0,0" BorderBrush="#FF1D1C1C" IsEnabled="{Binding grpFamilyContraint}" >
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Choose Family"  IsChecked="{Binding FamilyCheckBoxChecked, Mode=TwoWay}" x:Name="FamilyCheckBox" RenderTransformOrigin="0.628,-0.562"  />
+                    <ComboBox Width="170" Height="25" x:Name="FamilyComboBox" IsEditable="True" IsTextSearchEnabled="True" ItemsSource="{Binding FamilyList,Mode=TwoWay}" SelectedValue="{Binding Path=SelectedFamily, Mode=TwoWay}" />
+                </StackPanel>
+            </GroupBox>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Refresh"  Width="65" x:Name="RefreshButton" Command="{Binding RunRetrieveFetchDataCommand}"  Height="29" Margin="5,0,0,0" IsEnabled="{Binding IsRefreshEnabled}"/>
+            </StackPanel>
+        </StackPanel>
+        <DataGrid Grid.Row="1" HorizontalAlignment="Stretch"
+                   AlternatingRowBackground="LightGray"
+                  VerticalAlignment="Stretch" ItemsSource="{Binding ConstraintsList}" AutoGenerateColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="True" x:Name="constraintDataGrid" SelectionMode="Extended" SelectedItem="{Binding SelectedConstraint, Mode=TwoWay}"
+        VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Margin="0,2,0,0">
+
+            <DataGrid.ContextMenu>
+                <ContextMenu >
+                    <MenuItem Header="Nodal Min DrillDown" Command="{Binding RunRightClickCommand}" />
+                    <MenuItem Header="Nodal Max DrillDown" Command="{Binding RunRightClickMaxCommand}" />
+                    <MenuItem Header="Up To DrillDown" Command="{Binding RunRightClickUpToCommand}"/>
+                    <MenuItem Header="Tag Outage Relationship" Command="{Binding RunRightClickTagOutageCommand}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Foreground" Value="Black"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Width="40*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding date}"/>
+                <DataGridTextColumn Header="ID" Width="25*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding constraintNum}"/>
+                <DataGridTextColumn Header="From" Width="35*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding fromZone}"/>
+                <DataGridTextColumn Header="To" Width="35*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding toZone}"/>
+                <DataGridTextColumn Header="Monitored" Width="150*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding monitoredName}" />
+                <DataGridTextColumn Header="Contingency" Width="60*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding contingName}"/>
+                <DataGridTextColumn Header="1" Width="30*" CanUserReorder="False" IsReadOnly="True"  Binding="{Binding he1Value}"/>
+                <DataGridTextColumn Header="2" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he2Value}"/>
+                <DataGridTextColumn Header="3" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he3Value}"/>
+                <DataGridTextColumn Header="4" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he4Value}"/>
+                <DataGridTextColumn Header="5" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he5Value}"/>
+                <DataGridTextColumn Header="6" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he6Value}"/>
+                <DataGridTextColumn Header="7" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he7Value}"/>
+                <DataGridTextColumn Header="8" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he8Value}"/>
+                <DataGridTextColumn Header="9" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he9Value}"/>
+                <DataGridTextColumn Header="10" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he10Value}"/>
+                <DataGridTextColumn Header="11" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he11Value}"/>
+                <DataGridTextColumn Header="12" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he12Value}"/>
+                <DataGridTextColumn Header="13" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he13Value}"/>
+                <DataGridTextColumn Header="14" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he14Value}"/>
+                <DataGridTextColumn Header="15" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he15Value}"/>
+                <DataGridTextColumn Header="16" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he16Value}"/>
+                <DataGridTextColumn Header="17" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he17Value}"/>
+                <DataGridTextColumn Header="18" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he18Value}"/>
+                <DataGridTextColumn Header="19" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he19Value}"/>
+                <DataGridTextColumn Header="20" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he20Value}"/>
+                <DataGridTextColumn Header="21" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he21Value}"/>
+                <DataGridTextColumn Header="22" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he22Value}"/>
+                <DataGridTextColumn Header="23" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he23Value}"/>
+                <DataGridTextColumn Header="24" Width="30*" CanUserReorder="False" IsReadOnly="True" Binding="{Binding he24Value}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>

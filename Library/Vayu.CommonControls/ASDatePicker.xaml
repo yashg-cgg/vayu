@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="Vayu.CommonControls.ASDatePicker" x:Name="MyASDatePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Label Content="Date" Height="28" HorizontalAlignment="Left" Margin="5,10,0,0" Name="label" VerticalAlignment="Top" Width="37" />
+        <DatePicker HorizontalAlignment="Left" Margin="39,0,0,0" Name="datePicker" VerticalAlignment="Center" Width="90" 
+                    SelectedDate="{Binding ElementName=MyASDatePicker, Path=displaydate, Mode=TwoWay}"/>
+        <Button Content="+" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="136,4,0,0" Name="forward_button" VerticalAlignment="Top" Width="19" />
+        <Button Content="-" FontWeight="Bold" Height="24" HorizontalAlignment="Left" Margin="136,29,0,0" Name="backward_button" VerticalAlignment="Top" Width="19" />
+        <Button Content="|" Height="18" HorizontalAlignment="Left" Margin="155,12,0,0" Name="current_button" VerticalAlignment="Top" Width="18" />
+    </Grid>
+</UserControl>
