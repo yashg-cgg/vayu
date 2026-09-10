@@ -51,9 +51,17 @@ namespace Vayu.MarketView.Views
         private MemoryLayer navigateConstraintLayer;
         private MemoryLayer selectedPinLayer;
 
-        // ---- Pin Image ----
+        // ---- Pin Image & Clear Selected Pin ----
         private static int _selectedPinBitmapId = -1;
         private static double _selectedPinHeightPx;
+        private void ClearSelectedPin()
+        {
+            if (selectedPinLayer == null) return;
+            selectedPinLayer.Features = new List<IFeature>();
+            selectedPinLayer.DataHasChanged();
+            if (LmpMap != null)
+                LmpMap.RefreshGraphics();
+        }
 
         // ---- Hover-tooltip infrastructure (new, built in code-behind) ----
         private Popup _tooltipPopup;
@@ -93,7 +101,6 @@ namespace Vayu.MarketView.Views
         private const double ZoneSymbolScale = 0.50;
         private const double PinkSymbolScale = 0.40;
         private const double NavigateOverlayScale = 0.40;
-        private const double HighlightScale = 0.60;
         private const int HitTestMarginPx = 8; // hover/click tolerance in device px
 
 
@@ -131,6 +138,7 @@ namespace Vayu.MarketView.Views
             ZoomInbutton.Click += ZoomInbutton_Click;
             ZoomOutbutton.Click += ZoomOutbutton_Click;
             LMPCheckBox.Click += CheckBox_Checked;
+            LmpMap.MouseLeftButtonDown += LmpMap_MouseLeftButtonDown;
             ConstraintCheckBox.Click += ConstrainsCheckBox_Checked;
 
             InitializeMap();
@@ -258,6 +266,33 @@ namespace Vayu.MarketView.Views
                 _tooltipPopup.IsOpen = true;
         }
 
+        private void LmpMap_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (LmpMap == null || LmpMap.Map == null)
+                return;
+
+            var position = e.GetPosition(LmpMap);
+
+            MapInfo mapInfo = null;
+
+            try
+            {
+                mapInfo = LmpMap.GetMapInfo(
+                    new MPoint(position.X, position.Y),
+                    HitTestMarginPx);
+            }
+            catch
+            {
+                mapInfo = null;
+            }
+
+            // No feature exists at the clicked map location.
+            if (mapInfo?.Feature == null)
+            {
+                ClearSelectedPin();
+            }
+        }
+
         private void UpdateTooltipContent(IFeature feature)
         {
             string nodeName = SafeString(feature["NodeName"]);
@@ -319,6 +354,7 @@ namespace Vayu.MarketView.Views
             {
                 LmpMap.MouseMove -= LmpMap_MouseMove;
                 LmpMap.MouseLeave -= LmpMap_MouseLeave;
+                LmpMap.MouseLeftButtonDown -= LmpMap_MouseLeftButtonDown;
             }
             if (_tooltipPopup != null) _tooltipPopup.IsOpen = false;
             if (viewModel != null)
@@ -383,6 +419,7 @@ namespace Vayu.MarketView.Views
             var fill = ToMapsuiColor(GetColor(lmp));
             var outline = new MPen(MColor.Black, 2);
             var type = (nodeType ?? "").ToUpper();
+
             SymbolType symbol;
             switch (type)
             {
